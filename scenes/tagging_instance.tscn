@@ -1,0 +1,373 @@
+[gd_scene load_steps=17 format=3 uid="uid://cv04584lewxfj"]
+
+[ext_resource type="Script" path="res://scripts/tagging_instance.gd" id="1_qwxx4"]
+[ext_resource type="Texture2D" uid="uid://bspy7b4mnwwtt" path="res://textures/icons/wizard.svg" id="2_cc4m6"]
+[ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="3_0tqr4"]
+[ext_resource type="Texture2D" uid="uid://dv4iwivdjx3x7" path="res://textures/icons/import_icon.svg" id="3_43ms0"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="4_kxfaf"]
+[ext_resource type="Texture2D" uid="uid://b7swawa8cdqhk" path="res://textures/icons/template_icon.svg" id="4_n3yw6"]
+[ext_resource type="PackedScene" uid="uid://bnflgv04edf7b" path="res://scenes/session_blacklist.tscn" id="5_hmrsi"]
+[ext_resource type="PackedScene" uid="uid://dp0dtvv4h81x0" path="res://scenes/sites_option_menu.tscn" id="5_vdixj"]
+[ext_resource type="Texture2D" uid="uid://bv0lodmh5bkey" path="res://textures/icons/search_icon.svg" id="6_ym3uf"]
+[ext_resource type="PackedScene" uid="uid://dvsreawj4roce" path="res://scenes/special_tag_window.tscn" id="7_f11d4"]
+[ext_resource type="PackedScene" uid="uid://dkbd01s367esl" path="res://scenes/tag_full_search.tscn" id="7_jn3ja"]
+[ext_resource type="Texture2D" uid="uid://di5ghm6bpg4t8" path="res://textures/icons/tag_icon.svg" id="9_kl5w6"]
+[ext_resource type="Texture2D" uid="uid://bt5shjh0vtvkv" path="res://textures/icons/export_icon.svg" id="10_r4cct"]
+[ext_resource type="Texture2D" uid="uid://p8j77r81xo0q" path="res://textures/icons/clipboard_icon.svg" id="11_hxijk"]
+
+[sub_resource type="GDScript" id="GDScript_1hbdc"]
+script/source = "extends LineEdit
+
+
+@onready var timer: Timer = $Timer
+@onready var auto_fill: ItemList = $VBoxContainer/AutoFill
+@onready var auto_container = $VBoxContainer
+
+
+
+func _ready():
+	text_changed.connect(on_text_changed)
+	timer.timeout.connect(on_timer_ended)
+	focus_exited.connect(on_focus_lost)
+	text_submitted.connect(on_text_submitted)
+
+
+func on_text_submitted(_ignored: String) -> void:
+	if not timer.is_stopped():
+		timer.stop()
+
+
+func on_focus_lost() -> void:
+	await get_tree().process_frame # Wait to see who grabs focus
+	if not auto_fill.has_focus() and auto_container.visible:
+		auto_container.hide()
+
+
+func on_text_changed(_ignored: String) -> void:
+	if not Tagger.autofill_enabled:
+		return
+	
+	if auto_container.visible:
+		auto_container.hide()
+	
+	timer.start()
+
+
+func on_timer_ended() -> void:
+	var tag_to_search: String = text.strip_edges().to_lower()
+	if tag_to_search.is_empty():
+		return
+	
+	var tags_found: Array[String] = Tagger.search_local(tag_to_search, 10)
+	
+	auto_fill.clear()
+
+	for item in tags_found:
+		auto_fill.add_item(item)
+	
+	if 0 < tags_found.size():
+		auto_container.show()
+
+
+func _gui_input(event):
+	if has_focus() and event.is_action(\"ui_up\"):
+		auto_container.show()
+		auto_fill.select(auto_fill.item_count - 1)
+		auto_fill.grab_focus()
+
+"
+
+[sub_resource type="GDScript" id="GDScript_2kkhs"]
+script/source = "extends ItemList
+
+
+signal item_submited(item_text: String)
+
+
+@onready var add_tag: LineEdit = $\"../..\"
+@onready var container = $\"..\"
+
+
+func _ready():
+	container.hide()
+	focus_exited.connect(on_focus_exited)
+	item_clicked.connect(on_item_clicked)
+	item_activated.connect(on_item_activated)
+
+
+# Called when the node enters the scene tree for the first time.
+func _gui_input(_event):
+	if has_focus() and Input.is_action_just_pressed(\"ui_focus_next\") and is_anything_selected():
+		add_tag.text = get_item_text(
+			get_selected_items()[0]
+		)
+		add_tag.caret_column = add_tag.text.length()
+
+
+func on_item_clicked(index: int, _at_position: Vector2, mouse_button_index: int):
+	if mouse_button_index == MOUSE_BUTTON_LEFT:
+		item_submited.emit(get_item_text(index))
+
+
+func on_item_activated(item_index: int) -> void:
+	item_submited.emit(get_item_text(item_index))
+	add_tag.grab_focus()
+
+
+func on_focus_exited():
+	container.hide()
+"
+
+[node name="TaggingInstance" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qwxx4")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="MainContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MainTags" type="VBoxContainer" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+theme_override_constants/separation = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/MainTags"]
+layout_mode = 2
+alignment = 2
+
+[node name="WizardButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Open the tag wizard."
+theme_override_constants/icon_max_width = 24
+text = "Wizard"
+icon = ExtResource("2_cc4m6")
+
+[node name="LoadTagButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Load a tag list from text"
+text = "From Text"
+icon = ExtResource("3_43ms0")
+
+[node name="TemplateButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Load a Template"
+theme_override_constants/icon_max_width = 24
+text = "Template"
+icon = ExtResource("4_n3yw6")
+
+[node name="Empty" type="Control" parent="MarginContainer/MainContainer/MainTags"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/MainTags/Empty"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "Tags"
+
+[node name="TagItems" type="ItemList" parent="MarginContainer/MainContainer/MainTags"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 9.5
+select_mode = 1
+script = ExtResource("4_kxfaf")
+
+[node name="Interact" type="HBoxContainer" parent="MarginContainer/MainContainer/MainTags"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.5
+
+[node name="FullSearchButton" type="Button" parent="MarginContainer/MainContainer/MainTags/Interact"]
+layout_mode = 2
+tooltip_text = "Search on e621 database."
+icon = ExtResource("6_ym3uf")
+
+[node name="AddTag" type="LineEdit" parent="MarginContainer/MainContainer/MainTags/Interact"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+context_menu_enabled = false
+script = SubResource("GDScript_1hbdc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/MainTags/Interact/AddTag"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -350.0
+grow_horizontal = 2
+alignment = 2
+
+[node name="AutoFill" type="ItemList" parent="MarginContainer/MainContainer/MainTags/Interact/AddTag/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../..")
+focus_next = NodePath("../..")
+focus_previous = NodePath("../..")
+mouse_filter = 1
+theme = ExtResource("3_0tqr4")
+auto_height = true
+script = SubResource("GDScript_2kkhs")
+
+[node name="Timer" type="Timer" parent="MarginContainer/MainContainer/MainTags/Interact/AddTag"]
+wait_time = 0.3
+one_shot = true
+
+[node name="AddButton" type="Button" parent="MarginContainer/MainContainer/MainTags/Interact"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Add tag to list."
+text = "Add"
+
+[node name="SelectTagButton" type="Button" parent="MarginContainer/MainContainer/MainTags/Interact"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select tags of the packs
+you've installed."
+text = "Select..."
+
+[node name="Suggests" type="VBoxContainer" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 4
+
+[node name="Empty" type="Control" parent="MarginContainer/MainContainer/Suggests"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/Suggests/Empty"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -11.5
+offset_right = 46.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Suggestions"
+
+[node name="SuggestionList" type="ItemList" parent="MarginContainer/MainContainer/Suggests"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 6.0
+select_mode = 1
+script = ExtResource("4_kxfaf")
+
+[node name="SmartList" type="ItemList" parent="MarginContainer/MainContainer/Suggests"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+select_mode = 1
+script = ExtResource("4_kxfaf")
+
+[node name="Final" type="VBoxContainer" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.5
+theme_override_constants/separation = 4
+
+[node name="Platform" type="HBoxContainer" parent="MarginContainer/MainContainer/Final"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/Final/Platform"]
+layout_mode = 2
+text = "Format:"
+
+[node name="SitesOptionMenu" parent="MarginContainer/MainContainer/Final/Platform" instance=ExtResource("5_vdixj")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="FinalTags" type="TextEdit" parent="MarginContainer/MainContainer/Final"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 9.0
+editable = false
+wrap_mode = 1
+autowrap_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/MainContainer/Final"]
+layout_mode = 2
+
+[node name="GenerateButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Generate List"
+icon = ExtResource("9_kl5w6")
+
+[node name="ExtraOptions" type="VBoxContainer" parent="MarginContainer/MainContainer/Final/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="ExportButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/ExtraOptions"]
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Export your tag list as a file."
+text = "Export List"
+icon = ExtResource("10_r4cct")
+
+[node name="CopyButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/ExtraOptions"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Copy List"
+icon = ExtResource("11_hxijk")
+
+[node name="SpecialTagWindow" parent="." instance=ExtResource("7_f11d4")]
+visible = false
+layout_mode = 1
+
+[node name="SessionBlacklist" parent="." instance=ExtResource("5_hmrsi")]
+visible = false
+layout_mode = 1
+
+[node name="TagFullSearch" parent="." instance=ExtResource("7_jn3ja")]
+visible = false
+layout_mode = 1
+
+[node name="ExportFileDialog" type="FileDialog" parent="."]
+ok_button_text = "Save"
+access = 2
+filters = PackedStringArray("*.txt  ; Plain Text FIle")
+use_native_dialog = true

@@ -1,0 +1,107 @@
+[gd_scene load_steps=11 format=3 uid="uid://d3yr67bkeq33d"]
+
+[ext_resource type="Theme" uid="uid://c8ad5ntep5ucc" path="res://theme/default.tres" id="1_aon24"]
+[ext_resource type="PackedScene" uid="uid://cv04584lewxfj" path="res://scenes/tagging_instance.tscn" id="1_lifxp"]
+[ext_resource type="PackedScene" uid="uid://cimm555ig005" path="res://scenes/tag_review_instance.tscn" id="2_bafv0"]
+[ext_resource type="Script" path="res://scripts/main_window.gd" id="2_m0uhe"]
+[ext_resource type="PackedScene" uid="uid://bgpp0mr5o1al3" path="res://scenes/wiki_instance.tscn" id="2_no3wr"]
+[ext_resource type="PackedScene" uid="uid://bimxfti6jy5wq" path="res://scenes/tools_window.tscn" id="3_ec6rq"]
+[ext_resource type="PackedScene" uid="uid://cyodg6s04nvct" path="res://scenes/settings_window.tscn" id="4_rl0bd"]
+[ext_resource type="Texture2D" uid="uid://cahrs65npors7" path="res://textures/icons/save_icon.svg" id="8_3qeoh"]
+[ext_resource type="Texture2D" uid="uid://xejppul6k45c" path="res://textures/icons/new_icon.svg" id="8_s2grs"]
+[ext_resource type="Texture2D" uid="uid://bicsshv0cpf0u" path="res://textures/icons/load_icon.svg" id="10_jhx4k"]
+
+[node name="MainWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_aon24")
+script = ExtResource("2_m0uhe")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="TaggingInstance" parent="." instance=ExtResource("1_lifxp")]
+layout_mode = 1
+size_flags_vertical = 3
+
+[node name="TagReview" parent="." instance=ExtResource("2_bafv0")]
+visible = false
+layout_mode = 1
+
+[node name="ToolsWindow" parent="." instance=ExtResource("3_ec6rq")]
+visible = false
+layout_mode = 1
+
+[node name="SettingsWindow" parent="." instance=ExtResource("4_rl0bd")]
+visible = false
+layout_mode = 1
+
+[node name="WikiInstance" parent="." instance=ExtResource("2_no3wr")]
+visible = false
+layout_mode = 1
+
+[node name="MenusContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+anchor_right = 0.10625
+anchor_bottom = 0.0541667
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="TopMenuContainer" type="HBoxContainer" parent="MenusContainer"]
+layout_mode = 2
+
+[node name="MainMenu" type="MenuButton" parent="MenusContainer/TopMenuContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Menu"
+flat = false
+switch_on_hover = true
+item_count = 6
+popup/item_0/text = "Tagger"
+popup/item_0/id = 5
+popup/item_1/text = "Wiki"
+popup/item_1/id = 0
+popup/item_2/text = "Review Tags"
+popup/item_2/id = 1
+popup/item_3/text = "Tools"
+popup/item_3/id = 2
+popup/item_4/text = "Settings"
+popup/item_4/id = 3
+popup/item_5/text = "Exit"
+popup/item_5/id = 4
+
+[node name="TaggerMenu" type="MenuButton" parent="MenusContainer/TopMenuContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Tagger"
+flat = false
+switch_on_hover = true
+item_count = 6
+popup/item_0/text = "New List"
+popup/item_0/icon = ExtResource("8_s2grs")
+popup/item_0/id = 0
+popup/item_1/text = "Save List"
+popup/item_1/icon = ExtResource("8_3qeoh")
+popup/item_1/id = 1
+popup/item_2/text = "Load List"
+popup/item_2/icon = ExtResource("10_jhx4k")
+popup/item_2/id = 2
+popup/item_3/text = ""
+popup/item_3/id = 100
+popup/item_3/disabled = true
+popup/item_3/separator = true
+popup/item_4/text = "Blacklisted Suggestions"
+popup/item_4/id = 5
+popup/item_5/text = "Clear Tags"
+popup/item_5/id = 3

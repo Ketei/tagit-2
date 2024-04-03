@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://clofybwcoamm6"]
+
+[ext_resource type="Script" path="res://scripts/color_type_container.gd" id="1_3q23x"]
+
+[node name="FurContainer" type="HBoxContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1_3q23x")
+
+[node name="TypeBox" type="CheckBox" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Fur:"
+
+[node name="TypeCountOptBtn" type="OptionButton" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+disabled = true

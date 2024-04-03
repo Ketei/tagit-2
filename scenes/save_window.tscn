@@ -1,0 +1,121 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvv8htfeg3k53"]
+
+[ext_resource type="Script" path="res://scripts/save_window.gd" id="1_wmvmf"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_no3w2"]
+
+[node name="SaveWindow" type="Control"]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wmvmf")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.0431373, 0.101961, 0.188235, 0.588235)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ExistingSavesWindow" type="Control" parent="CenterContainer"]
+custom_minimum_size = Vector2(450, 650)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer/ExistingSavesWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.137255, 0.239216, 0.411765, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/ExistingSavesWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Existing saves:"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_no3w2")
+
+[node name="SaveEntriesContainer" type="VBoxContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="DataContainer" type="HBoxContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/DataContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Save Name:"
+
+[node name="SaveNameEdit" type="LineEdit" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/DataContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Close"
+
+[node name="SaveButton" type="Button" parent="CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 1
+text = "Save"
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+initial_position = 1
+size = Vector2i(270, 106)
+ok_button_text = "Confirm"
+dialog_text = "A file with the same name exists.
+Overwrite?"

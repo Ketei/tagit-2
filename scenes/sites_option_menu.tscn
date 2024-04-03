@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dp0dtvv4h81x0"]
+
+[ext_resource type="Script" path="res://scripts/sites_option_menu.gd" id="1_3b87o"]
+
+[node name="SitesOptionMenu" type="OptionButton"]
+offset_right = 45.0
+offset_bottom = 20.0
+alignment = 1
+script = ExtResource("1_3b87o")

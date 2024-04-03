@@ -1,0 +1,130 @@
+[gd_scene load_steps=4 format=3 uid="uid://b74j8u6a2s2t2"]
+
+[ext_resource type="Script" path="res://scripts/pack_folder_instance.gd" id="1_v0b26"]
+[ext_resource type="PackedScene" uid="uid://b0pf1366qxb7y" path="res://scenes/category_option_button.tscn" id="2_3q7gh"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="3_s5pod"]
+
+[node name="PackFolder" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_v0b26")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SearchContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/SearchContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+text = "X"
+
+[node name="SearchNameLineEdit" type="LineEdit" parent="VBoxContainer/SearchContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+placeholder_text = "Search for name"
+
+[node name="CatCon" type="HBoxContainer" parent="VBoxContainer/SearchContainer"]
+layout_mode = 2
+
+[node name="CategoryOptionButton" parent="VBoxContainer/SearchContainer/CatCon" instance=ExtResource("2_3q7gh")]
+layout_mode = 2
+max_heigth = 300
+
+[node name="EnableCat" type="CheckButton" parent="VBoxContainer/SearchContainer/CatCon"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SearchContainer"]
+layout_mode = 2
+
+[node name="SearchByPrioritySpin" type="SpinBox" parent="VBoxContainer/SearchContainer/HBoxContainer"]
+layout_mode = 2
+allow_greater = true
+allow_lesser = true
+
+[node name="EnablePrioCheckButton" type="CheckButton" parent="VBoxContainer/SearchContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SearchButton" type="Button" parent="VBoxContainer/SearchContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Search"
+
+[node name="ShowAllButton" type="Button" parent="VBoxContainer/SearchContainer"]
+layout_mode = 2
+text = "Clear FIlters"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("3_s5pod")
+speed = 10.0
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+follow_focus_ = false
+allow_horizontal_scroll = false
+
+[node name="TagsContainer" type="HFlowContainer" parent="VBoxContainer/MarginContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PackNameLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Pack Name"
+
+[node name="PackDescLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Pack Desc"
+
+[node name="CreateMapCheckBox" type="CheckBox" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Create Map"
+
+[node name="TagMapTypeLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Map Type"
+
+[node name="TagMapCatLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Map Categories"
+
+[node name="SelectAllButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Select All"
+
+[node name="DeselectAllButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Deselect All"

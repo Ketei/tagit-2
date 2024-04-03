@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdwih5ycurgtc"]
+
+[ext_resource type="Script" path="res://scripts/template_loader.gd" id="1_qc2g8"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_wvvcd"]
+
+[node name="TemplateLoader" type="Control"]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qc2g8")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Return"
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("1_wvvcd")
+
+[node name="TemplateList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NoTemplatesFound" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/NoTemplatesFound"]
+layout_mode = 2
+text = "No Templates Found"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GoCreateTemplateButton" type="Button" parent="MarginContainer/VBoxContainer/NoTemplatesFound"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Go to Create Template Tool"

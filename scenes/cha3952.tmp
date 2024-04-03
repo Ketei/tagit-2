@@ -1,0 +1,825 @@
+[gd_scene load_steps=15 format=3 uid="uid://ds167yujtqrif"]
+
+[ext_resource type="Script" path="res://scripts/char_info_instance.gd" id="1_rfmjg"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_ylrwt"]
+[ext_resource type="PackedScene" uid="uid://clofybwcoamm6" path="res://scenes/color_type_container.tscn" id="3_3u1bb"]
+[ext_resource type="Script" path="res://scenes/body_type_options.gd" id="3_p31e2"]
+[ext_resource type="PackedScene" uid="uid://dhadnetnefl7t" path="res://scenes/genders_option_button.tscn" id="3_y53kr"]
+[ext_resource type="Script" path="res://scripts/body_props_contianer.gd" id="4_y4l5k"]
+[ext_resource type="Script" path="res://scripts/clothing_checkbox.gd" id="5_8otdj"]
+[ext_resource type="Script" path="res://scripts/clothing_scoring.gd" id="5_nkm8e"]
+[ext_resource type="Script" path="res://scripts/pose_checkbox.gd" id="6_g0q6c"]
+[ext_resource type="Script" path="res://scripts/poses_container.gd" id="7_n8f0o"]
+
+[sub_resource type="GDScript" id="GDScript_o6xm3"]
+resource_name = "gender_contain"
+script/source = "extends HBoxContainer
+
+@onready var lore_button: CheckButton = $LoreButton
+@onready var canon_gender:GenderOptionButton = $CanonGender
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	lore_button.toggled.connect(on_lore_toggled)
+
+
+func on_lore_toggled(is_toggled: bool) -> void:
+	canon_gender.disabled = not is_toggled
+"
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_g34k6"]
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_ybr8h"]
+allow_unpress = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_41n82"]
+bg_color = Color(0.121569, 0.184314, 0.278431, 1)
+
+[node name="CharaInfoInstance" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rfmjg")
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ylrwt")
+speed = 7.0
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SmoothScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BodyTContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/BodyTContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Body type:"
+
+[node name="BodTypeOptBtn" type="OptionButton" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/BodyTContainer"]
+layout_mode = 2
+mouse_filter = 1
+alignment = 1
+item_count = 7
+selected = 0
+popup/item_0/text = "Anthro"
+popup/item_0/id = 0
+popup/item_1/text = "Semi-Anthro"
+popup/item_1/id = 1
+popup/item_2/text = "Feral"
+popup/item_2/id = 2
+popup/item_3/text = "Semi-Feral"
+popup/item_3/id = 3
+popup/item_4/text = "Human"
+popup/item_4/id = 4
+popup/item_5/text = "Humanoid"
+popup/item_5/id = 5
+popup/item_6/text = "Taur"
+popup/item_6/id = 6
+script = ExtResource("3_p31e2")
+
+[node name="SpeciesContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/SpeciesContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Species:"
+
+[node name="SpeciesLineEdit" type="LineEdit" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/SpeciesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+placeholder_text = "Species"
+
+[node name="HSeparator" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="GenderContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/GenderContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Gender:"
+
+[node name="GendersContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/GenderContainer"]
+layout_mode = 2
+script = SubResource("GDScript_o6xm3")
+
+[node name="GenderOpt" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/GenderContainer/GendersContainer" instance=ExtResource("3_y53kr")]
+layout_mode = 2
+
+[node name="LoreButton" type="CheckButton" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/GenderContainer/GendersContainer"]
+layout_mode = 2
+tooltip_text = "When the gender of the character doesn't match with what is visible."
+mouse_filter = 1
+text = "Enable Lore"
+
+[node name="CanonGender" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/GenderContainer/GendersContainer" instance=ExtResource("3_y53kr")]
+layout_mode = 2
+disabled = true
+
+[node name="HSeparator5" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BodPropsContainer" type="VBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("4_y4l5k")
+
+[node name="RowCont1" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer"]
+layout_mode = 2
+
+[node name="FurContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCont1" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Fur"
+
+[node name="ScalesContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCont1" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Scales"
+type_data = Array[Dictionary]([{
+"name": "1 Color",
+"tags": ["monotone scales"]
+}, {
+"name": "2 Colors",
+"tags": ["multicolored scales", "two tone scales"]
+}, {
+"name": "3+ Colors",
+"tags": ["multicolored scales", "multi tone scales"]
+}])
+
+[node name="FeathersContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCont1" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Feathers"
+type_data = Array[Dictionary]([{
+"name": "1 Color",
+"tags": ["monotone feathers"]
+}, {
+"name": "2 Colors",
+"tags": ["multicolored feathers", "two tone feathers"]
+}, {
+"name": "3+ Colors",
+"tags": ["multicolored feathers", "multi tone feathers"]
+}])
+
+[node name="RowCont2" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer"]
+layout_mode = 2
+
+[node name="WoolContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCont2" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Wool"
+type_data = Array[Dictionary]([{
+"name": "1 Color",
+"tags": ["monotone wool"]
+}, {
+"name": "2 Colors",
+"tags": ["multicolored wool", "two tone wool"]
+}, {
+"name": "3+ Colors",
+"tags": ["multicolored wool", "multi tone wool"]
+}])
+
+[node name="SkinContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCont2" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Skin"
+type_data = Array[Dictionary]([{
+"name": "1 Color",
+"tags": ["monotone skin"]
+}, {
+"name": "2 Colors",
+"tags": ["multicolored skin", "two tone skin"]
+}, {
+"name": "3+ Colors",
+"tags": ["multicolored skin", "multi tone skin"]
+}])
+
+[node name="BodyContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCont2" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Body"
+type_data = Array[Dictionary]([{
+"name": "1 Color",
+"tags": ["monotone body"]
+}, {
+"name": "2 Colors",
+"tags": ["multicolored body", "two tone body"]
+}, {
+"name": "3+ Colors",
+"tags": ["multicolored body", "multi tone body"]
+}])
+
+[node name="RowCount3" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BodyContainer2" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCount3" instance=ExtResource("3_3u1bb")]
+layout_mode = 2
+type_title = "Exoskeleton"
+type_data = Array[Dictionary]([{
+"name": "1 Color",
+"tags": ["monotone exoskeleton"]
+}, {
+"name": "2 Colors",
+"tags": ["multicolored exoskeleton", "two tone exoskeleton"]
+}, {
+"name": "3+ Colors",
+"tags": ["multicolored exoskeleton", "multi tone exoskeleton"]
+}])
+
+[node name="Control" type="Control" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCount3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="Control2" type="Control" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/BodPropsContainer/RowCount3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="HSeparator2" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ClothingHFlow" type="HFlowContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("5_nkm8e")
+
+[node name="Topwear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Topwear"
+clothing_tag = "topwear"
+solo_tag = "topwear only"
+clothing_score = 150
+
+[node name="Underwear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Underwear"
+clothing_tag = "underwear"
+solo_tag = "underwear only"
+clothing_score = 50
+
+[node name="BottomWear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Bottomwear"
+clothing_tag = "bottomwear"
+solo_tag = "topless"
+clothing_score = 150
+
+[node name="Legwear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Legwear"
+clothing_tag = "legwear"
+solo_tag = "legwear only"
+clothing_score = 10
+
+[node name="Armwear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Armwear"
+clothing_tag = "armwear"
+solo_tag = "armwear only"
+clothing_score = 10
+
+[node name="Footwear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Footwear"
+clothing_tag = "footwear"
+solo_tag = "footwear only"
+clothing_score = 10
+
+[node name="Headwear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Headwear"
+clothing_tag = "headwear"
+solo_tag = "headwear only"
+clothing_score = 10
+
+[node name="Collar" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Collar"
+clothing_tag = "collar"
+solo_tag = "collar only"
+counts_as_clothing = false
+
+[node name="Eyewear" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Eyewear"
+clothing_tag = "eyewear"
+solo_tag = "eyewear only"
+counts_as_clothing = false
+
+[node name="Diaper" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("5_8otdj")
+clothing_title = "Diaper"
+clothing_tag = "diaper"
+solo_tag = "diaper only"
+clothing_score = 10
+
+[node name="HSeparator3" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ExtraTags" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="FocusCheckBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags"]
+layout_mode = 2
+mouse_filter = 1
+text = "Is Focused"
+
+[node name="PositionContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags"]
+layout_mode = 2
+
+[node name="TopCheck" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags/PositionContainer"]
+layout_mode = 2
+mouse_filter = 1
+button_group = SubResource("ButtonGroup_g34k6")
+text = "On top"
+
+[node name="BottomCheck" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags/PositionContainer"]
+layout_mode = 2
+mouse_filter = 1
+button_group = SubResource("ButtonGroup_g34k6")
+text = "On bottom"
+
+[node name="RoleContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags"]
+layout_mode = 2
+
+[node name="DominantCheck" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags/RoleContainer"]
+layout_mode = 2
+mouse_filter = 1
+button_group = SubResource("ButtonGroup_ybr8h")
+text = "Dominant"
+
+[node name="SubmissiveCheck" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags/RoleContainer"]
+layout_mode = 2
+mouse_filter = 1
+button_group = SubResource("ButtonGroup_ybr8h")
+text = "Submissive"
+
+[node name="HSeparator4" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_41n82")
+
+[node name="PoseContainer" type="VBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+script = ExtResource("7_n8f0o")
+
+[node name="Label" type="Label" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Poses"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator7" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+
+[node name="StandingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Standing"
+script = ExtResource("6_g0q6c")
+pose_name = "Standing"
+pose_tag = "standing"
+
+[node name="VSeparator" type="VSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="StandingTypes" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="OneLegBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/HBoxContainer/StandingTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "On one leg"
+script = ExtResource("6_g0q6c")
+pose_name = "On one leg"
+pose_tag = "on one leg"
+
+[node name="AssUpBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/HBoxContainer/StandingTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ass up"
+script = ExtResource("6_g0q6c")
+pose_name = "Ass up"
+pose_tag = "ass up"
+
+[node name="HSeparator" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LeaningContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+
+[node name="LeaningBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Leaning"
+script = ExtResource("6_g0q6c")
+pose_name = "Leaning"
+pose_tag = "leaning"
+
+[node name="VSeparator" type="VSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="LeaningTypes" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SidewasBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Sideways"
+script = ExtResource("6_g0q6c")
+pose_name = "Leaning aside"
+pose_tag = "leaning sideways"
+
+[node name="BackBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Back"
+script = ExtResource("6_g0q6c")
+pose_name = "Leaning back"
+pose_tag = "leaning back"
+
+[node name="ForwardBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Forward"
+script = ExtResource("6_g0q6c")
+pose_name = "Leaning forward"
+pose_tag = "leaning forward"
+
+[node name="LeaningOn" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="WallBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Wall"
+script = ExtResource("6_g0q6c")
+pose_name = "On wall"
+pose_tag = "leaning on wall"
+
+[node name="FurnitureBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Furniture"
+script = ExtResource("6_g0q6c")
+pose_name = "On furniture"
+pose_tag = "leaning on furniture"
+
+[node name="LeaningOn2" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SelfBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningOn2"]
+layout_mode = 2
+mouse_filter = 1
+text = "On self"
+script = ExtResource("6_g0q6c")
+pose_name = "On self"
+pose_tag = "leaning on self"
+
+[node name="AnotherBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LeaningContainer/VBoxContainer/LeaningOn2"]
+layout_mode = 2
+mouse_filter = 1
+text = "On another"
+script = ExtResource("6_g0q6c")
+pose_name = "On another"
+pose_tag = "Leaning on another"
+
+[node name="HSeparator2" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BendingContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+
+[node name="BentOver" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Bending
+Over"
+script = ExtResource("6_g0q6c")
+pose_name = "Bending Over"
+pose_tag = "bent over"
+
+[node name="VSeparator" type="VSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BendingOn" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="WallBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer/BendingOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Wall"
+script = ExtResource("6_g0q6c")
+pose_name = "Wall"
+pose_tag = "bent over wall"
+
+[node name="FurnitureBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer/BendingOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Furniture"
+script = ExtResource("6_g0q6c")
+pose_name = "Furniture"
+pose_tag = "bent over furniture"
+
+[node name="BedBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer/BendingOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Bed"
+script = ExtResource("6_g0q6c")
+pose_name = "Bed"
+pose_tag = "bent over bed"
+
+[node name="DeskBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer/BendingOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Desk"
+script = ExtResource("6_g0q6c")
+pose_name = "Desk"
+pose_tag = "bent over desk"
+
+[node name="TableBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/BendingContainer/BendingOn"]
+layout_mode = 2
+mouse_filter = 1
+text = "Table"
+script = ExtResource("6_g0q6c")
+pose_name = "Table"
+pose_tag = "bent over table"
+
+[node name="HSeparator3" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="KneelingContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+
+[node name="KneelingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/KneelingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Kneeling"
+script = ExtResource("6_g0q6c")
+pose_name = "Kneeling"
+pose_tag = "kneeling"
+
+[node name="VSeparator" type="VSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/KneelingContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/KneelingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="OnOneBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/KneelingContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "One knee"
+script = ExtResource("6_g0q6c")
+pose_name = "One knee"
+pose_tag = "on one knee"
+
+[node name="AllFourBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/KneelingContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "All fours"
+script = ExtResource("6_g0q6c")
+pose_name = "All fours"
+pose_tag = "all fours"
+
+[node name="AssUpBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/KneelingContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ass up"
+script = ExtResource("6_g0q6c")
+pose_name = "Ass up"
+pose_tag = "ass up"
+
+[node name="HSeparator4" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LyingContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+
+[node name="LyingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LyingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Lying"
+script = ExtResource("6_g0q6c")
+pose_name = "Lying"
+pose_tag = "lying"
+
+[node name="VSeparator" type="VSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LyingContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LyingTypes" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LyingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="BackBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LyingContainer/LyingTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Back"
+script = ExtResource("6_g0q6c")
+pose_name = "Back"
+pose_tag = "on back"
+
+[node name="SideBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LyingContainer/LyingTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Side"
+script = ExtResource("6_g0q6c")
+pose_name = "Side"
+pose_tag = "on side"
+
+[node name="FrontBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/LyingContainer/LyingTypes"]
+layout_mode = 2
+mouse_filter = 1
+text = "Front"
+script = ExtResource("6_g0q6c")
+pose_name = "Front"
+pose_tag = "on front"
+
+[node name="HSeparator5" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SittingContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+
+[node name="SittingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/SittingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Sitting"
+script = ExtResource("6_g0q6c")
+pose_name = "Sitting"
+pose_tag = "sitting"
+
+[node name="VSeparator" type="VSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/SittingContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/SittingContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="GroundBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/SittingContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Surface"
+script = ExtResource("6_g0q6c")
+pose_name = "Ground"
+pose_tag = "sitting on ground"
+
+[node name="FurnitureBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/SittingContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Furniture"
+script = ExtResource("6_g0q6c")
+pose_name = "Furniture"
+pose_tag = "sitting on furniture"
+
+[node name="OtherBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/SittingContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Another"
+script = ExtResource("6_g0q6c")
+pose_name = "Another"
+pose_tag = "sitting on another"
+
+[node name="HSeparator6" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="OtherContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="FloatingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/OtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Floating"
+script = ExtResource("6_g0q6c")
+pose_name = "Floating"
+pose_tag = "floating"
+
+[node name="FlyingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/OtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Flying"
+script = ExtResource("6_g0q6c")
+pose_name = "Flying"
+pose_tag = "flying"
+
+[node name="JumpingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/OtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Jumping"
+script = ExtResource("6_g0q6c")
+pose_name = "Jumping"
+pose_tag = "jumping"
+
+[node name="SwimmingBox" type="CheckBox" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer/OtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Swimming"
+script = ExtResource("6_g0q6c")
+pose_name = "Swimming"
+pose_tag = "swimming"

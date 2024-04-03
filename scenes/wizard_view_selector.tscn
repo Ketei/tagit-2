@@ -1,0 +1,160 @@
+[gd_scene load_steps=21 format=3 uid="uid://d0ke7ull5xefx"]
+
+[ext_resource type="Script" path="res://scripts/wiz_view_selector.gd" id="1_vdjyn"]
+[ext_resource type="PackedScene" uid="uid://b0p6emcx6al3l" path="res://scenes/toggle_angle_container.tscn" id="2_ka1d8"]
+[ext_resource type="Texture2D" uid="uid://b1uj35edqwnyl" path="res://textures/angles/up-front.png" id="3_h4p62"]
+[ext_resource type="Texture2D" uid="uid://cf078lr5shmeh" path="res://textures/angles/up-34.png" id="4_v856k"]
+[ext_resource type="Texture2D" uid="uid://cg44pmrgfmkfo" path="res://textures/angles/up-side.png" id="5_dsc2g"]
+[ext_resource type="Texture2D" uid="uid://otkebh5twilj" path="res://textures/angles/up-back-34.png" id="6_085mh"]
+[ext_resource type="Texture2D" uid="uid://ba4wucaieamab" path="res://textures/angles/up-back.png" id="7_r7xj7"]
+[ext_resource type="Texture2D" uid="uid://i7kmfevaonqi" path="res://textures/angles/regular-front.png" id="8_2r2tc"]
+[ext_resource type="Texture2D" uid="uid://dkhauxar8k4m2" path="res://textures/angles/regular-34.png" id="9_uyupx"]
+[ext_resource type="Texture2D" uid="uid://pgm1exoye3c2" path="res://textures/angles/regular-side.png" id="10_s32i1"]
+[ext_resource type="Texture2D" uid="uid://cpafk41e2uhxg" path="res://textures/angles/regular-back-34.png" id="11_kk1na"]
+[ext_resource type="Texture2D" uid="uid://c83a5c8lt3w2p" path="res://textures/angles/regular-back.png" id="12_wqejy"]
+[ext_resource type="Texture2D" uid="uid://cos6pyeidmuqv" path="res://textures/angles/low-fromt.png" id="13_qu8rw"]
+[ext_resource type="Texture2D" uid="uid://60edqjcitux7" path="res://textures/angles/low-34.png" id="14_047b3"]
+[ext_resource type="Texture2D" uid="uid://dgqvasth60iti" path="res://textures/angles/low-side.png" id="15_106qn"]
+[ext_resource type="Texture2D" uid="uid://crs6wi8jrntwi" path="res://textures/angles/low-back-34.png" id="16_ewxg1"]
+[ext_resource type="Texture2D" uid="uid://dy2lasndun0au" path="res://textures/angles/low-back.png" id="17_6jwrb"]
+[ext_resource type="Texture2D" uid="uid://dbgng5m5s83bw" path="res://textures/angles/bird.png" id="18_vb6uv"]
+[ext_resource type="Texture2D" uid="uid://byn7youg81dqi" path="res://textures/angles/worm.png" id="19_vci3l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3rfa5"]
+bg_color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="ViewSelector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vdjyn")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1062, 0.13326, 0.18, 0.784314)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.292188
+anchor_top = 0.193056
+anchor_right = 0.707812
+anchor_bottom = 0.808333
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3rfa5")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="UpAngleContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HighFront" parent="PanelContainer/MarginContainer/VBoxContainer/UpAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("3_h4p62")
+
+[node name="HighProfileFront" parent="PanelContainer/MarginContainer/VBoxContainer/UpAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("4_v856k")
+
+[node name="HighSide" parent="PanelContainer/MarginContainer/VBoxContainer/UpAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("5_dsc2g")
+
+[node name="HighProfileBack" parent="PanelContainer/MarginContainer/VBoxContainer/UpAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("6_085mh")
+
+[node name="HighBack" parent="PanelContainer/MarginContainer/VBoxContainer/UpAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("7_r7xj7")
+
+[node name="FrontAngleContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NormalFront" parent="PanelContainer/MarginContainer/VBoxContainer/FrontAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("8_2r2tc")
+
+[node name="NormalProfileFront" parent="PanelContainer/MarginContainer/VBoxContainer/FrontAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("9_uyupx")
+
+[node name="NormalSide" parent="PanelContainer/MarginContainer/VBoxContainer/FrontAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("10_s32i1")
+
+[node name="NormalProfileBack" parent="PanelContainer/MarginContainer/VBoxContainer/FrontAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("11_kk1na")
+
+[node name="NormalBack" parent="PanelContainer/MarginContainer/VBoxContainer/FrontAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("12_wqejy")
+
+[node name="LowAngleContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LowFront" parent="PanelContainer/MarginContainer/VBoxContainer/LowAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("13_qu8rw")
+
+[node name="LowProfileFront" parent="PanelContainer/MarginContainer/VBoxContainer/LowAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("14_047b3")
+
+[node name="LowSide" parent="PanelContainer/MarginContainer/VBoxContainer/LowAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("15_106qn")
+
+[node name="LowProfileBack" parent="PanelContainer/MarginContainer/VBoxContainer/LowAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("16_ewxg1")
+
+[node name="LowBack" parent="PanelContainer/MarginContainer/VBoxContainer/LowAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("17_6jwrb")
+
+[node name="ExtraAngleContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BirdView" parent="PanelContainer/MarginContainer/VBoxContainer/ExtraAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("18_vb6uv")
+
+[node name="WormView" parent="PanelContainer/MarginContainer/VBoxContainer/ExtraAngleContainer" instance=ExtResource("2_ka1d8")]
+layout_mode = 2
+texture = ExtResource("19_vci3l")
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="SubmitButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Submit"

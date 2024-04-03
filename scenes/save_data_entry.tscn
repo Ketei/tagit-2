@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5u8nxrpcsfu0"]
+
+[ext_resource type="Script" path="res://scripts/save_data_entry.gd" id="1_7bddx"]
+
+[node name="SaveDataContainer" type="HBoxContainer"]
+custom_minimum_size = Vector2(320, 32)
+alignment = 1
+script = ExtResource("1_7bddx")
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "[SaveName]"
+text_overrun_behavior = 3
+
+[node name="SelectButton" type="Button" parent="."]
+layout_mode = 2
+mouse_filter = 1
+text = "Overwrite"
+
+[node name="DeleteSaveButton" type="Button" parent="."]
+layout_mode = 2
+mouse_filter = 1
+text = "Delete"

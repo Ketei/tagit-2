@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0p6emcx6al3l"]
+
+[ext_resource type="Script" path="res://scripts/angle_view_container.gd" id="1_13ujw"]
+[ext_resource type="Texture2D" uid="uid://b1uj35edqwnyl" path="res://textures/angles/up-front.png" id="2_861es"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3rfa5"]
+bg_color = Color(1, 1, 1, 0)
+
+[node name="AngleName" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_3rfa5")
+script = ExtResource("1_13ujw")
+
+[node name="VisualContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VisualContainer"]
+layout_mode = 2
+texture = ExtResource("2_861es")
+
+[node name="CheckButton" type="CheckBox" parent="VisualContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+
+[node name="ToggleButton" type="Button" parent="."]
+layout_mode = 2
+flat = true

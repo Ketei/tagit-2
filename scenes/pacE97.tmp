@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7d2r6xbbh1vw"]
+
+[ext_resource type="Script" path="res://scripts/tool_packer.gd" id="1_63kba"]
+[ext_resource type="PackedScene" uid="uid://b74j8u6a2s2t2" path="res://scenes/pack_folder_instance.tscn" id="2_fdsv8"]
+
+[node name="Packer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_63kba")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 16
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SubfolderLineEdit" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="CreateSubfolderButton" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Create Subfolder"
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PackFolder" parent="VBoxContainer/TabContainer" instance=ExtResource("2_fdsv8")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="PackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Pack Tags"

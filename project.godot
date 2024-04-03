@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Tag_It_2"
+run/main_scene="res://scenes/main_window.tscn"
+config/auto_accept_quit=false
+config/features=PackedStringArray("4.2", "GL Compatibility")
+boot_splash/image="res://textures/splash/splash.png"
+config/icon="res://textures/icons/icon.svg"
+config/windows_native_icon="res://textures/icons/icon.ico"
+boot_splash/minimum_display_time=1000
+
+[autoload]
+
+Tagger="*res://autoload/settings.gd"
+ESixRequester="*res://autoload/e_requester.gd"
+ImageLoader="*res://autoload/image_loader.gd"
+Hydrus="*res://autoload/hydrus_requester.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/SmoothScroll/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

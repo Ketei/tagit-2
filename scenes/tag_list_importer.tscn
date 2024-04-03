@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3 uid="uid://i8yytpmfbpx6"]
+
+[ext_resource type="Script" path="res://scripts/taglist_importer.gd" id="1_p488o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g4mr"]
+bg_color = Color(0.0901961, 0.211765, 0.4, 1)
+
+[node name="TagListImporter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p488o")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0589, 0.11134, 0.19, 0.588235)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(450, 600)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0g4mr")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="InputSide" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TagListTextEdit" type="TextEdit" parent="CenterContainer/PanelContainer/MarginContainer/InputSide"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_next = NodePath("../LineEdits/DivisorLineEdit")
+focus_previous = NodePath("../ButtonContainer/CancelButton")
+placeholder_text = "Write tags here"
+wrap_mode = 1
+
+[node name="LineEdits" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/InputSide"]
+layout_mode = 2
+
+[node name="DivisorLineEdit" type="LineEdit" parent="CenterContainer/PanelContainer/MarginContainer/InputSide/LineEdits"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "What separates a tag from each other."
+focus_next = NodePath("../WhitespaceLineEdit")
+placeholder_text = "Tag Separator"
+
+[node name="WhitespaceLineEdit" type="LineEdit" parent="CenterContainer/PanelContainer/MarginContainer/InputSide/LineEdits"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "What is used to separate words in tags. \"5_figners\" = \"_\""
+focus_next = NodePath("../../ButtonContainer/TransferTags")
+placeholder_text = "Tag whitespace"
+
+[node name="ButtonContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/InputSide"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/InputSide/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_next = NodePath("../../TagListTextEdit")
+focus_previous = NodePath("../TransferTags")
+text = "Cancel"
+
+[node name="TransferTags" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/InputSide/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+focus_next = NodePath("../CancelButton")
+focus_previous = NodePath("../../LineEdits/WhitespaceLineEdit")
+text = "Load Tag List"

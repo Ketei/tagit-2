@@ -1,0 +1,654 @@
+[gd_scene load_steps=17 format=3 uid="uid://dnmpmltog3uqx"]
+
+[ext_resource type="ButtonGroup" uid="uid://dui1fch8p2y5n" path="res://button_groups/wizard_completion.tres" id="1_e4fqs"]
+[ext_resource type="Script" path="res://scripts/wizard_instance.gd" id="1_ou3hq"]
+[ext_resource type="ButtonGroup" uid="uid://csb8mujyfac2o" path="res://button_groups/wizard_scenes.tres" id="2_jra51"]
+[ext_resource type="Script" path="res://scripts/wizard_media_type.gd" id="2_kv04q"]
+[ext_resource type="Theme" uid="uid://c8ad5ntep5ucc" path="res://theme/default.tres" id="3_k2k5r"]
+[ext_resource type="ButtonGroup" uid="uid://xk5teh2lwp2t" path="res://button_groups/wizard_cover_type.tres" id="3_pa5s4"]
+[ext_resource type="Script" path="res://scripts/backgrounds_container.gd" id="3_vrlyd"]
+[ext_resource type="Script" path="res://scripts/wiz_completion_container.gd" id="4_f0qec"]
+[ext_resource type="PackedScene" uid="uid://dhadnetnefl7t" path="res://scenes/genders_option_button.tscn" id="5_ub8m7"]
+[ext_resource type="Script" path="res://scripts/wizard_checkbox_tag.gd" id="6_6nttk"]
+[ext_resource type="Script" path="res://scripts/wixard_character_namer.gd" id="6_r4bok"]
+[ext_resource type="Script" path="res://scripts/wizard_perspective_container.gd" id="7_0swr5"]
+[ext_resource type="Script" path="res://scripts/wiz_comic_container.gd" id="8_fnfvv"]
+[ext_resource type="Script" path="res://scripts/wizard_extra_seggs.gd" id="11_t3e51"]
+[ext_resource type="Script" path="res://scripts/wiz_sex_interactions.gd" id="12_rkmvx"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="13_bx75r"]
+
+[node name="WizardInstance" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ou3hq")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ImageInfo" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="BasicData" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="ArtistContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/ArtistContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/ArtistContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Artist"
+horizontal_alignment = 1
+
+[node name="ArtistLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/ArtistContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="UnknownArtChkBtn" type="CheckButton" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/ArtistContainer"]
+layout_mode = 2
+text = "Unknown Artist"
+
+[node name="YearContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/YearContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/YearContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Media year"
+horizontal_alignment = 1
+
+[node name="YearSpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/YearContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+min_value = 1900.0
+max_value = 3000.0
+value = 1900.0
+allow_greater = true
+
+[node name="UnknownDateChkBtn" type="CheckButton" parent="MarginContainer/HBoxContainer/ImageInfo/BasicData/YearContainer"]
+layout_mode = 2
+text = "Unknown Year"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="MediaType" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+script = ExtResource("2_kv04q")
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/MediaType"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Media Type"
+
+[node name="OptionContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/MediaType"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="MediaTypeOptBtn" type="OptionButton" parent="MarginContainer/HBoxContainer/ImageInfo/MediaType/OptionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.5
+
+[node name="MediaSubOptBtn" type="OptionButton" parent="MarginContainer/HBoxContainer/ImageInfo/MediaType/OptionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.5
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Background"
+
+[node name="BackgroundsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+script = ExtResource("3_vrlyd")
+
+[node name="BGTypeOptions" type="OptionButton" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer/BackgroundsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text_overrun_behavior = 3
+fit_to_longest_item = false
+
+[node name="BGSubtypeOptions" type="OptionButton" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer/BackgroundsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text_overrun_behavior = 3
+fit_to_longest_item = false
+
+[node name="DaytimeButtons" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer/BackgroundsContainer"]
+layout_mode = 2
+
+[node name="DayTime" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer/BackgroundsContainer/DaytimeButtons"]
+layout_mode = 2
+text = "Day"
+
+[node name="NightTime" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/HBoxContainer/BackgroundsContainer/DaytimeButtons"]
+layout_mode = 2
+text = "Night"
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="CompletionContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+script = ExtResource("4_f0qec")
+
+[node name="CompletionContainerH" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="DegreeContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer/CompletionContainerH"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SketchCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer/CompletionContainerH/DegreeContainer"]
+layout_mode = 2
+button_group = ExtResource("1_e4fqs")
+text = "Sketch"
+script = ExtResource("6_6nttk")
+display_name = "Sketch"
+tag_name = "sketch"
+
+[node name="LineartCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer/CompletionContainerH/DegreeContainer"]
+layout_mode = 2
+button_group = ExtResource("1_e4fqs")
+text = "Lineart"
+script = ExtResource("6_6nttk")
+display_name = "Lineart"
+tag_name = "line art"
+
+[node name="LinelessCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer/CompletionContainerH/DegreeContainer"]
+layout_mode = 2
+button_group = ExtResource("1_e4fqs")
+text = "Lineless"
+script = ExtResource("6_6nttk")
+display_name = "Lineless"
+tag_name = "lineless"
+
+[node name="ColoredCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer/CompletionContainerH"]
+layout_mode = 2
+text = "Colored"
+script = ExtResource("6_6nttk")
+display_name = "Colored"
+tag_name = "colored"
+
+[node name="ShadedCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/CompletionContainer/CompletionContainerH"]
+layout_mode = 2
+text = "Shaded"
+script = ExtResource("6_6nttk")
+display_name = "Shaded"
+tag_name = "shaded"
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="Perspectives" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+script = ExtResource("7_0swr5")
+
+[node name="AnglesContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/AnglesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+text = "Angles:"
+
+[node name="ChecksContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/AnglesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="WormCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/AnglesContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Worm Angle"
+script = ExtResource("6_6nttk")
+display_name = "Worm Angle"
+tag_name = "worm's-eye view "
+
+[node name="LowCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/AnglesContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Low Angle"
+script = ExtResource("6_6nttk")
+display_name = "Low Angle"
+tag_name = "low-angle view "
+
+[node name="HighCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/AnglesContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "High Angle"
+script = ExtResource("6_6nttk")
+display_name = "High Angle"
+tag_name = "high-angle view "
+
+[node name="BirdCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/AnglesContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Bird Angle"
+script = ExtResource("6_6nttk")
+display_name = "Bird Angle"
+tag_name = "bird's-eye view "
+
+[node name="ViewsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/ViewsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+text = "Views:"
+
+[node name="ChecksContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/ViewsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="FrontCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/ViewsContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Front View"
+script = ExtResource("6_6nttk")
+display_name = "Front View"
+tag_name = "front view"
+
+[node name="ThreeCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/ViewsContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3/4 View"
+script = ExtResource("6_6nttk")
+display_name = "3/4 View"
+tag_name = "three-quarter view "
+
+[node name="SideCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/ViewsContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Side View"
+script = ExtResource("6_6nttk")
+display_name = "Side View"
+tag_name = "side view"
+
+[node name="ButtCheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives/ViewsContainer/ChecksContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rear View"
+script = ExtResource("6_6nttk")
+display_name = "Rear View"
+tag_name = "rear view"
+
+[node name="OpenViewSlectButton" type="Button" parent="MarginContainer/HBoxContainer/ImageInfo/Perspectives"]
+layout_mode = 2
+text = "Open View Selector"
+
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="ComicContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_fnfvv")
+
+[node name="Uniques" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer"]
+layout_mode = 2
+
+[node name="MultipleSceneBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/Uniques"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+button_group = ExtResource("2_jra51")
+text = "Multiple Scenes"
+script = ExtResource("6_6nttk")
+display_name = "Multiple Scenes"
+tag_name = "multiple scenes"
+
+[node name="SequentialCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/Uniques"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Sequential"
+script = ExtResource("6_6nttk")
+display_name = "Sequential"
+tag_name = "sequence"
+
+[node name="MultiImageBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/Uniques"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+button_group = ExtResource("2_jra51")
+text = "Multiple Images"
+script = ExtResource("6_6nttk")
+display_name = "Multiple Images"
+tag_name = "multiple images"
+
+[node name="MultiPoses" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/Uniques"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Multiple Poses"
+script = ExtResource("6_6nttk")
+display_name = "Multiple Poses"
+tag_name = "multiple poses"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ComicBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+button_group = ExtResource("3_pa5s4")
+text = "Comic"
+script = ExtResource("6_6nttk")
+display_name = "Comic"
+tag_name = "comic"
+
+[node name="CoverBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+button_group = ExtResource("3_pa5s4")
+text = "Front Page"
+script = ExtResource("6_6nttk")
+display_name = "Front Cover"
+tag_name = "cover page"
+
+[node name="EndBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+button_group = ExtResource("3_pa5s4")
+text = "Back Cover"
+script = ExtResource("6_6nttk")
+display_name = "Back Cover"
+tag_name = "back cover"
+
+[node name="ComicBack" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer"]
+layout_mode = 2
+
+[node name="FirstPageBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/ComicBack"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "First Page"
+script = ExtResource("6_6nttk")
+display_name = "First Page"
+tag_name = "first page"
+
+[node name="LastPageBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/ComicBack"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Last Page"
+script = ExtResource("6_6nttk")
+display_name = "Last Page"
+tag_name = "end page"
+
+[node name="PGNumbBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ComicContainer/ComicBack"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Page numbered"
+script = ExtResource("6_6nttk")
+display_name = "Page number"
+tag_name = "page number"
+
+[node name="HSeparator6" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="ExtraSegs" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+script = ExtResource("11_t3e51")
+
+[node name="SomeContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs"]
+layout_mode = 2
+
+[node name="ThreesomeBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs/SomeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Threesome"
+
+[node name="FoursomeBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs/SomeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Foursome"
+
+[node name="FivesomeBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs/SomeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fivesome"
+
+[node name="GroupSex" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs"]
+layout_mode = 2
+
+[node name="GangBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs/GroupSex"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Gangbang"
+
+[node name="ReverseGangBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs/GroupSex"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Reverse gangbang"
+
+[node name="OrgyBox" type="CheckBox" parent="MarginContainer/HBoxContainer/ImageInfo/ExtraSegs/GroupSex"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Orgy"
+
+[node name="HSeparator7" type="HSeparator" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+
+[node name="SexInteractions" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("12_rkmvx")
+
+[node name="SexInteracts" type="ItemList" parent="MarginContainer/HBoxContainer/ImageInfo/SexInteractions"]
+layout_mode = 2
+size_flags_vertical = 3
+max_columns = 2
+same_column_width = true
+fixed_column_width = 250
+script = ExtResource("13_bx75r")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ImageInfo/SexInteractions"]
+layout_mode = 2
+alignment = 1
+
+[node name="GenderOptA" parent="MarginContainer/HBoxContainer/ImageInfo/SexInteractions/HBoxContainer" instance=ExtResource("5_ub8m7")]
+layout_mode = 2
+action_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ImageInfo/SexInteractions/HBoxContainer"]
+layout_mode = 2
+text = "on"
+
+[node name="GenderOptB" parent="MarginContainer/HBoxContainer/ImageInfo/SexInteractions/HBoxContainer" instance=ExtResource("5_ub8m7")]
+layout_mode = 2
+action_mode = 1
+
+[node name="AddInteractButton" type="Button" parent="MarginContainer/HBoxContainer/ImageInfo/SexInteractions/HBoxContainer"]
+layout_mode = 2
+text = "Add Interaction"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="MenuOptions" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MenuButton" type="MenuButton" parent="MarginContainer/HBoxContainer/VBoxContainer/MenuOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "New Character"
+item_count = 2
+popup/item_0/text = "Known Character"
+popup/item_0/id = 0
+popup/item_1/text = "Unknown Character"
+popup/item_1/id = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CharacterInfo" type="TabContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme = ExtResource("3_k2k5r")
+drag_to_rearrange_enabled = true
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="CancelButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="DoneButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Finish"
+
+[node name="CharacterNamer" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_r4bok")
+
+[node name="ColorRect" type="ColorRect" parent="CharacterNamer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="CharcterPanel" type="PanelContainer" parent="CharacterNamer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -48.0
+offset_right = 192.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundColor" type="ColorRect" parent="CharacterNamer/CharcterPanel"]
+layout_mode = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="CharacterNamer/CharcterPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CharacterNamer/CharcterPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="CharInfo" type="HBoxContainer" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/CharInfo"]
+layout_mode = 2
+text = "Character name"
+
+[node name="CharNameLineEdit" type="LineEdit" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/CharInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Character Name"
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Cancel"
+
+[node name="AcceptButton" type="Button" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Accept"

@@ -1,0 +1,133 @@
+[gd_scene load_steps=3 format=3 uid="uid://c52fth8a6brwp"]
+
+[ext_resource type="Script" path="res://scripts/tool_templates.gd" id="1_4sj5k"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="1_extqk"]
+
+[node name="ToolTemplates" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4sj5k")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NameContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/NameContainer"]
+layout_mode = 2
+text = "Template Name"
+
+[node name="NameLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/NameContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DescriptionContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/DescriptionContainer"]
+layout_mode = 2
+text = "Template Description"
+horizontal_alignment = 1
+
+[node name="DescTextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/DescriptionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TemplateTags" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 18
+
+[node name="NormalContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TemplateTags"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TemplateTags/NormalContainer"]
+layout_mode = 2
+text = "Tags"
+horizontal_alignment = 1
+
+[node name="NomalTagsItem" type="ItemList" parent="MarginContainer/VBoxContainer/TemplateTags/NormalContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("1_extqk")
+
+[node name="InputContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TemplateTags/NormalContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TagsLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/TemplateTags/NormalContainer/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="AddTagButton" type="Button" parent="MarginContainer/VBoxContainer/TemplateTags/NormalContainer/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Add"
+
+[node name="SuggestionsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TemplateTags"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer"]
+layout_mode = 2
+text = "Suggestions"
+horizontal_alignment = 1
+
+[node name="Suggestions" type="ItemList" parent="MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("1_extqk")
+
+[node name="InputContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SuggestionsLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="AddSuggestionButton" type="Button" parent="MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Add"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Save Template"

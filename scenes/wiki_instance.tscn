@@ -1,0 +1,292 @@
+[gd_scene load_steps=7 format=3 uid="uid://bgpp0mr5o1al3"]
+
+[ext_resource type="Script" path="res://scripts/wiki_instance.gd" id="1_qfsgr"]
+[ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="2_5ih7u"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_oo4wn"]
+[ext_resource type="Texture2D" uid="uid://cosrtsibrj13r" path="res://textures/icons/e6_logo.svg" id="4_vsnv8"]
+
+[sub_resource type="GDScript" id="GDScript_sotlf"]
+resource_name = "wiki_search"
+script/source = "extends LineEdit
+
+
+@onready var timer: Timer = $Timer
+@onready var auto_fill: ItemList = $VBoxContainer/AutoFill
+@onready var auto_container = $VBoxContainer
+
+
+
+func _ready():
+	text_changed.connect(on_text_changed)
+	timer.timeout.connect(on_timer_ended)
+	focus_exited.connect(on_focus_lost)
+	text_submitted.connect(on_text_submitted)
+
+
+func on_text_submitted(_ignored: String) -> void:
+	if not timer.is_stopped():
+		timer.stop()
+
+
+func on_focus_lost() -> void:
+	await get_tree().process_frame # Wait to see who grabs focus
+	if not auto_fill.has_focus() and auto_container.visible:
+		auto_container.hide()
+
+
+func on_text_changed(_ignored: String) -> void:
+	if not Tagger.autofill_enabled:
+		return
+	
+	if auto_container.visible:
+		auto_container.hide()
+	
+	timer.start()
+
+
+func on_timer_ended() -> void:
+	var tag_to_search: String = text.strip_edges().to_lower()
+	if tag_to_search.is_empty():
+		return
+	
+	var tags_found: Array[String] = Tagger.search_local(tag_to_search, 10)
+	
+	auto_fill.clear()
+
+	for item in tags_found:
+		auto_fill.add_item(item)
+	
+	if 0 < tags_found.size():
+		auto_container.show()
+
+
+func _gui_input(event):
+	if has_focus() and event.is_action(\"ui_up\"):
+		auto_container.show()
+		auto_fill.select(auto_fill.item_count - 1)
+		auto_fill.grab_focus()
+
+"
+
+[sub_resource type="GDScript" id="GDScript_qr4vn"]
+script/source = "extends ItemList
+
+
+signal item_submited(item_text: String)
+
+
+@onready var add_tag: LineEdit = $\"../..\"
+@onready var container = $\"..\"
+
+
+func _ready():
+	container.hide()
+	focus_exited.connect(on_focus_exited)
+	item_clicked.connect(on_item_clicked)
+	item_activated.connect(on_item_activated)
+
+
+# Called when the node enters the scene tree for the first time.
+func _gui_input(_event):
+	if has_focus() and Input.is_action_just_pressed(\"ui_focus_next\") and is_anything_selected():
+		add_tag.text = get_item_text(
+			get_selected_items()[0]
+		)
+		add_tag.caret_column = add_tag.text.length()
+
+
+func on_item_clicked(index: int, _at_position: Vector2, mouse_button_index: int):
+	if mouse_button_index == MOUSE_BUTTON_LEFT:
+		item_submited.emit(get_item_text(index))
+		release_focus()
+
+
+func on_item_activated(item_index: int) -> void:
+	item_submited.emit(get_item_text(item_index))
+	release_focus()
+	#add_tag.grab_focus()
+
+
+func on_focus_exited():
+	container.hide()
+"
+
+[node name="WikiInstance" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qfsgr")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="WikiContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="WikiSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/WikiContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Empty" type="Control" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
+visible = false
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Close Wiki"
+text = "Close"
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 9.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer"]
+layout_mode = 2
+script = ExtResource("2_oo4wn")
+speed = 6.0
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+follow_focus_ = false
+allow_horizontal_scroll = false
+
+[node name="WikiDesc" type="RichTextLabel" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+mouse_filter = 1
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="LeftMenus" type="HBoxContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+
+[node name="WikiSearch" type="LineEdit" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 7.0
+clear_button_enabled = true
+script = SubResource("GDScript_sotlf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -350.0
+grow_horizontal = 2
+alignment = 2
+
+[node name="AutoFill" type="ItemList" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../..")
+focus_next = NodePath("../..")
+focus_previous = NodePath("../..")
+mouse_filter = 1
+theme = ExtResource("2_5ih7u")
+auto_height = true
+item_count = 1
+item_0/text = "asdasd"
+script = SubResource("GDScript_qr4vn")
+
+[node name="Timer" type="Timer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch"]
+wait_time = 0.3
+one_shot = true
+
+[node name="SearchButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Search"
+
+[node name="ESixSearch" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "e621"
+icon = ExtResource("4_vsnv8")
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/WikiContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/WikiContainer/PanelContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("2_oo4wn")
+speed = 10.0
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+
+[node name="ThumbnailContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+top_level = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FullScreenView" type="TextureRect" parent="PanelContainer"]
+visible = false
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5

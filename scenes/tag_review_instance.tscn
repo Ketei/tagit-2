@@ -1,0 +1,422 @@
+[gd_scene load_steps=10 format=3 uid="uid://cimm555ig005"]
+
+[ext_resource type="Script" path="res://scripts/tag_review_instance.gd" id="1_csr5t"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="1_t4hiu"]
+[ext_resource type="PackedScene" uid="uid://b0pf1366qxb7y" path="res://scenes/category_option_button.tscn" id="1_v2b00"]
+[ext_resource type="Texture2D" uid="uid://cosrtsibrj13r" path="res://textures/icons/e6_logo.svg" id="2_axmym"]
+[ext_resource type="Texture2D" uid="uid://b5yr2531jxk8a" path="res://textures/icons/download_icon.svg" id="2_piyp6"]
+[ext_resource type="Script" path="res://scripts/preview_builder.gd" id="2_wugvu"]
+[ext_resource type="Script" path="res://scripts/tag_review_menu.gd" id="3_i77ie"]
+[ext_resource type="Script" path="res://scripts/review_smart_entries.gd" id="5_1gv4a"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="5_7suxg"]
+
+[node name="TagReview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_csr5t")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="SearchContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 16
+
+[node name="TopMenu" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Empty" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TopMenu"]
+custom_minimum_size = Vector2(130, 31)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FetchStatus" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TopMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="ClearButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TopMenu"]
+layout_mode = 2
+text = "Clear"
+
+[node name="NameContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer"]
+layout_mode = 2
+
+[node name="TagNameLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/NameContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+placeholder_text = "Tag Name"
+select_all_on_focus = true
+
+[node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/NameContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load"
+icon = ExtResource("2_piyp6")
+
+[node name="FetchButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/NameContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Grabs some basic information of the tag from e621 if the tag exists."
+text = "Fetch"
+icon = ExtResource("2_axmym")
+
+[node name="Props" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CategoryContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/Props"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/Props/CategoryContainer"]
+layout_mode = 2
+text = "Category"
+
+[node name="CategoryOptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/Props/CategoryContainer" instance=ExtResource("1_v2b00")]
+layout_mode = 2
+size_flags_horizontal = 3
+max_heigth = 184
+max_width = 200
+
+[node name="PriorityContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/Props"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/Props/PriorityContainer"]
+layout_mode = 2
+text = "Priority"
+
+[node name="PrioritySpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/Props/PriorityContainer"]
+layout_mode = 2
+allow_greater = true
+allow_lesser = true
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 1
+
+[node name="Parents" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer" node_paths=PackedStringArray("input_line", "submit_button", "tag_list")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_i77ie")
+input_line = NodePath("InputContainer/ParentsLineEdit")
+submit_button = NodePath("InputContainer/AddParentButton")
+tag_list = NodePath("ParentsItemList")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Parents"]
+layout_mode = 2
+text = "Tag Parents"
+horizontal_alignment = 1
+
+[node name="ParentsItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Parents"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+script = ExtResource("1_t4hiu")
+
+[node name="InputContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Parents"]
+layout_mode = 2
+
+[node name="ParentsLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Parents/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AddParentButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Parents/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="Suggestions" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer" node_paths=PackedStringArray("input_line", "submit_button", "tag_list")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_i77ie")
+input_line = NodePath("InputContainer/SuggestionLineEdit")
+submit_button = NodePath("InputContainer/AddSuggestionButton")
+tag_list = NodePath("SuggestionItemList")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Suggestions"]
+layout_mode = 2
+text = "Tag Suggestions"
+horizontal_alignment = 1
+
+[node name="SuggestionItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Suggestions"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+script = ExtResource("1_t4hiu")
+
+[node name="InputContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Suggestions"]
+layout_mode = 2
+
+[node name="SuggestionLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Suggestions/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AddSuggestionButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Suggestions/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="Groups" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("5_1gv4a")
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_alignment = 1
+
+[node name="Lists" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("5_7suxg")
+speed = 7.0
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists/MarginContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+alignment = 1
+
+[node name="AddData" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists"]
+layout_mode = 2
+
+[node name="TitleLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists/AddData"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Group Title"
+
+[node name="EntryLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists/AddData"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Group Entry"
+
+[node name="AddGroupButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists/AddData"]
+layout_mode = 2
+text = "Add Group Entry"
+
+[node name="Amounts" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("5_7suxg")
+speed = 7.0
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+
+[node name="NumberHflow" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/MarginContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+alignment = 1
+
+[node name="AddData" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts"]
+layout_mode = 2
+
+[node name="LineEdits" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData/LineEdits"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Tag Title"
+
+[node name="EntryLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData/LineEdits"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Tag single form"
+
+[node name="SpinBoxes" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData/SpinBoxes"]
+layout_mode = 2
+text = "Min value"
+
+[node name="MinSpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData/SpinBoxes"]
+layout_mode = 2
+size_flags_horizontal = 3
+allow_greater = true
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData/SpinBoxes"]
+layout_mode = 2
+text = "Max value"
+
+[node name="MaxSpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData/SpinBoxes"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "-1 for no limit."
+min_value = -1.0
+value = -1.0
+allow_greater = true
+
+[node name="AddGroupButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/AddData"]
+layout_mode = 2
+text = "Add Amount Entry"
+
+[node name="Aliases" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer" node_paths=PackedStringArray("input_line", "submit_button", "tag_list")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_i77ie")
+input_line = NodePath("InputContainer/AliasLineEdit")
+submit_button = NodePath("InputContainer/AddAliasButton")
+tag_list = NodePath("AliasItemList")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Aliases"]
+layout_mode = 2
+text = "Aliases"
+horizontal_alignment = 1
+
+[node name="AliasItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Aliases"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+script = ExtResource("1_t4hiu")
+
+[node name="InputContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Aliases"]
+layout_mode = 2
+
+[node name="AliasLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Aliases/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AddAliasButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Aliases/InputContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="WikiContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/WikiContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_wugvu")
+
+[node name="Write" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/WikiContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="WikiTextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/WikiContainer/TabContainer/Write"]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Wiki Entry"
+wrap_mode = 1
+
+[node name="Preview" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/WikiContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="WikiRichLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/WikiContainer/TabContainer/Preview"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Hey guys, did you know that in terms of male human and [b]male[/b] Pokémon breeding, Vaporeon is the most compatible Pokémon for humans? Not only are they in the field egg group, which is mostly comprised of mammals, Vaporeon are an average of 3\"03' tall and 63.9 pounds, this means they're large enough to be able handle human dicks, and with their impressive Base Stats for HP and access to Acid Armor, you can be rough with one. Due to their mostly water based biology, there's no doubt in my mind that an aroused Vaporeon would be incredibly wet, so wet that you could easily have sex with one for hours without getting sore. They can also learn the moves Attract, Baby-Doll Eyes, Captivate, Charm, and Tail Whip, along with not having fur to hide nipples, so it'd be incredibly easy for one to get you in the mood. With their abilities Water Absorb and Hydration, they can easily recover from fatigue with enough water. No other Pokémon comes close to this level of compatibility. Also, fun fact, if you pull out enough, you can make your Vaporeon turn white. Vaporeon is literally built for human dick. Ungodly defense stat+high HP pool+Acid Armor means it can take cock all day, all shapes and sizes and still come for more"
+
+[node name="TooltipLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/WikiContainer"]
+layout_mode = 2
+placeholder_text = "Tooltip"
+select_all_on_focus = true
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Save"
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonsContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delete"

@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://bimxfti6jy5wq"]
+
+[ext_resource type="Script" path="res://scripts/tools_window.gd" id="1_gjyo2"]
+[ext_resource type="PackedScene" uid="uid://cb0xy7vkvw6e1" path="res://scenes/tool_prefixes.tscn" id="1_iui6u"]
+[ext_resource type="PackedScene" uid="uid://c52fth8a6brwp" path="res://scenes/tool_templates.tscn" id="2_7rhvu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jdtdr"]
+bg_color = Color(0.184314, 0.254902, 0.360784, 1)
+
+[node name="ToolsWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gjyo2")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.431373, 0.517647, 0.647059, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jdtdr")
+tab_alignment = 1
+
+[node name="Prefixes" parent="MarginContainer/TabContainer" instance=ExtResource("1_iui6u")]
+layout_mode = 2
+
+[node name="Template Creator" parent="MarginContainer/TabContainer" instance=ExtResource("2_7rhvu")]
+visible = false
+layout_mode = 2

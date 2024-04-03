@@ -1,0 +1,491 @@
+[gd_scene load_steps=10 format=3 uid="uid://cyodg6s04nvct"]
+
+[ext_resource type="Script" path="res://scripts/settings_window.gd" id="1_7cc65"]
+[ext_resource type="PackedScene" uid="uid://dp0dtvv4h81x0" path="res://scenes/sites_option_menu.tscn" id="1_uwl5o"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="3_7umna"]
+[ext_resource type="Script" path="res://scripts/sett_load_wiki.gd" id="3_ej6ke"]
+[ext_resource type="Script" path="res://scripts/tool_aliased_tags.gd" id="3_uiqhg"]
+[ext_resource type="Script" path="res://scripts/settings_invalid_tags.gd" id="4_ja1bu"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="5_i3xrb"]
+[ext_resource type="Script" path="res://scripts/settings_suggestion_blacklist.gd" id="6_43nla"]
+[ext_resource type="Script" path="res://scripts/settings_constant_tags.gd" id="7_mfs0k"]
+
+[node name="SettingsWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7cc65")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="LeftSettings" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/separation = 16
+
+[node name="Empty" type="Control" parent="MarginContainer/HBoxContainer/LeftSettings"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ExitButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings"]
+visible = false
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Close"
+
+[node name="DefaultSite" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/DefaultSite"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Default Site"
+
+[node name="SitesOptionMenu" parent="MarginContainer/HBoxContainer/LeftSettings/DefaultSite" instance=ExtResource("1_uwl5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="OnlineContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="OnlineCheckButton" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/OnlineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load Online Suggestions"
+
+[node name="InvalidInclude" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="IncludeInvalidCheck" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/InvalidInclude"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "If invalid tags will be added to the final generated tag list."
+text = "Include Invalid tags on generation"
+
+[node name="SuggestContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/SuggestContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Confidence"
+
+[node name="ConfidenceSpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftSettings/SuggestContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+value = 45.0
+alignment = 1
+suffix = "%"
+
+[node name="ImageLoader" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wiki Images"
+vertical_alignment = 1
+
+[node name="LoadImagesContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+script = ExtResource("3_ej6ke")
+
+[node name="LoadImagesBTN" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader/LoadImagesContainer"]
+layout_mode = 2
+text = "Load Images"
+alignment = 1
+
+[node name="ImageCount" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader/LoadImagesContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 120.0
+value = 1.0
+alignment = 1
+editable = false
+
+[node name="FunctionallityToggle" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+alignment = 1
+
+[node name="AutofillEnabled" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "When typing on the tagger or wiki, show
+tags that contain the typed word. Accepts
+prefixing or suffixing with the wildcard \"*\""
+button_pressed = true
+text = "Autofill"
+
+[node name="WikiESixSearch" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "When clicking a tag link on the wiki, 
+if there is no wiki page on the local database, 
+open e621 instead."
+button_pressed = true
+text = "Wiki links to e621"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Database Path"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="DBPathLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+editable = false
+
+[node name="BrowsePathButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Browse"
+
+[node name="HydrusContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="HydrusFields" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PortContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/PortContainer"]
+layout_mode = 2
+text = "Hydrus Port:"
+
+[node name="PortSpinbox" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/PortContainer"]
+layout_mode = 2
+allow_greater = true
+alignment = 1
+
+[node name="KeyContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/KeyContainer"]
+layout_mode = 2
+text = "Hydrus Key:"
+
+[node name="KeySecret" type="LineEdit" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/KeyContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+select_all_on_focus = true
+secret = true
+
+[node name="HydrusConnectButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer"]
+layout_mode = 2
+text = "Connect to Hydrus"
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OpenTagFolderBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+text = "Open Tags Folder"
+
+[node name="InstallPakButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+tooltip_text = "Install a tag pack"
+text = "Install Tag Pack"
+
+[node name="InstallWebsiteButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Install Website Data"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DangerButtonsCheck" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Enables buttons that will critically change how the tagger operate."
+text = "Enable Special Buttons"
+
+[node name="ReloadTagButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Use if you changed your database and want to load tags on that new folder."
+disabled = true
+text = "Reload Tags"
+
+[node name="ClearTagMapButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Clear Tag Map"
+
+[node name="BlackListTabs" type="TabContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+tab_alignment = 1
+
+[node name="Invalid Tags" type="Control" parent="MarginContainer/HBoxContainer/BlackListTabs"]
+layout_mode = 2
+script = ExtResource("4_ja1bu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InvalidList" type="ItemList" parent="MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+script = ExtResource("5_i3xrb")
+
+[node name="LineContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags/VBoxContainer"]
+layout_mode = 2
+
+[node name="InvalidAddLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags/VBoxContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AddInvalidButton" type="Button" parent="MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags/VBoxContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Add"
+
+[node name="Suggestion Blacklist" type="Control" parent="MarginContainer/HBoxContainer/BlackListTabs"]
+visible = false
+layout_mode = 2
+script = ExtResource("6_43nla")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SugBlackList" type="ItemList" parent="MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+script = ExtResource("5_i3xrb")
+
+[node name="LineContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist/VBoxContainer"]
+layout_mode = 2
+
+[node name="SugBlackAddLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist/VBoxContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AddSugBlackButton" type="Button" parent="MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist/VBoxContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Add"
+
+[node name="Constant Tags" type="Control" parent="MarginContainer/HBoxContainer/BlackListTabs"]
+visible = false
+layout_mode = 2
+script = ExtResource("7_mfs0k")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Constant Tags"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConstantsList" type="ItemList" parent="MarginContainer/HBoxContainer/BlackListTabs/Constant Tags/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+script = ExtResource("5_i3xrb")
+
+[node name="LineContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Constant Tags/VBoxContainer"]
+layout_mode = 2
+
+[node name="ConstantAddLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/BlackListTabs/Constant Tags/VBoxContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="ConstantButton" type="Button" parent="MarginContainer/HBoxContainer/BlackListTabs/Constant Tags/VBoxContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Add"
+
+[node name="Aliased Tags" type="Control" parent="MarginContainer/HBoxContainer/BlackListTabs"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_uiqhg")
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.129412, 0.14902, 0.180392, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="SearchContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="SearchFilters" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SearchContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+alignment = 2
+
+[node name="SearchingLabel" type="Label" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SearchContainer/SearchFilters"]
+visible = false
+layout_mode = 2
+text = "Searching for"
+
+[node name="ClearSearchButton" type="Button" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SearchContainer/SearchFilters"]
+visible = false
+layout_mode = 2
+text = "X"
+flat = true
+
+[node name="SearchLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SearchContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="SearchAliasButton" type="Button" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SearchContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Search Alias"
+
+[node name="CustomOnlyCheckButton" type="CheckButton" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SearchContainer"]
+layout_mode = 2
+tooltip_text = "Display only aliases added by user."
+text = "Custom Only"
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("3_7umna")
+speed = 7.0
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+
+[node name="AliasFlowContainer" type="HFlowContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="FromAliasLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Old Tag"
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "->"
+
+[node name="ToAliasLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "New Tag"
+
+[node name="CreateAliasButton" type="Button" parent="MarginContainer/HBoxContainer/BlackListTabs/Aliased Tags/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Create Alias"
+
+[node name="FolderDialog" type="FileDialog" parent="."]
+title = "Open a Directory"
+initial_position = 1
+size = Vector2i(454, 159)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+title = "Database Updated"
+initial_position = 1
+size = Vector2i(306, 106)
+borderless = true
+dialog_text = "Database location has been updated.
+The tags will now be reloaded"
+dialog_close_on_escape = false

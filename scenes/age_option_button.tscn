@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0l8681t7um42"]
+
+[ext_resource type="Script" path="res://scripts/age_option_button.gd" id="1_t0qbp"]
+
+[node name="AgeOptionButton" type="OptionButton"]
+tooltip_text = "Aprox. ages:
+Adult: >17
+Teen ages: 13-17
+Child: 3-12
+Toddler: 1-3
+Baby: <1"
+mouse_filter = 1
+script = ExtResource("1_t0qbp")

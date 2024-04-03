@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3 uid="uid://csjufm8ejdh8t"]
+
+[ext_resource type="Script" path="res://scripts/prefix_entry.gd" id="1_l23s7"]
+
+[node name="PrefixEntry" type="PanelContainer"]
+anchors_preset = -1
+anchor_right = 0.7
+anchor_bottom = 0.0652778
+size_flags_vertical = 3
+script = ExtResource("1_l23s7")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="PrefixContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="KeySymbolLineEdit" type="LineEdit" parent="MarginContainer/PrefixContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WWWWW"
+placeholder_text = "Prefix"
+alignment = 1
+max_length = 5
+editable = false
+
+[node name="Label" type="Label" parent="MarginContainer/PrefixContainer"]
+layout_mode = 2
+text = "->"
+
+[node name="StringFormatLineEdit" type="LineEdit" parent="MarginContainer/PrefixContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "{0} penetrating {1}"
+alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/PrefixContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UpdateButton" type="Button" parent="MarginContainer/PrefixContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Update"
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/PrefixContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Delete"

@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://dreln2kou6sgu"]
+
+[ext_resource type="Script" path="res://scripts/warning_save_window.gd" id="1_2skn8"]
+[ext_resource type="Script" path="res://scripts/save_warning_dialog.gd" id="2_km5lw"]
+
+[node name="UnsaveWindow" type="Control"]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2skn8")
+
+[node name="DimColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="SaveConfirmWindow" type="Window" parent="."]
+title = "TagIt!"
+initial_position = 1
+size = Vector2i(300, 100)
+wrap_controls = true
+transient = true
+exclusive = true
+unresizable = true
+script = ExtResource("2_km5lw")
+
+[node name="MarginContainer" type="MarginContainer" parent="SaveConfirmWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SaveConfirmWindow/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SaveConfirmWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "You have unsaved changes.
+Do you want to save your tag list?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SaveConfirmWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="SaveButton" type="Button" parent="SaveConfirmWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Save"
+
+[node name="DontSaveButton" type="Button" parent="SaveConfirmWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Don't save"
+
+[node name="CancelButton" type="Button" parent="SaveConfirmWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"

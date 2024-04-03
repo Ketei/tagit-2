@@ -1,0 +1,99 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnflgv04edf7b"]
+
+[ext_resource type="Script" path="res://scripts/session_blacklist.gd" id="1_njqcq"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="2_xsrjo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k81if"]
+bg_color = Color(0.176471, 0.227451, 0.301961, 1)
+
+[node name="SessionBlacklist" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_njqcq")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0705882, 0.0941176, 0.129412, 0.490196)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(640, 500)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_k81if")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SuggestionBlackContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/SuggestionBlackContainer"]
+layout_mode = 2
+text = "Suggestion Blacklist"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TempItemList" type="ItemList" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/SuggestionBlackContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_xsrjo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/SuggestionBlackContainer"]
+layout_mode = 2
+
+[node name="TempBlacklistLineEdit" type="LineEdit" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/SuggestionBlackContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AddTempBlacklistButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/SuggestionBlackContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="GroupsBlackContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/GroupsBlackContainer"]
+layout_mode = 2
+text = "Groups Blacklist"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TempGroupList" type="ItemList" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/GroupsBlackContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_xsrjo")
+
+[node name="DoneButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Done"

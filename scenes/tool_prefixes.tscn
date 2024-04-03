@@ -1,0 +1,107 @@
+[gd_scene load_steps=3 format=3 uid="uid://cb0xy7vkvw6e1"]
+
+[ext_resource type="Script" path="res://scripts/tool_prefixes.gd" id="1_i6clu"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_nbqmg"]
+
+[node name="ToolPrefixes" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i6clu")
+
+[node name="ToolContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="ListContainer" type="VBoxContainer" parent="ToolContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="PanelContainer" type="PanelContainer" parent="ToolContainer/ListContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="ToolContainer/ListContainer/PanelContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("1_nbqmg")
+allow_horizontal_scroll = false
+
+[node name="NodeContainer" type="VBoxContainer" parent="ToolContainer/ListContainer/PanelContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ToolContainer/ListContainer"]
+layout_mode = 2
+
+[node name="CreateContainer" type="HBoxContainer" parent="ToolContainer/ListContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CreatePrefixLineEdit" type="LineEdit" parent="ToolContainer/ListContainer/VBoxContainer/CreateContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+placeholder_text = "Prefix Symbol"
+alignment = 1
+max_length = 5
+
+[node name="FormatLineEdit" type="LineEdit" parent="ToolContainer/ListContainer/VBoxContainer/CreateContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+placeholder_text = "Format String"
+
+[node name="CreateButton" type="Button" parent="ToolContainer/ListContainer/VBoxContainer/CreateContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Create Prefix"
+
+[node name="MarginContainer" type="MarginContainer" parent="ToolContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/margin_right = 16
+
+[node name="RightSide" type="VBoxContainer" parent="ToolContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+alignment = 1
+
+[node name="InstructionLabel" type="Label" parent="ToolContainer/MarginContainer/RightSide"]
+layout_mode = 2
+text = "Test the prefixes"
+horizontal_alignment = 1
+
+[node name="TestOutLineEdit" type="LineEdit" parent="ToolContainer/MarginContainer/RightSide"]
+layout_mode = 2
+placeholder_text = "Output tag"
+alignment = 1
+editable = false
+
+[node name="TestContainer" type="HBoxContainer" parent="ToolContainer/MarginContainer/RightSide"]
+layout_mode = 2
+
+[node name="TestLineEdit" type="LineEdit" parent="ToolContainer/MarginContainer/RightSide/TestContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+placeholder_text = "Tag with prefix"
+
+[node name="TestButton" type="Button" parent="ToolContainer/MarginContainer/RightSide/TestContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Test"

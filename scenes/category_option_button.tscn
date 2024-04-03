@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0pf1366qxb7y"]
+
+[ext_resource type="Script" path="res://scripts/category_opt_btn.gd" id="1_ndkuc"]
+
+[node name="CategoryOptionButton" type="OptionButton"]
+offset_right = 45.0
+offset_bottom = 20.0
+script = ExtResource("1_ndkuc")

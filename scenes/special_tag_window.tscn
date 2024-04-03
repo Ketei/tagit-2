@@ -1,0 +1,78 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvsreawj4roce"]
+
+[ext_resource type="Script" path="res://scripts/promt_tag_window.gd" id="1_kgdc6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r3fdw"]
+bg_color = Color(0.196078, 0.309804, 0.458824, 1)
+
+[node name="SpecialTagWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kgdc6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TagDropdownAdd" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(360, 110)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r3fdw")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/TagDropdownAdd"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/TagDropdownAdd/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "[Tag title]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AmountSpinBox" type="SpinBox" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TagOptionButton" type="OptionButton" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 1
+popup/item_0/text = "ass"
+popup/item_0/id = 0
+
+[node name="ButtonsConainer" type="HBoxContainer" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer/ButtonsConainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="AddButton" type="Button" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer/ButtonsConainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Add"
