@@ -60,3 +60,10 @@ func on_focus_lost() -> void:
 		deselect_all()
 
 
+func remove_indexes(indexes_to_remove: Array[int]) -> void:
+	var _indexes: Array[int] = indexes_to_remove.duplicate()
+	_indexes.sort_custom(func(a, b): return a > b)
+	for index in _indexes:
+		remove_item(index)
+	deselect_all()
+
