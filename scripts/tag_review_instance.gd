@@ -62,7 +62,7 @@ func _ready():
 
 
 func on_clear_pressed() -> void:
-	clear_fields()
+	clear_all()
 
 
 func on_load_pressed() -> void:
@@ -76,25 +76,28 @@ func on_search_submit(tag_string: String) -> void:
 	var tag_search: String = Tagger.get_alias(
 			tag_string.strip_edges().to_lower())
 	
+	clear_all(false)
 	groups_list.disable_manual_input()
-	clear_fields()
-	
 	while groups_list.has_entries():
 		await get_tree().process_frame
-	
 	groups_list.enable_manual_input()
 	
 	if tag_search.is_empty() or not Tagger.has_tag(tag_search):
+		tag_name_line_edit.editable = true
+		load_button.disabled = false
+		fetch_button.disabled = false
 		return
 	
 	var tag_load: Tag = Tagger.get_tag(tag_search)
 	
-	tag_name_line_edit.text = tag_search
+	#tag_name_line_edit.text = tag_search
+	#tag_name_line_edit.caret_column = tag_name_line_edit.text.length()
 	
 	category_option_button.select_category(tag_load.category)
 	priority_spin_box.value = tag_load.tag_priority
 	wiki_text_edit.text = tag_load.wiki_entry
-	wiki_rich_label.text = tag_load.wiki_entry
+	#wiki_rich_label.text = tag_load.wiki_entry
+	wiki_rich_label.parse_bbcode(tag_load.wiki_entry)
 	tooltip_line_edit.text = tag_load.tooltip
 	loaded_tag = tag_search
 	delete_button.text = "Delete \"" + tag_search + "\""
@@ -221,32 +224,32 @@ func on_save_pressed() -> void:
 	tag_resource.suggestions = suggestions_list.get_all_items()
 	tag_resource.aliases = aliases_list.get_all_items()
 	tag_resource.smart_tags = groups_list.get_entries()
-
-	if Tagger.has_tag(tag_resource.tag):
-		var tag_path: String = Tagger.get_tag_filepath(tag_resource.tag)
-		tag_resource.file_name = tag_path.get_file()
-		ResourceSaver.save(
-			tag_resource,
-			tag_path)
-	else:
-		tag_resource.save()
 	
-	Tagger.register_tag(tag_resource.tag, Tagger.database_path + Tagger.TAGS_PATH + tag_resource.file_name)
+	#if Tagger.has_tag(tag_resource.tag):
+		#tag_path = Tagger.get_tag_filepath(tag_resource.tag)
+		#tag_resource.file_name = tag_path.get_file()
+
+	tag_resource.save()
+	Tagger.register_tag(
+			tag_resource.tag,
+			Tagger.get_tag_filepath(tag_title))
 	Tagger.tag_updated.emit(tag_resource.tag)
 	await get_tree().create_timer(2.5).timeout
 	save_button.text = "Save"
 	save_button.disabled = false
 
 
-func clear_fields() -> void:
-	tag_name_line_edit.clear()
+func clear_all(include_line := true) -> void:
+	if include_line:
+		tag_name_line_edit.clear()
 	priority_spin_box.value = 0
 	category_option_button.select(0)
 	parents_item_list.clear()
 	suggestion_item_list.clear()
 	alias_item_list.clear()
 	wiki_text_edit.clear()
-	wiki_rich_label.clear()
+	#wiki_rich_label.clear()
+	#wiki_rich_label.text = ""
 	tooltip_line_edit.clear()
 	title_line_edit.clear()
 	entry_line_edit.clear()
@@ -268,5 +271,5 @@ func on_delete_pressed() -> void:
 	
 	OS.move_to_trash(Tagger.get_tag_filepath(loaded_tag))
 	Tagger.remove_tag(loaded_tag)
-	clear_fields()
+	clear_all()
 

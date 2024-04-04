@@ -586,7 +586,10 @@ func search_local(search_string: String, limit: int = -1, invert := true) -> Arr
 
 
 func get_tag_filepath(tag_name: String) -> String:
-	return loaded_tags[tag_name.left(1)][tag_name]
+	if has_tag(tag_name):
+		return loaded_tags[tag_name.left(1)][tag_name]
+	else:
+		return database_path + TAGS_PATH + tag_name + ".tres"
 
 
 func remove_tag(tag_name: String) -> void:
@@ -628,7 +631,7 @@ func get_parents(tag_name: String) -> Array[String]:
 	var tag_file: Tag = get_tag(tag_name)
 	unexplored_parents.append_array(tag_file.parents)
 	
-	print("Starting while loop.")
+	#print("Starting while loop.")
 	
 	while not unexplored_parents.is_empty():
 		var tag: String = unexplored_parents.pop_front()
@@ -645,8 +648,7 @@ func get_parents(tag_name: String) -> Array[String]:
 				not unexplored_parents.has(parent):
 					unexplored_parents.append(parent)
 					# But only if not on queue or already explored
-		#print("Explored parents: " + str(explored_parents))
-		print("Unexplored parents: " + str(unexplored_parents))
+		#print("Unexplored parents: " + str(unexplored_parents))
 	
 	return return_parents
 
@@ -663,7 +665,7 @@ func get_prioritized_parents(tag_name: String) -> Dictionary:
 	var tag_file: Tag = get_tag(tag_name)
 	unexplored_parents.append_array(tag_file.parents)
 	
-	print("Starting while loop.")
+	#print("Starting while loop.")
 	
 	while not unexplored_parents.is_empty():
 		var tag: String = unexplored_parents.pop_front()
@@ -686,7 +688,7 @@ func get_prioritized_parents(tag_name: String) -> Dictionary:
 			return_parents["0"].append(tag)
 		
 		#print("Explored parents: " + str(explored_parents))
-		print("Unexplored parents: " + str(unexplored_parents))
+		#print("Unexplored parents: " + str(unexplored_parents))
 	
 	return return_parents
 

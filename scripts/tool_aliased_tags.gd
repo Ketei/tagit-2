@@ -20,7 +20,7 @@ var search_results: Array[TagAliasInstance] = []
 
 @onready var custom_only_check_button: CheckButton = $VBoxContainer/SearchContainer/CustomOnlyCheckButton
 
-@onready var reload_tag_button: Button = $"../../LeftSettings/ButtonsContainer/VBoxContainer/ReloadTagButton"
+#@onready var reload_tag_button: Button = $"../../LeftSettings/ButtonsContainer/VBoxContainer/ReloadTagButton"
 
 func _ready():
 	search_alias_button.pressed.connect(on_search_pressed)
@@ -57,7 +57,7 @@ func reload_aliases() -> void:
 		for alias in Tagger.alias_list[index]:
 			load_alias(alias, Tagger.alias_list[index][alias])
 	
-	reload_tag_button.disabled = false
+	#reload_tag_button.disabled = false
 
 
 func add_alias(old_name: String, new_name: String, is_custom: bool = false) -> void:

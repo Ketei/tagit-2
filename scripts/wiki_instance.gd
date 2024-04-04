@@ -25,6 +25,8 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 @onready var search_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/SearchButton
 @onready var e_six_search: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/ESixSearch
 
+@onready var thumbnail_scroll_container: SmoothScrollContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer
+
 @onready var pictures_panel: PanelContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer
 
 @onready var auto_fill: ItemList = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer/AutoFill

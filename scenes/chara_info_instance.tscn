@@ -924,10 +924,6 @@ pose_tag = "sitting on another"
 layout_mode = 2
 mouse_filter = 1
 
-[node name="HSeparator9" type="HSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
-layout_mode = 2
-mouse_filter = 1
-
 [node name="OtherContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer"]
 layout_mode = 2
 alignment = 1

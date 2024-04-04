@@ -49,8 +49,13 @@ func on_add_tag_submitted(tag_submited: String) -> void:
 
 
 func on_save_pressed() -> void:
+	save_button.text = "Template Created"
+	save_button.disabled = true
 	Tagger.save_template(get_data())
 	clear_all()
+	get_tree().create_timer(1.0)
+	save_button.disabled = false
+	save_button.text = "Save Template"
 
 
 func clear_all() -> void:
