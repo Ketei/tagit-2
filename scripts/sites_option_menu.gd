@@ -2,8 +2,12 @@ class_name SitesOptionButton
 extends OptionButton
 
 
+@export var max_height: int = 200
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	get_popup().max_size.y = max_height
 	load_sites()
 	Tagger.websites_updated.connect(load_sites)
 

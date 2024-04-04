@@ -342,6 +342,7 @@ text = "Format:"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+max_height = 150
 
 [node name="FinalTags" type="TextEdit" parent="MarginContainer/MainContainer/Final"]
 layout_mode = 2
