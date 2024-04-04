@@ -60,5 +60,7 @@ func save() -> void:
 	if file_name.is_empty():
 		file_name = tag.validate_filename() + ".tres"
 	
-	ResourceSaver.save(self, Tagger.database_path + Tagger.TAGS_PATH + file_name)
+	ResourceSaver.save(
+			self, 
+			Tagger.get_tag_filepath(tag))
 
