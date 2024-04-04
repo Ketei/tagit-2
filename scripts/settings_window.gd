@@ -118,8 +118,10 @@ func on_open_tag_folder_pressed() -> void:
 
 
 func on_reload_tags_pressed() -> void:
-	reload_tag_button.disabled = true
+	#reload_tag_button.disabled = true
 	Tagger.reload_tags()
+	#await Tagger.aliases_reloaded
+	#reload_tag_button.disabled = false
 
 
 func on_confidence_changed(new_value: float) -> void:
