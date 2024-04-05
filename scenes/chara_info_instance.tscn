@@ -105,6 +105,8 @@ text = "Body type:"
 
 [node name="BodTypeOptBtn" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/BodyTContainer" instance=ExtResource("3_717r1")]
 layout_mode = 2
+item_count = 0
+selected = -1
 
 [node name="SpeciesContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer"]
 layout_mode = 2
