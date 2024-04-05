@@ -29,7 +29,6 @@ func on_search_submitted(_ignored: String = "") -> void:
 	var e_six_array: Array[String] = []
 	
 	var tag_to_search: String = tag_line.text.strip_edges().to_lower()
-	
 	local_array = Tagger.search_local(tag_to_search, -1, false)
 	ESixRequester.request_prio(
 		Tagger.get_tag_request_url(tag_to_search, Tagger.E621_CATEGORY.ALL, "count", 100)

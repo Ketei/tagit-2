@@ -173,7 +173,9 @@ var constant_tags: Array[String] = []
 var alias_list: Dictionary = {
 	#"a": {"ass": "butt"}
 }
+var _loaded_aliases: Dictionary = {}
 var custom_aliases: Dictionary = {}
+var removed_aliases: Dictionary = {}
 var prefixes: Dictionary = {}
 var prefix_sorting: Array[String] = []
 
@@ -289,13 +291,22 @@ func _ready():
 				alias_list[alias.left(1)][alias] = tag.tag
 			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file)
 	
+	_loaded_aliases = alias_list.duplicate(true)
+	
 	for custom_alias in _load_settings.custom_aliases:
 		if not alias_list.has(custom_alias):
 			alias_list[custom_alias] = {}
 		
 		alias_list[custom_alias].merge(_load_settings.custom_aliases[custom_alias], true)
 	
+	for removed_alias in _load_settings.removed_aliases:
+		if not removed_aliases.has(removed_alias):
+			removed_aliases[removed_alias] = {}
+		
+		removed_aliases[removed_alias].merge(_load_settings.removed_aliases[removed_alias], true)
+	
 	custom_aliases = _load_settings.custom_aliases
+	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
 
@@ -337,6 +348,75 @@ func erase_template(template_index: int) -> void:
 	var _existing_data := SaveSlots.get_save_data()
 	_existing_data.templates = templates
 	_existing_data.save()
+
+
+func add_to_custom_aliases(from: String, to: String) -> void:
+	if not custom_aliases.has(from.left(1)):
+		custom_aliases[from.left(1)] = {}
+	custom_aliases[from.left(1)][from] = to
+	add_alias(from, to)
+
+
+func remove_from_custom_aliases(from: String) -> void:
+	#var to_custom: String = custom_aliases[from.left(1)][from]
+	
+	custom_aliases[from.left(1)].erase(from)
+	
+	if custom_aliases[from.left(1)].is_empty():
+		custom_aliases.erase(from.left(1))
+	
+	if not has_load_alias(from):
+		remove_alias(from)
+
+
+func has_custom_alias(from: String) -> bool:
+	if custom_aliases.has(from.left(1)):
+		return custom_aliases[from.left(1)].has(from)
+	return false
+
+
+func add_to_removed_aliases(from: String, to: String) -> void:
+	if not removed_aliases.has(from.left(1)):
+		removed_aliases[from.left(1)] = {}
+	removed_aliases[from.left(1)][from] = to
+
+
+func remove_from_removed_aliases(from: String, to: String) -> void:
+	if has_removed_alias(from, to):
+		if removed_aliases[from.left(1)][from] == to:
+			removed_aliases[from.left(1)].erase(from)
+		if removed_aliases[from.left(1)].is_empty():
+			removed_aliases.erase(from.left(1))
+
+
+func has_removed_alias(from: String, to: String) -> bool:
+	if removed_aliases.has(from.left(1)):
+		return removed_aliases[from.left(1)][from] == to
+	return false
+
+
+func add_alias(from: String, to: String) -> void:
+	if not alias_list.has(from.left(1)):
+		alias_list[from.left(1)] = {}
+	alias_list[from.left(1)][from] = to
+
+
+func remove_alias(from: String) -> void:
+	alias_list[from.left(1)].erase(from)
+	if alias_list[from.left(1)].is_empty():
+		alias_list.erase(from.left(1))
+
+
+func has_load_alias(from: String) -> bool:
+	if _loaded_aliases.has(from.left(1)):
+		return _loaded_aliases[from.left(1)].has(from)
+	return false
+
+
+func has_alias(from: String) -> bool:
+	if alias_list.has(from.left(1)):
+		return alias_list[from.left(1)].has(from)
+	return false
 
 
 func add_invalid_tag(tag_name: String) -> void:
@@ -545,13 +625,29 @@ func get_tag(tag_name: String) -> Tag:
 
 
 ## Gets the alias of a tag or the tag unchanged
-func get_alias(tag_string: String) -> String:
-	tag_string = tag_string.strip_edges().to_lower()
+func get_alias(tag_string: String, _starting_alias: String = "") -> String:
+	#tag_string = tag_string.strip_edges().to_lower()
 	var tag_key: String = tag_string.left(1)
-	if alias_list.has(tag_key) and alias_list[tag_key].has(tag_string):
-		return alias_list[tag_key][tag_string]
-	else:
+	var to_tag: String = ""
+	
+	if has_alias(tag_string):
+		to_tag = alias_list[tag_key][tag_string]
+	
+	if to_tag.is_empty() or has_removed_alias(tag_string, to_tag):
 		return tag_string
+	else:
+		if to_tag == _starting_alias:
+			print(
+				"Cyclic aliasing detected. From\"{0}\" to \"{1}\"".format(
+						[_starting_alias, tag_string]))
+			return tag_string
+		elif has_alias(to_tag):
+			if _starting_alias.is_empty():
+				return get_alias(to_tag, tag_string)
+			else:
+				return get_alias(to_tag, _starting_alias)
+		else:
+			return to_tag
 
 
 ## Searches for all tag matches. If limit is -1 it'll go through all entries
@@ -733,10 +829,10 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 	var tag_key: String = prefix_search.left(1)
 	var return_array: Array[String] = []
 	
-	if alias_list.has(tag_key) and alias_list[tag_key].has(prefix_search):
+	if has_alias(prefix_search):
 		return_array.push_front(alias_list[tag_key][prefix_search])
 		limit -= 1
-	elif loaded_tags.has(tag_key) and loaded_tags[tag_key].has(prefix_search):
+	elif has_tag(prefix_search):
 		return_array.push_front(prefix_search)
 		limit -= 1
 	
@@ -816,6 +912,7 @@ func save_settings() -> void:
 		new_settings.tag_map = tag_map
 		new_settings.custom_aliases = custom_aliases
 		new_settings.include_invalid = include_invalid
+		new_settings.removed_aliases = removed_aliases
 		new_settings.save()
 		#new_saves.save()
 	else:
