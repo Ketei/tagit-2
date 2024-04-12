@@ -186,6 +186,7 @@ var suggestion_confidence: int = 45
 var search_online_suggestions: bool = false
 
 # Loaded tags {"a": {"asshole": "D:/tags/asshole.tres"}}
+# Loaded tags {"a": {"asshole": {"path": "D:/tags/asshole.tres", "category": 0}}
 var loaded_tags: Dictionary = {}
 
 # Resources
@@ -212,6 +213,7 @@ var http_requests: int = 0
 
 func _ready():
 	DisplayServer.window_set_min_size(Vector2i(1280, 720))
+	DisplayServer.window_set_title("TagIt!")
 	
 	loaded_sites.merge(DEFAULT_SITES)
 	
@@ -594,10 +596,13 @@ func register_tag(tag_string: String, path: String):
 	if not loaded_tags.has(tag_string.left(1)):
 		loaded_tags[tag_string.left(1)] = {}
 	
-	loaded_tags[tag_string.left(1)][tag_string] = path
+	var tag: Tag = load(path)
 	
-	var tag: Tag = get_tag(tag_string)
-	
+	loaded_tags[tag_string.left(1)][tag_string] = {
+		"path": path,
+		"category": tag.category
+	}
+	#print(loaded_tags)
 	for alias in tag.aliases: # Regsiter/update new aliases
 		if custom_aliases.has(alias.left(1)) and custom_aliases[alias.left(1)].has(alias):
 			continue # Only if they are not custom
@@ -615,13 +620,13 @@ func has_tag(tag_name: String) -> bool:
 	var tag_key: String = tag_name.left(1)
 	if loaded_tags.has(tag_key):
 		if loaded_tags[tag_key].has(tag_name):
-			return FileAccess.file_exists(loaded_tags[tag_key][tag_name])
+			return FileAccess.file_exists(loaded_tags[tag_key][tag_name]["path"])
 	return false
 
 
 ## Gets a tag file. Check with has_tag before using
 func get_tag(tag_name: String) -> Tag:
-	return load(loaded_tags[tag_name.left(1)][tag_name])
+	return load(loaded_tags[tag_name.left(1)][tag_name]["path"])
 
 
 ## Gets the alias of a tag or the tag unchanged
@@ -666,24 +671,37 @@ func search_local(search_string: String, limit: int = -1, invert := true) -> Arr
 	else:
 		return _search_local_with_prefix(search_string, limit, invert)
 
-#
-#func add_tag(tag_string: String) -> void:
-	#tag_string = tag_string.strip_edges().to_lower()
-	#
-	#var tag_to_add: String = get_alias(tag_string)
-	#
-	## Iterate through items to see if added
-	## Iterate through suggestions to remove
-	## Itemadd + meta
-	#
-	#var suggestions: Array[String] = get_suggestions(get_parents(tag_string))
-	#
-	## Add suggestions to list if regular, or to special if special
+
+func search_with_category(search_string: String, category: Categories, limit: int = -1, invert := true) -> Array[String]:
+	var tag_key: String = search_string.left(1)
+	var return_array: Array[String] = []
+	
+	if has_alias(search_string):
+		return_array.push_front(get_alias(search_string))
+		limit -= 1
+	elif has_tag(search_string):
+		return_array.push_front(search_string)
+		limit -= 1
+	
+	if loaded_tags.has(tag_key):
+		for tag in loaded_tags[tag_key]:
+			if limit == 0:
+				break
+			if tag.begins_with(tag_key) and\
+			not return_array.has(tag) and\
+			loaded_tags[tag_key][tag]["category"] == category:
+				if invert:
+					return_array.push_front(tag)
+				else:
+					return_array.push_back(tag)
+				limit -= 1
+	
+	return return_array
 
 
 func get_tag_filepath(tag_name: String) -> String:
 	if has_tag(tag_name):
-		return loaded_tags[tag_name.left(1)][tag_name]
+		return loaded_tags[tag_name.left(1)][tag_name]["path"]
 	else:
 		return database_path + TAGS_PATH + tag_name + ".tres"
 

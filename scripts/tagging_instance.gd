@@ -25,7 +25,7 @@ var tag_map_browser: TagMapBrowser
 var unsaved_work_window: UnsavedWorkWindow
 
 @onready var sites_option_menu = $MarginContainer/MainContainer/Final/Platform/SitesOptionMenu
-@onready var final_tags = $MarginContainer/MainContainer/Final/FinalTags
+@onready var final_tags: TextEdit = $MarginContainer/MainContainer/Final/FinalTags
 
 @onready var tag_items: TagItemList = $MarginContainer/MainContainer/MainTags/TagItems
 @onready var suggestion_list: TagItemList = $MarginContainer/MainContainer/Suggests/SuggestionList
@@ -445,7 +445,7 @@ func on_tag_updated(tag_name: String) -> void:
 				load("res://textures/status/generic.png"))
 
 
-func on_suggestion_activated(_sugg_index: int) -> void:
+func on_suggestion_activated(sugg_index: int) -> void:
 	var tags_to_add: Array[String] = []
 	var selected_indexes: Array[int] = []
 	
@@ -454,6 +454,11 @@ func on_suggestion_activated(_sugg_index: int) -> void:
 				suggestion_list.get_item_text(index)
 		)
 		selected_indexes.append(index)
+	if not selected_indexes.has(sugg_index):
+		selected_indexes.append(sugg_index)
+		tags_to_add.insert(
+			sugg_index,
+			suggestion_list.get_item_text(sugg_index))
 	suggestion_list.remove_indexes(selected_indexes)
 	load_tag_array(tags_to_add)
 
@@ -560,6 +565,10 @@ func on_copy_pressed() -> void:
 
 
 func on_export_pressed() -> void:
+	if final_tags.text.is_empty():
+		return
+	if export_file_dialog.current_file.is_empty():
+		export_file_dialog.current_file = "new_tag_list.txt"
 	export_file_dialog.show()
 
 

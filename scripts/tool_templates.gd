@@ -53,7 +53,7 @@ func on_save_pressed() -> void:
 	save_button.disabled = true
 	Tagger.save_template(get_data())
 	clear_all()
-	get_tree().create_timer(1.0)
+	await get_tree().create_timer(1.0).timeout
 	save_button.disabled = false
 	save_button.text = "Save Template"
 

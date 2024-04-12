@@ -84,6 +84,7 @@ func on_wiki_search_submit(tag_search: String) -> void:
 	
 	wiki_search.text = tag_to_search
 	wiki_search.caret_column = wiki_search.text.length()
+	
 	var tag_to_load: Tag = Tagger.get_tag(tag_to_search)
 	var parents_string: String = ""
 	var suggestions_string: String = ""

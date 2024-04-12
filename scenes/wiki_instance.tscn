@@ -233,8 +233,6 @@ focus_previous = NodePath("../..")
 mouse_filter = 1
 theme = ExtResource("2_5ih7u")
 auto_height = true
-item_count = 1
-item_0/text = "asdasd"
 script = SubResource("GDScript_qr4vn")
 
 [node name="Timer" type="Timer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch"]
