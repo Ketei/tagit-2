@@ -59,32 +59,28 @@ func on_search_tag() -> void:
 func on_search_submited(tag_serch: String) -> void:
 	if not tag_serch.is_empty():
 		for check:TagCheckBox in tags_container.get_children():
-			if not check.tag_name.contains(tag_serch):
-				check.hide()
-			else:
-				check.show()
+			check.visible = check.tag_name.contains(tag_serch)
 
 	if enable_cat.button_pressed:
 		var cat_select := category_option_button.get_category()
 		for check:TagCheckBox in tags_container.get_children():
 			if not check.visible:
 				continue
-			if check.tag_category != cat_select:
-				check.hide()
+			check.visible = check.tag_category == cat_select
 	
 	if enable_prio_check_button.button_pressed:
 		var priority: int = int(search_by_priority_spin.value)
 		for check:TagCheckBox in tags_container.get_children():
 			if not check.visible:
 				continue
-			if check.tag_priority != priority:
-				check.hide()
+			
+			check.visible = check.tag_priority == priority
 
 
 func show_all() -> void:
 	for check:TagCheckBox in tags_container.get_children():
 		if not check.visible:
-			check.show()
+			check.visible = true
 
 
 func on_select_all_pressed() -> void:

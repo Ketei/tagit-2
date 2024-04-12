@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d3yr67bkeq33d"]
+[gd_scene load_steps=23 format=3 uid="uid://d3yr67bkeq33d"]
 
 [ext_resource type="Theme" uid="uid://c8ad5ntep5ucc" path="res://theme/default.tres" id="1_aon24"]
 [ext_resource type="PackedScene" uid="uid://cv04584lewxfj" path="res://scenes/tagging_instance.tscn" id="1_lifxp"]
@@ -8,8 +8,20 @@
 [ext_resource type="PackedScene" uid="uid://bimxfti6jy5wq" path="res://scenes/tools_window.tscn" id="3_ec6rq"]
 [ext_resource type="PackedScene" uid="uid://cyodg6s04nvct" path="res://scenes/settings_window.tscn" id="4_rl0bd"]
 [ext_resource type="Texture2D" uid="uid://cahrs65npors7" path="res://textures/icons/save_icon.svg" id="8_3qeoh"]
+[ext_resource type="Texture2D" uid="uid://di5ghm6bpg4t8" path="res://textures/icons/tag_icon.svg" id="8_jmtav"]
 [ext_resource type="Texture2D" uid="uid://xejppul6k45c" path="res://textures/icons/new_icon.svg" id="8_s2grs"]
+[ext_resource type="Texture2D" uid="uid://2lik3jl8i5pc" path="res://textures/icons/wiki_icon.svg" id="9_qvkhg"]
+[ext_resource type="Texture2D" uid="uid://don64idx4aqps" path="res://textures/icons/review_icon.svg" id="10_dtfhi"]
 [ext_resource type="Texture2D" uid="uid://bicsshv0cpf0u" path="res://textures/icons/load_icon.svg" id="10_jhx4k"]
+[ext_resource type="Texture2D" uid="uid://bspy7b4mnwwtt" path="res://textures/icons/wizard.svg" id="11_a1460"]
+[ext_resource type="Texture2D" uid="uid://c65yhj5pqa7i2" path="res://textures/icons/tools_icon.svg" id="11_pkcay"]
+[ext_resource type="Texture2D" uid="uid://dv4iwivdjx3x7" path="res://textures/icons/import_icon.svg" id="12_7hnc6"]
+[ext_resource type="Texture2D" uid="uid://dr4kuhm4e1j1h" path="res://textures/icons/settings_icon.svg" id="12_udrrf"]
+[ext_resource type="Texture2D" uid="uid://b7swawa8cdqhk" path="res://textures/icons/template_icon.svg" id="13_32oc7"]
+[ext_resource type="Texture2D" uid="uid://bfnj4giwjsvtn" path="res://textures/icons/quit_icon.svg" id="13_yk7hr"]
+[ext_resource type="Texture2D" uid="uid://bvaokn11jui2a" path="res://textures/icons/sort_icon.svg" id="17_s58f3"]
+[ext_resource type="Texture2D" uid="uid://1pbhywash4dx" path="res://textures/icons/list_icon.svg" id="18_dtp6s"]
+[ext_resource type="Texture2D" uid="uid://c8tr3vy3eure6" path="res://textures/icons/erase_icon.svg" id="19_7vhul"]
 
 [node name="MainWindow" type="Control"]
 layout_mode = 3
@@ -69,16 +81,22 @@ flat = false
 switch_on_hover = true
 item_count = 6
 popup/item_0/text = "Tagger"
+popup/item_0/icon = ExtResource("8_jmtav")
 popup/item_0/id = 5
 popup/item_1/text = "Wiki"
+popup/item_1/icon = ExtResource("9_qvkhg")
 popup/item_1/id = 0
 popup/item_2/text = "Review Tags"
+popup/item_2/icon = ExtResource("10_dtfhi")
 popup/item_2/id = 1
 popup/item_3/text = "Tools"
+popup/item_3/icon = ExtResource("11_pkcay")
 popup/item_3/id = 2
 popup/item_4/text = "Settings"
+popup/item_4/icon = ExtResource("12_udrrf")
 popup/item_4/id = 3
 popup/item_5/text = "Exit"
+popup/item_5/icon = ExtResource("13_yk7hr")
 popup/item_5/id = 4
 
 [node name="TaggerMenu" type="MenuButton" parent="MenusContainer/TopMenuContainer"]
@@ -87,7 +105,7 @@ size_flags_vertical = 0
 text = "Tagger"
 flat = false
 switch_on_hover = true
-item_count = 6
+item_count = 11
 popup/item_0/text = "New List"
 popup/item_0/icon = ExtResource("8_s2grs")
 popup/item_0/id = 0
@@ -101,7 +119,25 @@ popup/item_3/text = ""
 popup/item_3/id = 100
 popup/item_3/disabled = true
 popup/item_3/separator = true
-popup/item_4/text = "Blacklisted Suggestions"
-popup/item_4/id = 5
-popup/item_5/text = "Clear Tags"
-popup/item_5/id = 3
+popup/item_4/text = "Sort Tags"
+popup/item_4/icon = ExtResource("17_s58f3")
+popup/item_4/id = 10
+popup/item_5/text = "Blacklist"
+popup/item_5/icon = ExtResource("18_dtp6s")
+popup/item_5/id = 5
+popup/item_6/text = "Clear Tags"
+popup/item_6/icon = ExtResource("19_7vhul")
+popup/item_6/id = 3
+popup/item_7/text = ""
+popup/item_7/id = 101
+popup/item_7/disabled = true
+popup/item_7/separator = true
+popup/item_8/text = "Tag Wizard"
+popup/item_8/icon = ExtResource("11_a1460")
+popup/item_8/id = 7
+popup/item_9/text = "Load from Text"
+popup/item_9/icon = ExtResource("12_7hnc6")
+popup/item_9/id = 8
+popup/item_10/text = "Load Template"
+popup/item_10/icon = ExtResource("13_32oc7")
+popup/item_10/id = 9

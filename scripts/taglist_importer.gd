@@ -17,7 +17,12 @@ func _ready():
 
 
 func convert_to_tags() -> void:
-	var div_text: String = divisor_line_edit.text
+	var div_text: String = ""
+	if divisor_line_edit.text.is_empty():
+		div_text = "^"
+	else:
+		div_text =  divisor_line_edit.text
+	
 	var line_split: Array[String] = []
 	var raw_array: Array = tag_list_text_edit.text.strip_edges()\
 			.replace("\n", div_text).split(div_text)

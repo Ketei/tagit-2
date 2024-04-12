@@ -1,9 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://cv04584lewxfj"]
+[gd_scene load_steps=19 format=3 uid="uid://cv04584lewxfj"]
 
 [ext_resource type="Script" path="res://scripts/tagging_instance.gd" id="1_qwxx4"]
 [ext_resource type="Texture2D" uid="uid://bspy7b4mnwwtt" path="res://textures/icons/wizard.svg" id="2_cc4m6"]
+[ext_resource type="Texture2D" uid="uid://xejppul6k45c" path="res://textures/icons/new_icon.svg" id="2_mo8qe"]
 [ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="3_0tqr4"]
 [ext_resource type="Texture2D" uid="uid://dv4iwivdjx3x7" path="res://textures/icons/import_icon.svg" id="3_43ms0"]
+[ext_resource type="Texture2D" uid="uid://cahrs65npors7" path="res://textures/icons/save_icon.svg" id="3_e4k6d"]
+[ext_resource type="Texture2D" uid="uid://bicsshv0cpf0u" path="res://textures/icons/load_icon.svg" id="4_8tt1r"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="4_kxfaf"]
 [ext_resource type="Texture2D" uid="uid://b7swawa8cdqhk" path="res://textures/icons/template_icon.svg" id="4_n3yw6"]
 [ext_resource type="PackedScene" uid="uid://bnflgv04edf7b" path="res://scenes/session_blacklist.tscn" id="5_hmrsi"]
@@ -11,9 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://bv0lodmh5bkey" path="res://textures/icons/search_icon.svg" id="6_ym3uf"]
 [ext_resource type="PackedScene" uid="uid://dvsreawj4roce" path="res://scenes/special_tag_window.tscn" id="7_f11d4"]
 [ext_resource type="PackedScene" uid="uid://dkbd01s367esl" path="res://scenes/tag_full_search.tscn" id="7_jn3ja"]
-[ext_resource type="Texture2D" uid="uid://di5ghm6bpg4t8" path="res://textures/icons/tag_icon.svg" id="9_kl5w6"]
 [ext_resource type="Texture2D" uid="uid://bt5shjh0vtvkv" path="res://textures/icons/export_icon.svg" id="10_r4cct"]
-[ext_resource type="Texture2D" uid="uid://p8j77r81xo0q" path="res://textures/icons/clipboard_icon.svg" id="11_hxijk"]
+[ext_resource type="Texture2D" uid="uid://4o3c2a4my706" path="res://textures/icons/copy_icon.svg" id="13_51rkk"]
 
 [sub_resource type="GDScript" id="GDScript_1hbdc"]
 script/source = "extends LineEdit
@@ -153,25 +155,50 @@ theme_override_constants/separation = 4
 layout_mode = 2
 alignment = 2
 
+[node name="NewListButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+tooltip_text = "New List"
+icon = ExtResource("2_mo8qe")
+icon_alignment = 1
+
+[node name="SaveListButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+tooltip_text = "Save List"
+icon = ExtResource("3_e4k6d")
+icon_alignment = 1
+
+[node name="LoadListButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+tooltip_text = "Load List"
+icon = ExtResource("4_8tt1r")
+icon_alignment = 1
+
 [node name="WizardButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 tooltip_text = "Open the tag wizard."
 theme_override_constants/icon_max_width = 24
-text = "Wizard"
 icon = ExtResource("2_cc4m6")
+icon_alignment = 1
 
 [node name="LoadTagButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 tooltip_text = "Load a tag list from text"
-text = "From Text"
 icon = ExtResource("3_43ms0")
+icon_alignment = 1
 
 [node name="TemplateButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 tooltip_text = "Load a Template"
 theme_override_constants/icon_max_width = 24
-text = "Template"
 icon = ExtResource("4_n3yw6")
+icon_alignment = 1
 
 [node name="Empty" type="Control" parent="MarginContainer/MainContainer/MainTags"]
 visible = false
@@ -315,6 +342,7 @@ text = "Format:"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+max_height = 150
 
 [node name="FinalTags" type="TextEdit" parent="MarginContainer/MainContainer/Final"]
 layout_mode = 2
@@ -333,7 +361,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 text = "Generate List"
-icon = ExtResource("9_kl5w6")
 
 [node name="ExtraOptions" type="VBoxContainer" parent="MarginContainer/MainContainer/Final/Buttons"]
 layout_mode = 2
@@ -352,7 +379,7 @@ icon = ExtResource("10_r4cct")
 layout_mode = 2
 size_flags_vertical = 3
 text = "Copy List"
-icon = ExtResource("11_hxijk")
+icon = ExtResource("13_51rkk")
 
 [node name="SpecialTagWindow" parent="." instance=ExtResource("7_f11d4")]
 visible = false

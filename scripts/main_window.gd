@@ -55,6 +55,14 @@ func on_tagger_menu_selected(menu_index: int) -> void:
 		tagger.clear_main_list()
 	elif menu_id ==5: # Session Blacklist
 		tagger.open_session_blacklist()
+	elif menu_id == 10: # Sort Tags
+		tagger.sort_tags_alphabetically()
+	elif menu_id == 7: # Wizard
+		tagger.summon_wizard()
+	elif menu_id == 8: # Load from Text
+		tagger.open_taglist_importer()
+	elif menu_id == 9: # Load Template
+		tagger.display_template_loader()
 
 
 func on_menu_changed(menu_index: int) -> void:

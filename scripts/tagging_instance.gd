@@ -25,7 +25,7 @@ var tag_map_browser: TagMapBrowser
 var unsaved_work_window: UnsavedWorkWindow
 
 @onready var sites_option_menu = $MarginContainer/MainContainer/Final/Platform/SitesOptionMenu
-@onready var final_tags = $MarginContainer/MainContainer/Final/FinalTags
+@onready var final_tags: TextEdit = $MarginContainer/MainContainer/Final/FinalTags
 
 @onready var tag_items: TagItemList = $MarginContainer/MainContainer/MainTags/TagItems
 @onready var suggestion_list: TagItemList = $MarginContainer/MainContainer/Suggests/SuggestionList
@@ -44,6 +44,10 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var template_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/TemplateButton
 @onready var load_tag_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/LoadTagButton
 @onready var wizard_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/WizardButton
+@onready var new_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/NewListButton
+@onready var save_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/SaveListButton
+@onready var load_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/LoadListButton
+
 
 @onready var special_tag_window: PromptTagWindow = $SpecialTagWindow
 @onready var tag_full_search: TagFullSearch = $TagFullSearch
@@ -74,7 +78,14 @@ func _ready():
 	select_tag_button.pressed.connect(on_tag_map_open)
 	tag_full_search.add_selected_pressed.connect(load_tag_array)
 	full_search_button.pressed.connect(on_full_search_open)
+	new_list_button.pressed.connect(new_list)
+	save_list_button.pressed.connect(open_save_window)
+	load_list_button.pressed.connect(open_load_window)
 	Tagger.tag_updated.connect(on_tag_updated)
+
+
+func sort_tags_alphabetically() -> void:
+	tag_items.sort_items_by_text()
 
 
 func on_full_search_open() -> void:
@@ -181,10 +192,13 @@ func open_session_blacklist() -> void:
 
 
 func open_load_window() -> void:
+	if load_list_button.has_focus():
+		load_list_button.release_focus()
 	save_window = SAVE_WINDOW.instantiate()
 	save_window.mode = 1
 	save_window.file_loaded.connect(on_load_pressed)
 	add_child(save_window)
+	
 
 
 func on_load_pressed(load_data: Dictionary) -> void:
@@ -321,7 +335,8 @@ func on_tag_submitted(tag_text: String) -> void:
 		for sugg in tag_load.suggestions:
 			if not suggestion_list.has_item(sugg) and\
 			not tag_items.has_item(sugg) and\
-			not session_blacklist.has_item(sugg):
+			not session_blacklist.has_item(sugg) and\
+			not Tagger.suggestion_blacklist.has(sugg):
 				suggestion_list.add_item(sugg)
 		
 		var extra_suggs: Dictionary = Tagger.get_suggestions(
@@ -400,7 +415,8 @@ func process_response(response: Array, response_type: ESixRequester.JOB_TYPES) -
 				var tag_string: String = item.replace("_", " ")
 				if not suggestion_list.has_item(tag_string) and\
 				not tag_items.has_item(tag_string) and\
-				not session_blacklist.has_item(tag_string):
+				not session_blacklist.has_item(tag_string) and\
+				not Tagger.suggestion_blacklist.has(tag_string):
 					suggestion_list.add_item(tag_string)
 
 
@@ -430,10 +446,21 @@ func on_tag_updated(tag_name: String) -> void:
 
 
 func on_suggestion_activated(sugg_index: int) -> void:
-	var tag_add: String = suggestion_list.get_item_text(sugg_index)
-	suggestion_list.remove_item(sugg_index)
+	var tags_to_add: Array[String] = []
+	var selected_indexes: Array[int] = []
 	
-	on_tag_submitted(tag_add)
+	for index in suggestion_list.get_selected_items():
+		tags_to_add.append(
+				suggestion_list.get_item_text(index)
+		)
+		selected_indexes.append(index)
+	if not selected_indexes.has(sugg_index):
+		selected_indexes.append(sugg_index)
+		tags_to_add.insert(
+			sugg_index,
+			suggestion_list.get_item_text(sugg_index))
+	suggestion_list.remove_indexes(selected_indexes)
+	load_tag_array(tags_to_add)
 
 
 func on_template_loaded(mains: Array[String], suggs: Array[String]):
@@ -526,6 +553,9 @@ func generate_full_tags() -> void:
 			if not final_array.has(format_tag):
 				final_array.append(format_tag)
 	
+	for constant in Tagger.constant_tags:
+		if not final_array.has(constant):
+			final_array.append(constant)
 	
 	final_tags.text = Tagger.loaded_sites[selected_site_key]["separator"].join(final_array)
 
@@ -535,6 +565,10 @@ func on_copy_pressed() -> void:
 
 
 func on_export_pressed() -> void:
+	if final_tags.text.is_empty():
+		return
+	if export_file_dialog.current_file.is_empty():
+		export_file_dialog.current_file = "new_tag_list.txt"
 	export_file_dialog.show()
 
 

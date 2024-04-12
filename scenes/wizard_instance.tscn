@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dnmpmltog3uqx"]
+[gd_scene load_steps=22 format=3 uid="uid://dnmpmltog3uqx"]
 
 [ext_resource type="ButtonGroup" uid="uid://dui1fch8p2y5n" path="res://button_groups/wizard_completion.tres" id="1_e4fqs"]
 [ext_resource type="Script" path="res://scripts/wizard_instance.gd" id="1_ou3hq"]
@@ -18,6 +18,130 @@
 [ext_resource type="Script" path="res://scripts/wizard_extra_seggs.gd" id="11_t3e51"]
 [ext_resource type="Script" path="res://scripts/wiz_sex_interactions.gd" id="12_rkmvx"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="13_bx75r"]
+[ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="19_wkkq5"]
+
+[sub_resource type="GDScript" id="GDScript_djhi1"]
+resource_name = "char_search"
+script/source = "extends LineEdit
+
+
+@onready var timer: Timer = $Timer
+@onready var auto_fill: ItemList = $VBoxContainer/AutoFill
+@onready var auto_container = $VBoxContainer
+
+
+
+func _ready():
+	text_changed.connect(on_text_changed)
+	timer.timeout.connect(on_timer_ended)
+	focus_exited.connect(on_focus_lost)
+	text_submitted.connect(on_text_submitted)
+	auto_fill.item_submited.connect(on_char_submitted)
+
+
+func on_char_submitted(char_string: String):
+	grab_focus()
+	text = char_string
+	caret_column = text.length()
+
+
+func on_text_submitted(_ignored: String) -> void:
+	if not timer.is_stopped():
+		timer.stop()
+
+
+func on_focus_lost() -> void:
+	await get_tree().process_frame # Wait to see who grabs focus
+	if not auto_fill.has_focus() and auto_container.visible:
+		auto_container.hide()
+
+
+func on_text_changed(_ignored: String) -> void:
+	if not Tagger.autofill_enabled:
+		return
+	
+	if auto_container.visible:
+		auto_container.hide()
+	
+	timer.start()
+
+
+func on_timer_ended() -> void:
+	var tag_to_search: String = text.strip_edges().to_lower()
+	if tag_to_search.is_empty():
+		return
+	
+	var tags_found: Array[String] = Tagger.search_with_category(
+		tag_to_search,
+		Tagger.Categories.CHARACTER,
+		10,
+		false
+	)
+	
+	auto_fill.clear()
+
+	for item in tags_found:
+		auto_fill.add_item(item)
+	
+	if 0 < tags_found.size():
+		auto_container.show()
+
+
+func _gui_input(event):
+	if has_focus() and event.is_action(\"ui_down\") and 0 < auto_fill.item_count:
+		auto_container.show()
+		auto_fill.select(0)
+		auto_fill.grab_focus()
+	elif has_focus() and event.is_action(\"ui_up\") and 0 < auto_fill.item_count:
+		auto_container.show()
+		auto_fill.select(auto_fill.item_count -1)
+		auto_fill.grab_focus()
+
+"
+
+[sub_resource type="GDScript" id="GDScript_imnh7"]
+resource_name = "char_search_items"
+script/source = "extends ItemList
+
+
+signal item_submited(item_text: String)
+
+
+@onready var add_tag: LineEdit = $\"../..\"
+@onready var container = $\"..\"
+
+
+func _ready():
+	container.hide()
+	focus_exited.connect(on_focus_exited)
+	item_clicked.connect(on_item_clicked)
+	item_activated.connect(on_item_activated)
+
+
+# Called when the node enters the scene tree for the first time.
+func _gui_input(_event):
+	if has_focus() and Input.is_action_just_pressed(\"ui_focus_next\") and is_anything_selected():
+		add_tag.text = get_item_text(
+			get_selected_items()[0]
+		)
+		add_tag.caret_column = add_tag.text.length()
+
+
+func on_item_clicked(index: int, _at_position: Vector2, mouse_button_index: int):
+	if mouse_button_index == MOUSE_BUTTON_LEFT:
+		item_submited.emit(get_item_text(index))
+		release_focus()
+
+
+func on_item_activated(item_index: int) -> void:
+	item_submited.emit(get_item_text(item_index))
+	release_focus()
+	#add_tag.grab_focus()
+
+
+func on_focus_exited():
+	container.hide()
+"
 
 [node name="WizardInstance" type="Control"]
 top_level = true
@@ -278,6 +402,10 @@ size_flags_vertical = 4
 mouse_filter = 1
 text_overrun_behavior = 3
 fit_to_longest_item = false
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/SmoothScrollContainer/ImageInfo/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
 
 [node name="ExtraButtons" type="HBoxContainer" parent="MarginContainer/HBoxContainer/SmoothScrollContainer/ImageInfo/HBoxContainer"]
 layout_mode = 2
@@ -870,7 +998,44 @@ text = "Character Tag"
 [node name="CharNameLineEdit" type="LineEdit" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/CharInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Character Tag"
+size_flags_stretch_ratio = 7.0
+clear_button_enabled = true
+script = SubResource("GDScript_djhi1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/CharInfo/CharNameLineEdit"]
+visible = false
+top_level = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -6.0
+offset_right = 184.0
+offset_bottom = 339.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="AutoFill" type="ItemList" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/CharInfo/CharNameLineEdit/VBoxContainer"]
+visibility_layer = 2
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../..")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath("../..")
+focus_previous = NodePath("../..")
+theme = ExtResource("19_wkkq5")
+auto_height = true
+script = SubResource("GDScript_imnh7")
+
+[node name="Timer" type="Timer" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer/CharInfo/CharNameLineEdit"]
+wait_time = 0.3
+one_shot = true
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="CharacterNamer/CharcterPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2

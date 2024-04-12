@@ -7,7 +7,7 @@ var parent_alias: String = ""
 
 @onready var alias_label: Label = $MarginContainer/VBoxContainer/AliasLabel
 
-@onready var alias_list: TagItemList = $MarginContainer/VBoxContainer/AliasList
+@onready var alias_list: AliasItemList = $MarginContainer/VBoxContainer/AliasList
 @onready var alias_line_edit: LineEdit = $MarginContainer/VBoxContainer/InteractContainer/AliasLineEdit
 @onready var add_alias_button: Button = $MarginContainer/VBoxContainer/InteractContainer/AddAliasButton
 
@@ -63,59 +63,68 @@ func has_alias(alias_name: String) -> bool:
 		return false
 
 
-func remove_alias(deleted_alias: String, is_custom: bool) -> void:
+func remove_alias(deleted_alias: String, is_custom: bool, is_remove: bool, item_index: int) -> void:
 	#child_alias.erase(deleted_alias)
-	
-	Tagger.alias_list[deleted_alias.left(1)].erase(deleted_alias)
-	if Tagger.alias_list[deleted_alias.left(1)].is_empty():
-		Tagger.alias_list.erase(deleted_alias.left(1))
-	
-	if is_custom:
-		Tagger.custom_aliases[deleted_alias.left(1)].erase(deleted_alias)
-		if Tagger.custom_aliases[deleted_alias.left(1)].is_empty():
-			Tagger.custom_aliases.erase(deleted_alias.left(1))
+	if is_remove:
+		print("Is remove")
+		Tagger.remove_from_removed_aliases(deleted_alias, parent_alias)
+		if Tagger.has_custom_alias(deleted_alias):
+			alias_list.set_item_removed(item_index, false)
+			alias_list.set_item_custom(item_index)
+		else:
+			alias_list.set_item_normal(item_index)
+	elif is_custom:
+		Tagger.remove_from_custom_aliases(deleted_alias)
+		if Tagger.has_load_alias(deleted_alias):
+			print(Tagger._loaded_aliases)
+			alias_list.set_item_normal(item_index)
+		else:
+			alias_list.remove_item(item_index)
+	else:
+		Tagger.add_to_removed_aliases(deleted_alias, parent_alias)
+		alias_list.set_item_removed(item_index)
 
 
 func add_alias(new_alias: String, is_custom: bool) -> void:
 	if alias_list.has_item(new_alias):# If the alias exists
 		if is_custom: # And is custom
 			var alias_index: int = alias_list.get_item_index(new_alias)
+			#var item_metadata: Dictionary = alias_list.get_item_metadata(alias_index)
 			# If current item is not custom. Make it
 			if not alias_list.get_item_metadata(alias_index):
-				if not Tagger.custom_aliases.has(new_alias.left(1)):
-					Tagger.custom_aliases[new_alias.left(1)] = {}
-				Tagger.custom_aliases[new_alias.left(1)][new_alias] = parent_alias
-				alias_list.set_item_icon(
-						alias_index,
-						load("res://textures/status/loaded.png"))
-				alias_list.set_item_metadata(
-						alias_index,
-						true)
+				Tagger.add_to_custom_aliases(new_alias, parent_alias)
+				alias_list.set_item_custom(alias_index)
 		return # Since alias exists, we do nothing else.
 	
 	#child_alias.append(new_alias)
 	
 	var item_index: int = alias_list.add_item(new_alias)
 	
-	if not Tagger.alias_list.has(new_alias.left(1)):
-		Tagger.alias_list[new_alias.left(1)] = {}
-	Tagger.alias_list[new_alias.left(1)][new_alias] = parent_alias
-	
-	if is_custom:
-		if not Tagger.custom_aliases.has(new_alias.left(1)):
-			Tagger.custom_aliases[new_alias.left(1)] = {}
-		Tagger.custom_aliases[new_alias.left(1)][new_alias] = parent_alias
-		
-		alias_list.set_item_icon(
+	alias_list.set_item_metadata(
 			item_index,
-			load("res://textures/status/loaded.png"))
-		alias_list.set_item_metadata(
-				item_index,
-				true)
+			{"custom": false, "remove": false})
+	
+	Tagger.add_alias(new_alias, parent_alias)
+	
+	#if Tagger.has_removed_alias(new_alias, parent_alias):
+		#alias_list.set_item_removed(item_index)
+	var was_removed: bool = Tagger.has_removed_alias(new_alias, parent_alias)
+	if is_custom:
+		Tagger.add_to_custom_aliases(new_alias, parent_alias)
+		#if not Tagger.custom_aliases.has(new_alias.left(1)):
+			#Tagger.custom_aliases[new_alias.left(1)] = {}
+		#Tagger.custom_aliases[new_alias.left(1)][new_alias] = parent_alias
+		alias_list.set_item_custom(item_index)
+		if was_removed:
+			Tagger.remove_from_removed_aliases(new_alias, parent_alias)
 	else:
-		alias_list.set_item_metadata(
-				item_index,
-				false)
+		if was_removed:
+			alias_list.set_item_removed(item_index)
+	
+	
+	#alias_list.set_item_metadata(
+			#item_index,
+			#{"custom": is_custom, "remove": false})
 
 
 func add_alias_no_update(new_alias: String, is_custom: bool) -> void:
@@ -124,22 +133,25 @@ func add_alias_no_update(new_alias: String, is_custom: bool) -> void:
 	
 	var item_index: int = alias_list.add_item(new_alias)
 	
-	if is_custom:
-		alias_list.set_item_icon(
+	alias_list.set_item_metadata(
 			item_index,
-			load("res://textures/status/loaded.png"))
-		alias_list.set_item_metadata(
-				item_index,
-				true)
-	else:
-		alias_list.set_item_metadata(
-				item_index,
-				false)
+			{"custom": false, "remove": false})
+	
+	if is_custom:
+		alias_list.set_item_custom(item_index)
+
+
+func set_alias_removed(alias_name: String) -> void:
+	var alias_index: int = alias_list.get_item_index(alias_name)
+	if alias_index == -1:
+		return
+	alias_list.set_item_removed(alias_index)
 
 
 func has_custom_alias() -> bool:
 	for index in range(alias_list.item_count):
-		if alias_list.get_item_metadata(index):
+		var item_metadata: Dictionary = alias_list.get_item_metadata(index)
+		if item_metadata["custom"] or item_metadata["remove"]:
 			return true
 	return false
 

@@ -114,12 +114,12 @@ text = "Create Map"
 [node name="TagMapTypeLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Map Type"
+placeholder_text = "Map Type Key"
 
 [node name="TagMapCatLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Map Categories"
+placeholder_text = "Map Category Key"
 
 [node name="SelectAllButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2

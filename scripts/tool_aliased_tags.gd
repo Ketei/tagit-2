@@ -20,7 +20,7 @@ var search_results: Array[TagAliasInstance] = []
 
 @onready var custom_only_check_button: CheckButton = $VBoxContainer/SearchContainer/CustomOnlyCheckButton
 
-@onready var reload_tag_button: Button = $"../../LeftSettings/ButtonsContainer/VBoxContainer/ReloadTagButton"
+#@onready var reload_tag_button: Button = $"../../LeftSettings/ButtonsContainer/VBoxContainer/ReloadTagButton"
 
 func _ready():
 	search_alias_button.pressed.connect(on_search_pressed)
@@ -36,9 +36,12 @@ func _ready():
 	for c_index in Tagger.custom_aliases:
 		for c_alias in Tagger.custom_aliases[c_index]:
 			load_alias(c_alias, Tagger.custom_aliases[c_index][c_alias], true)
-	for index in Tagger.alias_list:
-		for alias in Tagger.alias_list[index]:
-			load_alias(alias, Tagger.alias_list[index][alias])
+	for index in Tagger._loaded_aliases:
+		for alias in Tagger._loaded_aliases[index]:
+			load_alias(alias, Tagger._loaded_aliases[index][alias])
+	for char_index in Tagger.removed_aliases:
+		for alias in Tagger.removed_aliases[char_index]:
+			set_alias_deleted(alias, Tagger.removed_aliases[char_index][alias])
 
 
 func reload_aliases() -> void:
@@ -53,11 +56,25 @@ func reload_aliases() -> void:
 		for c_alias in Tagger.custom_aliases[c_index]:
 			load_alias(c_alias, Tagger.custom_aliases[c_index][c_alias], true)
 	
-	for index in Tagger.alias_list:
+	for index in Tagger._loaded_aliases:
 		for alias in Tagger.alias_list[index]:
 			load_alias(alias, Tagger.alias_list[index][alias])
 	
-	reload_tag_button.disabled = false
+	for char_index in Tagger.removed_aliases:
+		for alias in Tagger.removed_aliases[char_index]:
+			set_alias_deleted(alias, Tagger.removed_aliases[char_index][alias])
+	
+	#reload_tag_button.disabled = false
+
+
+func set_alias_deleted(from: String, to: String) -> void:
+	#if Tagger.alias_list.has(from.left(1)) and\
+	#Tagger.alias_list[from.left(1)].has(from) and\
+	#Tagger.alias_list[from.left(1)][from] == to:
+	for alias_box: TagAliasInstance in alias_container.get_children():
+		if alias_box.parent_alias == to:
+			alias_box.set_alias_removed(from)
+			return
 
 
 func add_alias(old_name: String, new_name: String, is_custom: bool = false) -> void:
