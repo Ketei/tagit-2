@@ -118,6 +118,8 @@ func on_search_submit(tag_string: String) -> void:
 
 func on_fetch_pressed() -> void:
 	var tag_fetch: String = tag_name_line_edit.text.strip_edges().replace(" ", "_").to_lower()
+	if tag_fetch.is_empty():
+		return
 	fetch_status.text = "Fetching e621 info for: " + tag_fetch
 	fetch_button.disabled = true
 	clear_button.disabled = true
@@ -206,6 +208,10 @@ func process_response(response: Array, request_type: ESixRequester.JOB_TYPES) ->
 
 func on_save_pressed() -> void:
 	var tag_title: String = tag_name_line_edit.text.strip_edges().to_lower()
+	
+	loaded_tag = tag_title
+	delete_button.text = "Delete \"" + tag_title + "\""
+	delete_button.visible = true
 	
 	if tag_title.is_empty():
 		return

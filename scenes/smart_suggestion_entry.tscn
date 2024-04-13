@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dehqswvgpq0js"]
+[gd_scene load_steps=5 format=3 uid="uid://dehqswvgpq0js"]
 
 [ext_resource type="Script" path="res://scripts/smart_tag_entry.gd" id="1_2atgu"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="2_dbwf6"]
+[ext_resource type="Texture2D" uid="uid://bvaokn11jui2a" path="res://textures/icons/sort_icon.svg" id="2_dmm72"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f178j"]
 bg_color = Color(0.211765, 0.282353, 0.396078, 1)
@@ -47,7 +48,7 @@ text_overrun_behavior = 3
 [node name="SortButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Sort Alphabetically"
-text = "SR."
+icon = ExtResource("2_dmm72")
 
 [node name="SmartSuggestionItemList" type="ItemList" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
