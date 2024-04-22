@@ -29,7 +29,7 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 	if target_window == 0: # Wiki
 		tagger.show()
 		tagger_menu.show()
-	elif target_window == 1: # Rewview Tag
+	elif target_window == 1: # Review Tag
 		reviewer.show()
 		reviewer.clear_fields()
 		reviewer.tag_name_line_edit.text = args["tag"]
