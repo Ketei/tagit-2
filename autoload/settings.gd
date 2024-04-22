@@ -105,7 +105,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.0.0"
+const VERSION: String = "2.0.1"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 
 enum E621_CATEGORY {
