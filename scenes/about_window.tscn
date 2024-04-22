@@ -107,14 +107,13 @@ layout_mode = 2
 [node name="UpdateStatus" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/VersionChecker"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.588235, 0.980392, 0, 1)
 horizontal_alignment = 1
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
 layout_mode = 2
 size_flags_vertical = 6
 bbcode_enabled = true
-text = "TagIt was created with he intention of helping creators with tagging posts, helping users both find them more easily or avoid them if the content is not to their tastes."
+text = "TagIt was created with the intention of helping creators with tagging posts, helping users both find them more easily or avoid them if the content is not to their tastes."
 fit_content = true
 scroll_active = false
 
