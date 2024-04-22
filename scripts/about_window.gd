@@ -61,6 +61,8 @@ func on_close_pressed() -> void:
 func set_new_version_available(update_available: bool, update_version: String = "") -> void:
 	if update_available:
 		update_status.text = "Update {0} is available.".format([update_version])
+		update_status.add_theme_color_override("font_color", Color(1, 0.784, 0))
 	else:
 		update_status.text = "You're using the latest version."
+		update_status.add_theme_color_override("font_color", Color(0.588, 0.98, 0))
 
