@@ -1,0 +1,121 @@
+[gd_scene load_steps=4 format=3 uid="uid://ds6c0exekl6wq"]
+
+[ext_resource type="Script" path="res://scripts/about_window.gd" id="1_2qtxm"]
+[ext_resource type="Texture2D" uid="uid://bjpibg4o6rebp" path="res://textures/others/creator.png" id="2_m2eni"]
+[ext_resource type="Texture2D" uid="uid://dl4bf6dyws2kk" path="res://textures/icons/x_icon.svg" id="3_lomja"]
+
+[node name="AboutWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2qtxm")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.196078)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(600, 280)
+layout_mode = 2
+anchor_left = 0.2375
+anchor_top = 0.305556
+anchor_right = 0.7625
+anchor_bottom = 0.694444
+offset_bottom = 3.05176e-05
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="PanelContainer"]
+layout_mode = 2
+color = Color(0.129412, 0.196078, 0.313726, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="KeteiPik" type="TextureRect" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_m2eni")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="DataContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "TagIt!"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/HBoxContainer2/Label"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -16.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("3_lomja")
+icon_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
+layout_mode = 2
+
+[node name="VersionLabel" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.776471, 0.85098, 1, 1)
+text = "6969"
+horizontal_alignment = 1
+
+[node name="VersionChecker" type="HBoxContainer" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
+layout_mode = 2
+
+[node name="UpdateStatus" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/VersionChecker"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.588235, 0.980392, 0, 1)
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+bbcode_enabled = true
+text = "TagIt was created with he intention of helping artists and post creators with tagging pictures; Helping users both find them more easily or avoid them if the content is not to their tastes."
+fit_content = true
+scroll_active = false
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

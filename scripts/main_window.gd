@@ -10,6 +10,8 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var tools: ToolsWindow = $ToolsWindow # id 2
 @onready var settings: SettingsWindow = $SettingsWindow # id 3
 @onready var wiki: WikiWindow = $WikiInstance # id 4
+@onready var about_window: Control = $AboutWindow # id 6
+
 
 @onready var main_menu: MenuButton = $MenusContainer/TopMenuContainer/MainMenu
 @onready var tagger_menu: MenuButton = $MenusContainer/TopMenuContainer/TaggerMenu
@@ -69,6 +71,9 @@ func on_menu_changed(menu_index: int) -> void:
 	var menu_id: int = main_menu.get_popup().get_item_id(menu_index)
 	if menu_id == 4: # Exit
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+		return
+	elif menu_id == 6:
+		about_window.show()
 		return
 	
 	hide_all_windows()

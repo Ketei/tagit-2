@@ -40,9 +40,10 @@ func _ready():
 
 
 func on_char_submitted(char_string: String):
-	grab_focus()
-	text = char_string
-	caret_column = text.length()
+	#grab_focus()
+	#text = char_string
+	#caret_column = text.length()
+	text_submitted.emit(char_string)
 
 
 func on_text_submitted(_ignored: String) -> void:

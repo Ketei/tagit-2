@@ -105,6 +105,8 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
+const VERSION: String = "2.0.0"
+const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 
 enum E621_CATEGORY {
 	ALL = -1,
@@ -118,9 +120,7 @@ enum E621_CATEGORY {
 	LORE = 8,
 	}
 
-var header_data: Dictionary = {
-	"User-Agent": "TaglistMaker/2.0.0 (by Ketei)",
-}
+var header_data: Dictionary = {}
 
 var custom_sites: Dictionary = {}
 
@@ -214,7 +214,7 @@ var http_requests: int = 0
 func _ready():
 	DisplayServer.window_set_min_size(Vector2i(1280, 720))
 	DisplayServer.window_set_title("TagIt!")
-	
+	header_data["User-Agent"] = HEADER_FORMAT.format([VERSION])
 	loaded_sites.merge(DEFAULT_SITES)
 	
 	var _load_settings = SettingsResource.get_settings()
