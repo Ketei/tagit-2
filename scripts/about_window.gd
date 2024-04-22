@@ -32,7 +32,7 @@ func _ready():
 		version_request.queue_free()
 		return
 	
-	var version_text: String = json_decoder.data["tag_name"]
+	var version_text: String = json_decoder.data["tag_name"].trim_prefix("v")
 	
 	var version_split: Array[int] = []
 	var current_version_split: Array[int] = []
