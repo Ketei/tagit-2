@@ -65,6 +65,7 @@ visible = false
 layout_mode = 1
 
 [node name="AboutWindow" parent="." instance=ExtResource("8_4i145")]
+visible = false
 layout_mode = 1
 
 [node name="MenusContainer" type="MarginContainer" parent="."]

@@ -20,7 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.196078)
+color = Color(0, 0, 0, 0.392157)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 0
@@ -114,7 +114,7 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_vertical = 6
 bbcode_enabled = true
-text = "TagIt was created with he intention of helping artists and post creators with tagging pictures; Helping users both find them more easily or avoid them if the content is not to their tastes."
+text = "TagIt was created with he intention of helping creators with tagging posts, helping users both find them more easily or avoid them if the content is not to their tastes."
 fit_content = true
 scroll_active = false
 

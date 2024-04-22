@@ -24,7 +24,6 @@ func _ready():
 	
 	var json_decoder = JSON.new()
 	json_decoder.parse(response[3].get_string_from_utf8())
-	print(json_decoder.data)
 	if not json_decoder.data is Dictionary:
 		version_request.queue_free()
 		return
