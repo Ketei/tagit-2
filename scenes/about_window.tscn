@@ -118,3 +118,4 @@ fit_content = true
 scroll_active = false
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
+timeout = 10.0
