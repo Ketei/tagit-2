@@ -24,6 +24,7 @@ func _ready():
 	
 	var json_decoder = JSON.new()
 	json_decoder.parse(response[3].get_string_from_utf8())
+	
 	if not json_decoder.data is Dictionary:
 		version_request.queue_free()
 		return
@@ -34,23 +35,19 @@ func _ready():
 	
 	var version_text: String = json_decoder.data["tag_name"].trim_prefix("v")
 	
-	var version_split: Array[int] = []
-	var current_version_split: Array[int] = []
+	var online_version_array: Array[int] = []
+	var local_version_array: Array[int] = []
 
 	for version in version_text.split(".", false):
-		version_split.append(int(version))
+		online_version_array.append(int(version))
 	
 	for c_version in Tagger.VERSION.split(".", false):
-		current_version_split.append(int(c_version))
+		local_version_array.append(int(c_version))
 	
-	if current_version_split[0] < version_split[1]:
-		set_new_version_available(true, version_text)
-	elif current_version_split[1] < version_split[1]:
-		set_new_version_available(true, version_text)
-	elif current_version_split[2] < version_split[2]:
-		set_new_version_available(true, version_text)
-	else:
-		set_new_version_available(false)
+	set_new_version_available(
+			local_version_array < online_version_array,
+			version_text)
+	
 	version_request.queue_free()
 
 
