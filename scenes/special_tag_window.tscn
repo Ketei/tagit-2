@@ -63,11 +63,12 @@ layout_mode = 2
 
 [node name="MultipleButton" type="Button" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer/DropdownContainer"]
 layout_mode = 2
-text = "Multiple"
+text = " Multiple... "
 
 [node name="TagOptionButton" type="OptionButton" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer/DropdownContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
 
 [node name="ButtonsConainer" type="HBoxContainer" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -123,4 +124,4 @@ text = "Cancel"
 [node name="ConfirmMultiAdd" type="Button" parent="CenterContainer/MultiPanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Done"
+text = "Add"
