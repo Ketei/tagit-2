@@ -24,6 +24,7 @@ var in_tag_editor: InTagEditor
 var tag_map_browser: TagMapBrowser
 var unsaved_work_window: UnsavedWorkWindow
 
+
 @onready var sites_option_menu = $MarginContainer/MainContainer/Final/Platform/SitesOptionMenu
 @onready var final_tags: TextEdit = $MarginContainer/MainContainer/Final/FinalTags
 
@@ -99,7 +100,6 @@ func on_multiple_special_submitted(tag_array: Array[String]) -> void:
 		smart_list.remove_item(special_tag_window.selected_index)
 		if Tagger.blacklist_after_remove:
 			session_blacklist.add_to_group_blacklist(special_tag_window.title_label.text)
-
 
 
 func sort_tags_alphabetically() -> void:
@@ -179,6 +179,8 @@ func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
 
 
 func open_taglist_importer() -> void:
+	if tag_importer != null:
+		return
 	tag_importer = TAG_LIST_IMPORTER.instantiate()
 	tag_importer.tags_converted.connect(on_tags_imported)
 	add_child(tag_importer)
@@ -210,6 +212,9 @@ func open_session_blacklist() -> void:
 
 
 func open_load_window() -> void:
+	if save_window != null:
+		return
+	
 	if load_list_button.has_focus():
 		load_list_button.release_focus()
 	save_window = SAVE_WINDOW.instantiate()
@@ -248,14 +253,26 @@ func on_load_pressed(load_data: Dictionary) -> void:
 
 
 func open_save_window() -> void:
+	if save_window != null:
+		return
+	
 	save_window = SAVE_WINDOW.instantiate()
 	save_window.mode = 0
 	save_window.file_saved.connect(on_file_saved)
 	save_window.save_data = get_save_data()
 	add_child(save_window)
-	
+
+
+func is_system_open() -> bool:
+	return template_loader != null or save_window != null or\
+	tag_importer != null or tag_wizard != null or in_tag_editor != null or\
+	tag_map_browser != null
+
 
 func new_list() -> void:
+	if is_system_open():
+		return
+	
 	if prompt_save_on_new:
 		unsaved_work_window = UNSAVED_WINDOW.instantiate()
 		unsaved_work_window.save_data = get_save_data()
@@ -497,6 +514,8 @@ func on_template_loaded(mains: Array[String], suggs: Array[String]):
 
 
 func display_template_loader() -> void:
+	if template_loader != null:
+		return
 	template_loader = TEMPLATE_LOADER.instantiate()
 	template_loader.template_selected.connect(on_template_loaded)
 	template_loader.create_template_pressed.connect(on_create_template_pressed)

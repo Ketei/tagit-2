@@ -17,7 +17,9 @@ func _ready():
 	var error = version_request.request(
 			"https://api.github.com/repos/Ketei/tagit-2/releases/latest"
 	)
+	
 	var response = await version_request.request_completed
+	
 	if error != OK:
 		version_request.queue_free()
 		return

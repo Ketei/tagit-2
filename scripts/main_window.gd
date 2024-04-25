@@ -2,8 +2,11 @@ class_name MainTaggerWindow
 extends Control
 
 const UNSAVED_WINDOW = preload("res://scenes/unsaved_window.tscn")
+const CONTROLS_WINDOW = preload("res://scenes/controls_window.tscn")
 
 var unsaved_work_window: UnsavedWorkWindow
+var controls_window: ControlsWindow
+var current_window_index: int = 0
 
 @onready var tagger: TaggerWindow = $TaggingInstance # id 0
 @onready var reviewer: ReviewWindow = $TagReview # id 1
@@ -15,6 +18,7 @@ var unsaved_work_window: UnsavedWorkWindow
 
 @onready var main_menu: MenuButton = $MenusContainer/TopMenuContainer/MainMenu
 @onready var tagger_menu: MenuButton = $MenusContainer/TopMenuContainer/TaggerMenu
+@onready var help_menu: MenuButton = $MenusContainer/TopMenuContainer/HelpMenu
 
 
 # Called when the node enters the scene tree for the first time.
@@ -22,7 +26,22 @@ func _ready():
 	main_menu.get_popup().index_pressed.connect(on_menu_changed)
 	tagger_menu.get_popup().index_pressed.connect(on_tagger_menu_selected)
 	tagger.window_switch_signaled.connect(on_window_switch_signaled)
-	
+	help_menu.get_popup().index_pressed.connect(on_help_menu_selected)
+
+
+func show_controls_window() -> void:
+	controls_window = CONTROLS_WINDOW.instantiate()
+	controls_window.close_pressed.connect(on_controls_closed)
+	main_menu.hide()
+	hide_all_windows()
+	add_child(controls_window)
+
+
+func on_controls_closed() -> void:
+	controls_window.queue_free()
+	main_menu.show()
+	on_menu_changed(current_window_index)
+
 
 func on_window_switch_signaled(target_window: int, args = {}) -> void:
 	hide_all_windows()
@@ -42,6 +61,15 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 		settings.show()
 	elif target_window == 4: # Tagger
 		wiki.show()
+
+
+func on_help_menu_selected(menu_index: int) -> void:
+	var menu_id: int = help_menu.get_popup().get_item_id(menu_index)
+	
+	if menu_id == 0:
+		show_controls_window()
+	elif menu_id == 1: # About Tagit
+		about_window.show()
 
 
 func on_tagger_menu_selected(menu_index: int) -> void:
@@ -72,11 +100,10 @@ func on_menu_changed(menu_index: int) -> void:
 	if menu_id == 4: # Exit
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 		return
-	elif menu_id == 6:
-		about_window.show()
-		return
 	
 	hide_all_windows()
+	current_window_index = menu_index
+	
 	if menu_id == 0: # Wiki
 		wiki.show()
 	elif menu_id == 1: # Rewview Tag
