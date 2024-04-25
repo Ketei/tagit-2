@@ -178,7 +178,8 @@ var custom_aliases: Dictionary = {}
 var removed_aliases: Dictionary = {}
 var prefixes: Dictionary = {}
 var prefix_sorting: Array[String] = []
-
+var remove_after_use: bool = false
+var blacklist_after_remove: bool = false
 
 # Tagger Settings
 var default_site: String = ""
@@ -260,6 +261,8 @@ func _ready():
 	hydrus_key = _load_settings.hydrus_key
 	tag_map = _load_settings.tag_map
 	include_invalid = _load_settings.include_invalid
+	remove_after_use = _load_settings.remove_after_use
+	blacklist_after_remove = _load_settings.blacklist_after_remove
 	
 	if loaded_sites.has(_load_settings.default_site):
 		default_site = _load_settings.default_site
@@ -931,8 +934,9 @@ func save_settings() -> void:
 		new_settings.custom_aliases = custom_aliases
 		new_settings.include_invalid = include_invalid
 		new_settings.removed_aliases = removed_aliases
+		new_settings.remove_after_use = remove_after_use
+		new_settings.blacklist_after_remove = blacklist_after_remove
 		new_settings.save()
-		#new_saves.save()
 	else:
 		print("Running from source: Skipping saving settings.")
 

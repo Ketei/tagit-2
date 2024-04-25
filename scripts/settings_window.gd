@@ -16,12 +16,13 @@ var website_installer: WebsiteInstallWindow
 @onready var install_website_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2/InstallWebsiteButton
 @onready var clear_tag_map_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer/ClearTagMapButton
 
-
 @onready var autofill_enabled: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle/AutofillEnabled
 @onready var wiki_esix_search: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle/WikiESixSearch
 @onready var include_invalid_check: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/InvalidInclude/IncludeInvalidCheck
 @onready var online_check_button: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/OnlineContainer/OnlineCheckButton
 @onready var danger_buttons_check: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer/DangerButtonsCheck
+@onready var remove_after_use: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2/RemoveAfterUse
+@onready var blacklist_after_remove: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2/BlacklistAfterRemove
 
 @onready var db_path_line_edit: LineEdit = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer/DBPathLineEdit
 
@@ -44,6 +45,10 @@ func _ready():
 	confidence_spin_box.value = Tagger.suggestion_confidence
 	db_path_line_edit.text = Tagger.database_path
 	db_path_line_edit.tooltip_text = Tagger.database_path
+	remove_after_use.button_pressed = Tagger.remove_after_use
+	blacklist_after_remove.button_pressed = Tagger.blacklist_after_remove
+	if Tagger.remove_after_use:
+		blacklist_after_remove.disabled = false
 	
 	port_spinbox.value = Tagger.hydrus_port
 	key_secret.text = Tagger.hydrus_key
@@ -72,6 +77,16 @@ func _ready():
 	include_invalid_check.toggled.connect(on_load_invalid_changed)
 	danger_buttons_check.toggled.connect(on_danger_toggled)
 	clear_tag_map_button.pressed.connect(on_clear_tagmap_pressed)
+	remove_after_use.toggled.connect(on_remove_after_use)
+	blacklist_after_remove.toggled.connect(on_blacklist_after_remove)
+
+
+func on_remove_after_use(is_toggled: bool) -> void:
+	Tagger.remove_after_use = is_toggled
+
+
+func on_blacklist_after_remove(is_toggled: bool) -> void:
+	Tagger.blacklist_after_remove = is_toggled
 
 
 func on_clear_tagmap_pressed() -> void:

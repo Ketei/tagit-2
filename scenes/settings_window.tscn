@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cyodg6s04nvct"]
+[gd_scene load_steps=16 format=3 uid="uid://cyodg6s04nvct"]
 
 [ext_resource type="Script" path="res://scripts/settings_window.gd" id="1_7cc65"]
 [ext_resource type="PackedScene" uid="uid://dp0dtvv4h81x0" path="res://scenes/sites_option_menu.tscn" id="1_uwl5o"]
@@ -14,6 +14,24 @@
 [ext_resource type="Script" path="res://scripts/settings_suggestion_blacklist.gd" id="6_43nla"]
 [ext_resource type="Texture2D" uid="uid://r2hu7nn01jqa" path="res://textures/icons/web_icon.svg" id="6_i0iyc"]
 [ext_resource type="Script" path="res://scripts/settings_constant_tags.gd" id="7_mfs0k"]
+
+[sub_resource type="GDScript" id="GDScript_fkf5i"]
+resource_name = "toggle_me"
+script/source = "extends CheckButton
+
+
+@onready var blacklist_after_remove: CheckButton = $\"../BlacklistAfterRemove\"
+
+
+func _ready():
+	toggled.connect(on_toggled)
+
+
+func on_toggled(is_toggled: bool) -> void:
+	blacklist_after_remove.disabled = not is_toggled
+
+
+"
 
 [node name="SettingsWindow" type="Control"]
 layout_mode = 3
@@ -165,6 +183,24 @@ if there is no wiki page on the local database,
 open e621 instead."
 button_pressed = true
 text = "Wiki links to e621"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+layout_mode = 2
+
+[node name="RemoveAfterUse" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "After using a suggestion group, it'll be removed."
+text = "Remove suggestion groups after use"
+script = SubResource("GDScript_fkf5i")
+
+[node name="BlacklistAfterRemove" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 6
+tooltip_text = "Once a suggestion group is removed after use,
+it'll be included it in the blacklist."
+disabled = true
+text = "Add to blacklist"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
 layout_mode = 2
