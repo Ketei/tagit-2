@@ -61,7 +61,8 @@ func _ready():
 	add_tag_line_edit.text_submitted.connect(on_tag_submitted)
 	suggestion_list.item_activated.connect(on_suggestion_activated)
 	smart_list.item_activated.connect(on_special_tag_activated)
-	special_tag_window.prompt_selected.connect(on_tag_submitted)
+	special_tag_window.prompt_selected.connect(on_special_submitted)
+	special_tag_window.multiple_selected.connect(on_multiple_special_submitted)
 	template_button.pressed.connect(display_template_loader)
 	generate_button.pressed.connect(generate_full_tags)
 	copy_button.pressed.connect(on_copy_pressed)
@@ -82,6 +83,23 @@ func _ready():
 	save_list_button.pressed.connect(open_save_window)
 	load_list_button.pressed.connect(open_load_window)
 	Tagger.tag_updated.connect(on_tag_updated)
+
+
+func on_special_submitted(tag_string: String) -> void:
+	on_tag_submitted(tag_string)
+	if Tagger.remove_after_use:
+		smart_list.remove_item(special_tag_window.selected_index)
+		if Tagger.blacklist_after_remove:
+			session_blacklist.add_to_group_blacklist(special_tag_window.title_label.text)
+
+
+func on_multiple_special_submitted(tag_array: Array[String]) -> void:
+	load_tag_array(tag_array)
+	if Tagger.remove_after_use:
+		smart_list.remove_item(special_tag_window.selected_index)
+		if Tagger.blacklist_after_remove:
+			session_blacklist.add_to_group_blacklist(special_tag_window.title_label.text)
+
 
 
 func sort_tags_alphabetically() -> void:
@@ -200,7 +218,6 @@ func open_load_window() -> void:
 	add_child(save_window)
 	
 
-
 func on_load_pressed(load_data: Dictionary) -> void:
 	clear_all()
 	
@@ -263,12 +280,16 @@ func on_file_saved() -> void:
 
 
 func on_special_tag_activated(tag_index: int) -> void:
+	if not smart_list.delete_timer.is_stopped():
+		return
+
 	var medatada: Dictionary = smart_list.get_item_metadata(tag_index)
 	
 	if medatada["type"] == "opt":
 		special_tag_window.show_option_menu(
 			smart_list.get_item_text(tag_index),
-			medatada["tags"])
+			medatada["tags"],
+			tag_index)
 	
 	elif medatada["type"] == "nbr":
 		special_tag_window.show_spinbox_menu(
@@ -446,6 +467,9 @@ func on_tag_updated(tag_name: String) -> void:
 
 
 func on_suggestion_activated(sugg_index: int) -> void:
+	if not suggestion_list.delete_timer.is_stopped():
+		return
+	
 	var tags_to_add: Array[String] = []
 	var selected_indexes: Array[int] = []
 	
