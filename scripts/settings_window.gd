@@ -7,37 +7,36 @@ const WEB_INSTALL_WINDOW = preload("res://scenes/web_install_window.tscn")
 var pack_installer: PakInstallWindow
 var website_installer: WebsiteInstallWindow
 
-@onready var exit_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ExitButton
-@onready var hydrus_connect_button: Button = $MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusConnectButton
-@onready var browse_path_button: Button = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer/BrowsePathButton
-@onready var reload_tag_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer/ReloadTagButton
-@onready var open_tag_folder_btn: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2/OpenTagFolderBtn
-@onready var install_pak_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2/InstallPakButton
-@onready var install_website_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2/InstallWebsiteButton
-@onready var clear_tag_map_button: Button = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer/ClearTagMapButton
+@onready var hydrus_connect_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusConnectButton
+@onready var browse_path_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer/HBoxContainer/BrowsePathButton
+@onready var reload_tag_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer/ReloadTagButton
+@onready var open_tag_folder_btn: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2/OpenTagFolderBtn
+@onready var install_pak_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2/InstallPakButton
+@onready var install_website_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2/InstallWebsiteButton
+@onready var clear_tag_map_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer/ClearTagMapButton
 
-@onready var autofill_enabled: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle/AutofillEnabled
-@onready var wiki_esix_search: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle/WikiESixSearch
-@onready var include_invalid_check: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/InvalidInclude/IncludeInvalidCheck
-@onready var online_check_button: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/OnlineContainer/OnlineCheckButton
-@onready var danger_buttons_check: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer/DangerButtonsCheck
-@onready var remove_after_use: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2/RemoveAfterUse
-@onready var blacklist_after_remove: CheckButton = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2/BlacklistAfterRemove
+@onready var autofill_enabled: CheckButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/FunctionallityToggle/AutofillEnabled
+@onready var wiki_esix_search: CheckButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/WikiESixSearch
+@onready var include_invalid_check: CheckButton = $"MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer/InvalidInclude/IncludeInvalidCheck"
+@onready var online_check_button: CheckButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/OnlineContainer/OnlineCheckButton
+@onready var danger_buttons_check: CheckButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer/DangerButtonsCheck
+@onready var remove_after_use: CheckButton = $"MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer/RemoveOnUse/RemoveAfterUse"
+@onready var blacklist_after_remove: CheckButton = $"MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer/RemoveOnUse/BlacklistAfterRemove"
 
-@onready var db_path_line_edit: LineEdit = $MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer/DBPathLineEdit
+@onready var db_path_line_edit: LineEdit = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer/HBoxContainer/DBPathLineEdit
+@onready var key_secret: LineEdit = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/KeyContainer/KeySecret
 
 @onready var folder_dialog: FileDialog = $FolderDialog
 @onready var accept_dialog: AcceptDialog = $AcceptDialog
 
-@onready var port_spinbox: SpinBox = $MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/PortContainer/PortSpinbox
-@onready var confidence_spin_box: SpinBox = $MarginContainer/HBoxContainer/LeftSettings/SuggestContainer/ConfidenceSpinBox
+@onready var port_spinbox: SpinBox = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/PortContainer/PortSpinbox
+@onready var confidence_spin_box: SpinBox = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/SuggestContainer/ConfidenceSpinBox
 
-@onready var key_secret: LineEdit = $MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/KeyContainer/KeySecret
 
 @onready var invalid_list: TagItemList = $"MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags/VBoxContainer/InvalidList"
 @onready var sug_black_list: TagItemList = $"MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist/VBoxContainer/SugBlackList"
 @onready var constants_list: TagItemList = $"MarginContainer/HBoxContainer/BlackListTabs/Constant Tags/VBoxContainer/ConstantsList"
-@onready var sites_option_menu: SitesOptionButton = $MarginContainer/HBoxContainer/LeftSettings/DefaultSite/SitesOptionMenu
+@onready var sites_option_menu: SitesOptionButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DefaultSite/SitesOptionMenu
 
 
 # Called when the node enters the scene tree for the first time.
@@ -61,7 +60,6 @@ func _ready():
 	online_check_button.button_pressed = Tagger.search_online_suggestions
 	include_invalid_check.button_pressed = Tagger.include_invalid
 	
-	exit_button.pressed.connect(on_exit_pressed)
 	folder_dialog.dir_selected.connect(on_folder_selected)
 	browse_path_button.pressed.connect(on_browse_folder_pressed)
 	hydrus_connect_button.pressed.connect(on_hydrus_connect_pressed)
@@ -161,10 +159,6 @@ func on_hydrus_connect_pressed() -> void:
 		await get_tree().create_timer(2.0).timeout
 		hydrus_connect_button.text = "Connect to Hydrus"
 		hydrus_connect_button.disabled = false
-
-
-func on_exit_pressed() -> void:
-	hide()
 
 
 func on_browse_folder_pressed() -> void:
