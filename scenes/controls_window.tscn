@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://l1qox0iw3js0"]
+[gd_scene load_steps=5 format=3 uid="uid://l1qox0iw3js0"]
 
 [ext_resource type="Script" path="res://scripts/controls_window.gd" id="1_5cabl"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_ow2g4"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_08ibh"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_a8a81"]
+events = [SubResource("InputEventKey_08ibh")]
 
 [node name="ControlsWindow" type="Control"]
 layout_mode = 3
@@ -44,6 +51,8 @@ alignment = 2
 
 [node name="CloseButton" type="Button" parent="ControlsContainer/VBoxContainer/ButtonsContainer"]
 layout_mode = 2
+shortcut = SubResource("Shortcut_a8a81")
+shortcut_in_tooltip = false
 text = "Close"
 
 [node name="SmoothScrollContainer" type="ScrollContainer" parent="ControlsContainer/VBoxContainer"]

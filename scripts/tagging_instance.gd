@@ -109,8 +109,7 @@ func sort_tags_alphabetically() -> void:
 
 
 func on_full_search_open() -> void:
-	Tagger.shortcuts_disabled = true
-	tag_full_search.show()
+	tag_full_search.show_searcher()
 
 
 func on_tag_map_open() -> void:
@@ -222,8 +221,7 @@ func clear_main_list() -> void:
 
 
 func open_session_blacklist() -> void:
-	session_blacklist.show()
-	Tagger.shortcuts_disabled = true
+	session_blacklist.show_blacklist()
 
 
 func open_load_window() -> void:

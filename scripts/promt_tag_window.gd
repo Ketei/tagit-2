@@ -44,11 +44,17 @@ func _ready():
 	multiple_button.pressed.connect(_show_multiple_selector)
 	cancel_multi_add.pressed.connect(on_multi_select_cancel)
 	confirm_multi_add.pressed.connect(on_multi_select_submit)
+	set_process_unhandled_key_input(false)
 
 
 func _show_multiple_selector() -> void:
 	multi_panel_container.show()
 	tag_dropdown_add.hide()
+
+
+func _unhandled_key_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		on_cancel_button()
 
 
 func on_multi_select_cancel() -> void:
@@ -64,12 +70,17 @@ func on_multi_select_submit() -> void:
 	for child:CheckBox in items_container.get_children():
 		if child.button_pressed:
 			return_array.append(child.text)
-		child.queue_free()
 	multiple_selected.emit(return_array)
 	hide()
 
 
+func clear_multuselect() -> void:
+	for child:CheckBox in items_container.get_children():
+		child.queue_free()
+
+
 func show_option_menu(title: String, options: Array[String], index: int) -> void:
+	clear_multuselect()
 	if not tag_dropdown_add.visible:
 		tag_dropdown_add.visible = true
 	if multi_panel_container.visible:
@@ -89,7 +100,9 @@ func show_option_menu(title: String, options: Array[String], index: int) -> void
 	
 	amount_spin_box.hide()
 	mode = PromptMode.OPTION
-	show()
+	Tagger.shortcuts_disabled = true
+	set_process_unhandled_key_input(true)
+	visible = true
 	tag_option_button.grab_focus()
 
 
@@ -98,7 +111,7 @@ func show_spinbox_menu(title: String, single_form_tag: String, min_value: int = 
 		tag_dropdown_add.visible = true
 	if multi_panel_container.visible:
 		multi_panel_container.visible = false
-	
+	Tagger.shortcuts_disabled = true
 	title_label.text = title
 	string_format = single_form_tag
 	amount_spin_box.min_value = min_value
@@ -110,7 +123,9 @@ func show_spinbox_menu(title: String, single_form_tag: String, min_value: int = 
 	amount_spin_box.show()
 	tag_option_button.hide()
 	mode = PromptMode.NUMBER
-	show()
+	Tagger.shortcuts_disabled = true
+	set_process_unhandled_key_input(true)
+	visible = true
 	amount_spin_box.get_line_edit().grab_focus()
 
 
@@ -130,10 +145,16 @@ func on_accept_button() -> void:
 				string_build += "s"
 		
 		prompt_selected.emit(string_build)
-	hide()
+	close_window()
 
 
 func on_cancel_button():
 	prompt_cancelled.emit()
-	hide()
+	close_window()
+
+
+func close_window() -> void:
+	Tagger.shortcuts_disabled = false
+	set_process_unhandled_key_input(false)
+	visible = false
 

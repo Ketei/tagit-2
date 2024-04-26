@@ -67,64 +67,67 @@ theme_override_constants/margin_bottom = 8
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="LeftSettings" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
-theme_override_constants/separation = 16
+theme_override_constants/margin_top = 31
 
-[node name="Empty" type="Control" parent="MarginContainer/HBoxContainer/LeftSettings"]
-custom_minimum_size = Vector2(0, 31)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="ExitButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings"]
-visible = false
-custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Close"
-
-[node name="DefaultSite" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="LeftBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/DefaultSite"]
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox"]
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 1
+
+[node name="General" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+
+[node name="GeneralContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DefaultSite" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DefaultSite"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Default Site"
 
-[node name="SitesOptionMenu" parent="MarginContainer/HBoxContainer/LeftSettings/DefaultSite" instance=ExtResource("1_uwl5o")]
+[node name="SitesOptionMenu" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DefaultSite" instance=ExtResource("1_uwl5o")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="OnlineContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
 layout_mode = 2
 
-[node name="OnlineCheckButton" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/OnlineContainer"]
+[node name="OnlineContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
+
+[node name="OnlineCheckButton" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/OnlineContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Load Online Suggestions"
 icon = ExtResource("3_bur4n")
 
-[node name="InvalidInclude" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
 layout_mode = 2
 
-[node name="IncludeInvalidCheck" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/InvalidInclude"]
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "If invalid tags will be added to the final generated tag list."
-text = "Include Invalid tags on generation"
-
-[node name="SuggestContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="SuggestContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/SuggestContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/SuggestContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Confidence"
 
-[node name="ConfidenceSpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftSettings/SuggestContainer"]
+[node name="ConfidenceSpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/SuggestContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
@@ -132,29 +135,136 @@ value = 45.0
 alignment = 1
 suffix = "%"
 
-[node name="ImageLoader" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader"]
+[node name="DatabaseContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Database Path"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="DBPathLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+editable = false
+
+[node name="BrowsePathButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Browse"
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
+
+[node name="FunctionallityToggle" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="AutofillEnabled" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/FunctionallityToggle"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "When typing on the tagger or wiki, show
+tags that contain the typed word. Accepts
+prefixing or suffixing with the wildcard \"*\""
+button_pressed = true
+text = "Autofill"
+
+[node name="Tag List" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+
+[node name="TaglistContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InvalidInclude" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer"]
+layout_mode = 2
+
+[node name="IncludeInvalidCheck" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer/InvalidInclude"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "If invalid tags will be added to the final generated tag list."
+text = "Include Invalid tags on generation"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer"]
+layout_mode = 2
+
+[node name="RemoveOnUse" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer"]
+layout_mode = 2
+
+[node name="RemoveAfterUse" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer/RemoveOnUse"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "After using a suggestion group, it'll be removed."
+text = "Remove suggestion
+groups after use"
+script = SubResource("GDScript_fkf5i")
+
+[node name="BlacklistAfterRemove" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Tag List/TaglistContainer/RemoveOnUse"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Once a suggestion group is removed after use,
+it'll be included it in the blacklist."
+disabled = true
+text = "Add to blacklist"
+
+[node name="Wiki" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+
+[node name="WikiContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="WikiESixSearch" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer"]
+layout_mode = 2
+tooltip_text = "When clicking a tag link on the wiki, 
+if there is no wiki page on the local database, 
+open e621 instead."
+button_pressed = true
+text = "Wiki links to e621"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer"]
+layout_mode = 2
+
+[node name="ImageLoader" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/ImageLoader"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Wiki Images"
 vertical_alignment = 1
 
-[node name="LoadImagesContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader"]
+[node name="LoadImagesContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/ImageLoader"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 script = ExtResource("3_ej6ke")
 
-[node name="LoadImagesBTN" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader/LoadImagesContainer"]
+[node name="LoadImagesBTN" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/ImageLoader/LoadImagesContainer"]
 layout_mode = 2
 tooltip_text = "Load images from Hydrus Client."
 text = "Load Images"
 icon = ExtResource("4_4hhu3")
 alignment = 1
 
-[node name="ImageCount" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftSettings/ImageLoader/LoadImagesContainer"]
+[node name="ImageCount" type="SpinBox" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/ImageLoader/LoadImagesContainer"]
 layout_mode = 2
 min_value = 1.0
 max_value = 120.0
@@ -162,115 +272,54 @@ value = 1.0
 alignment = 1
 editable = false
 
-[node name="FunctionallityToggle" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
-layout_mode = 2
-alignment = 1
-
-[node name="AutofillEnabled" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "When typing on the tagger or wiki, show
-tags that contain the typed word. Accepts
-prefixing or suffixing with the wildcard \"*\""
-button_pressed = true
-text = "Autofill"
-
-[node name="WikiESixSearch" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/FunctionallityToggle"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "When clicking a tag link on the wiki, 
-if there is no wiki page on the local database, 
-open e621 instead."
-button_pressed = true
-text = "Wiki links to e621"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer"]
 layout_mode = 2
 
-[node name="RemoveAfterUse" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "After using a suggestion group, it'll be removed."
-text = "Remove suggestion groups after use"
-script = SubResource("GDScript_fkf5i")
-
-[node name="BlacklistAfterRemove" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "Once a suggestion group is removed after use,
-it'll be included it in the blacklist."
-disabled = true
-text = "Add to blacklist"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="HydrusContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Database Path"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
-
-[node name="DBPathLineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
-editable = false
-
-[node name="BrowsePathButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Browse"
-
-[node name="HydrusContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
-layout_mode = 2
-
-[node name="HydrusFields" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer"]
+[node name="HydrusFields" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PortContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields"]
+[node name="PortContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/PortContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/PortContainer"]
 layout_mode = 2
 text = "Hydrus Port:"
 
-[node name="PortSpinbox" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/PortContainer"]
+[node name="PortSpinbox" type="SpinBox" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/PortContainer"]
 layout_mode = 2
 allow_greater = true
 alignment = 1
 
-[node name="KeyContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields"]
+[node name="KeyContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/KeyContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/KeyContainer"]
 layout_mode = 2
 text = "Hydrus Key:"
 
-[node name="KeySecret" type="LineEdit" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer/HydrusFields/KeyContainer"]
+[node name="KeySecret" type="LineEdit" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/KeyContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 select_all_on_focus = true
 secret = true
 
-[node name="HydrusConnectButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/HydrusContainer"]
+[node name="HydrusConnectButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer"]
 layout_mode = 2
 text = "Connect to Hydrus"
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox"]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="OpenTagFolderBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2"]
+[node name="OpenTagFolderBtn" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -279,7 +328,7 @@ size_flags_stretch_ratio = 2.0
 text = "Open Tags Folder"
 icon = ExtResource("4_c6dde")
 
-[node name="InstallPakButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2"]
+[node name="InstallPakButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
@@ -287,27 +336,28 @@ tooltip_text = "Install a tag pack"
 text = "Install Tag Pack"
 icon = ExtResource("5_mmh48")
 
-[node name="InstallWebsiteButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer2"]
+[node name="InstallWebsiteButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Install Website Data"
 icon = ExtResource("6_i0iyc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DangerButtonsCheck" type="CheckButton" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer"]
+[node name="DangerButtonsCheck" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 tooltip_text = "Enables buttons that will critically change how the tagger operate."
 text = "Enable Special Buttons"
 
-[node name="ReloadTagButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer"]
+[node name="ReloadTagButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer"]
 layout_mode = 2
 tooltip_text = "Use if you changed your database and want to load tags on that new folder."
 disabled = true
 text = "Reload Tags"
 
-[node name="ClearTagMapButton" type="Button" parent="MarginContainer/HBoxContainer/LeftSettings/ButtonsContainer/VBoxContainer"]
+[node name="ClearTagMapButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "Clear Tag Map"

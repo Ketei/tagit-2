@@ -76,10 +76,10 @@ func on_help_menu_selected(menu_index: int) -> void:
 	var menu_id: int = help_menu.get_popup().get_item_id(menu_index)
 	Tagger.shortcuts_disabled = true
 	
-	if menu_id == 0:
+	if menu_id == 0: # Show Controls
 		show_controls_window()
 	elif menu_id == 1: # About Tagit
-		about_window.show()
+		about_window.show_info()
 
 
 func on_tagger_menu_selected(menu_index: int) -> void:

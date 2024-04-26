@@ -53,7 +53,18 @@ func _ready():
 	version_request.queue_free()
 
 
+func _unhandled_key_input(event: InputEvent):
+	if event.is_action_pressed("ui_cancel"):
+		on_close_pressed()
+
+
+func show_info() -> void:
+	set_process_unhandled_key_input(true)
+	visible = true
+
+
 func on_close_pressed() -> void:
+	set_process_unhandled_key_input(false)
 	visible = false
 	Tagger.shortcuts_disabled = false
 

@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://ds6c0exekl6wq"]
+[gd_scene load_steps=6 format=3 uid="uid://ds6c0exekl6wq"]
 
 [ext_resource type="Script" path="res://scripts/about_window.gd" id="1_2qtxm"]
 [ext_resource type="Texture2D" uid="uid://bjpibg4o6rebp" path="res://textures/others/creator.png" id="2_m2eni"]
 [ext_resource type="Texture2D" uid="uid://dl4bf6dyws2kk" path="res://textures/icons/x_icon.svg" id="3_lomja"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_6qhpx"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_r6ij5"]
+events = [SubResource("InputEventKey_6qhpx")]
 
 [node name="AboutWindow" type="Control"]
 top_level = true
@@ -89,6 +96,7 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+shortcut = SubResource("Shortcut_r6ij5")
 icon = ExtResource("3_lomja")
 icon_alignment = 1
 

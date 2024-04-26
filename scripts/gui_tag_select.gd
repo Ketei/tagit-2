@@ -20,6 +20,7 @@ var max_height: int = 400
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Tagger.shortcuts_disabled = true
 	var type_index: int = 0
 	type_option_button.get_popup().max_size.y = max_height
 	category_option_button.get_popup().max_size.y = max_height
@@ -40,6 +41,11 @@ func _ready():
 	tags_option_button.item_selected.connect(on_tag_selected)
 	cancel_button.pressed.connect(on_cancel_pressed)
 	add_button.pressed.connect(get_tag)
+
+
+func _unhandled_key_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		on_cancel_pressed()
 
 
 func on_type_selected(type_index: int) -> void:
@@ -106,5 +112,6 @@ func get_tag() -> void:
 
 
 func on_cancel_pressed() -> void:
+	Tagger.shortcuts_disabled = false
 	queue_free()
 
