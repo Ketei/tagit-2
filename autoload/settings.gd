@@ -698,7 +698,7 @@ func search_with_category(search_string: String, category: Categories, limit: in
 		for tag in loaded_tags[tag_key]:
 			if limit == 0:
 				break
-			if tag.begins_with(tag_key) and\
+			if tag.begins_with(search_string) and\
 			not return_array.has(tag) and\
 			loaded_tags[tag_key][tag]["category"] == category:
 				if invert:
