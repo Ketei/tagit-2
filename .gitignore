@@ -3,7 +3,7 @@
 addons/godotgif/bin/~godotgif.windows.template_debug.x86_64.dll
 
 # Does not ignore the Resources UID cache file
-!.godot/uid_cache.bin
+!.godot/extension_list.cfg
 !.godot/global_script_class_cache.cfg
 
 # Godot 4+ specific ignores
