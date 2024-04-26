@@ -70,5 +70,6 @@ func remove_indexes(indexes_to_remove: Array[int]) -> void:
 	_indexes.assign(indexes_to_remove)
 	_indexes.sort_custom(func(a, b): return a > b)
 	for index in _indexes:
+		item_deleted.emit(get_item_text(index))
 		remove_item(index)
 

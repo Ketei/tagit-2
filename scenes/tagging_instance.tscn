@@ -1,9 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://cv04584lewxfj"]
+[gd_scene load_steps=19 format=3 uid="uid://cv04584lewxfj"]
 
 [ext_resource type="Script" path="res://scripts/tagging_instance.gd" id="1_qwxx4"]
 [ext_resource type="Texture2D" uid="uid://bspy7b4mnwwtt" path="res://textures/icons/wizard.svg" id="2_cc4m6"]
 [ext_resource type="Texture2D" uid="uid://xejppul6k45c" path="res://textures/icons/new_icon.svg" id="2_mo8qe"]
-[ext_resource type="Shortcut" uid="uid://bcumpg26lu6qc" path="res://resources/shortcuts/list_actions/new_list_shortcut.tres" id="2_vrgr4"]
 [ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="3_0tqr4"]
 [ext_resource type="Texture2D" uid="uid://dv4iwivdjx3x7" path="res://textures/icons/import_icon.svg" id="3_43ms0"]
 [ext_resource type="Texture2D" uid="uid://cahrs65npors7" path="res://textures/icons/save_icon.svg" id="3_e4k6d"]
@@ -160,7 +159,6 @@ alignment = 2
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 tooltip_text = "New List"
-shortcut = ExtResource("2_vrgr4")
 icon = ExtResource("2_mo8qe")
 icon_alignment = 1
 

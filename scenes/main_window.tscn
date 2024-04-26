@@ -31,6 +31,7 @@ script/source = "extends MenuButton
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Tagger.disabled_shortcuts.connect(on_shortcuts_disabled)
 	var popup := get_popup()
 	popup.set_item_shortcut(
 		0,
@@ -56,6 +57,10 @@ func _ready():
 		5,
 		load(\"res://resources/shortcuts/quit_shortcut.tres\")
 	)
+
+
+func on_shortcuts_disabled(shortcuts_disabled: bool) -> void:
+	set_disable_shortcuts(shortcuts_disabled)
 "
 
 [sub_resource type="GDScript" id="GDScript_lgp87"]
@@ -65,6 +70,7 @@ script/source = "extends MenuButton
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Tagger.disabled_shortcuts.connect(on_shortcuts_disabled)
 	var menu_popup := get_popup()
 	menu_popup.set_item_shortcut(
 			0,
@@ -81,7 +87,11 @@ func _ready():
 	menu_popup.set_item_shortcut(
 		10,
 		load(\"res://resources/shortcuts/list_actions/load_template_shortcut.tres\"))
-	print(menu_popup.item_count)
+
+
+func on_shortcuts_disabled(shortcuts_disabled: bool) -> void:
+	set_disable_shortcuts(shortcuts_disabled)
+
 "
 
 [node name="MainWindow" type="Control"]

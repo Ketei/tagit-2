@@ -112,5 +112,6 @@ func save_file(title: String, index:int = -1):
 
 func on_close_pressed() -> void:
 	window_closed.emit()
+	Tagger.shortcuts_disabled = false
 	queue_free()
 

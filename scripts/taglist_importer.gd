@@ -36,4 +36,6 @@ func convert_to_tags() -> void:
 
 func on_close_pressed() -> void:
 	queue_free()
+	if Tagger.shortcuts_disabled:
+		Tagger.shortcuts_disabled = false
 

@@ -77,5 +77,6 @@ func on_add_selected() -> void:
 
 func on_close_pressed() -> void:
 	hide()
+	Tagger.shortcuts_disabled = false
 
 

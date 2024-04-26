@@ -177,5 +177,6 @@ func on_finish_pressed() -> void:
 
 
 func on_cancel_press() -> void:
+	Tagger.shortcuts_disabled = false
 	queue_free()
 

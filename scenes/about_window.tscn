@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dl4bf6dyws2kk" path="res://textures/icons/x_icon.svg" id="3_lomja"]
 
 [node name="AboutWindow" type="Control"]
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

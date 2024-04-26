@@ -8,6 +8,8 @@ signal aliases_reloaded
 signal tag_deleted(tag_name)
 signal invalid_added(tag_name)
 signal websites_updated
+signal disabled_shortcuts(is_disabled: bool)
+
 
 enum Categories {
 	GENERAL,
@@ -210,6 +212,12 @@ var saves: Array[Dictionary] = [
 
 # Internal
 var http_requests: int = 0
+var shortcuts_disabled: bool = false :
+	set(new_disabled):
+		if new_disabled == shortcuts_disabled:
+			return
+		shortcuts_disabled = new_disabled
+		disabled_shortcuts.emit(shortcuts_disabled)
 
 
 func _ready():

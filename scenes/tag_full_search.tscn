@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/tag_full_search.gd" id="1_tnglk"]
 
 [node name="TagFullSearch" type="Control"]
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

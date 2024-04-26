@@ -43,7 +43,14 @@ func on_controls_closed() -> void:
 	on_menu_changed(current_window_index)
 
 
+func is_other_open() -> bool:
+	return about_window.visible or controls_window != null
+
+
 func on_window_switch_signaled(target_window: int, args = {}) -> void:
+	if is_other_open():
+		return
+	
 	hide_all_windows()
 	if target_window == 0: # Wiki
 		tagger.show()
@@ -64,7 +71,10 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 
 
 func on_help_menu_selected(menu_index: int) -> void:
+	if is_other_open():
+		return
 	var menu_id: int = help_menu.get_popup().get_item_id(menu_index)
+	Tagger.shortcuts_disabled = true
 	
 	if menu_id == 0:
 		show_controls_window()

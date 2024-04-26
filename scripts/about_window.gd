@@ -55,6 +55,7 @@ func _ready():
 
 func on_close_pressed() -> void:
 	visible = false
+	Tagger.shortcuts_disabled = false
 
 
 func set_new_version_available(update_available: bool, update_version: String = "") -> void:

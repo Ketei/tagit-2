@@ -12,5 +12,6 @@ func _ready():
 
 
 func on_close_pressed() -> void:
+	Tagger.shortcuts_disabled = false
 	close_pressed.emit()
 

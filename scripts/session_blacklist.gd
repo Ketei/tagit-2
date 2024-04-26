@@ -16,6 +16,7 @@ func _ready():
 
 func on_done_pressed() -> void:
 	hide()
+	Tagger.shortcuts_disabled = false
 
 
 func has_item(item_string: String) -> bool:
