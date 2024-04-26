@@ -70,6 +70,7 @@ func on_text_changed(_ignored: String) -> void:
 func on_timer_ended() -> void:
 	var tag_to_search: String = text.strip_edges().to_lower()
 	if tag_to_search.is_empty():
+		auto_fill.clear()
 		return
 	
 	var tags_found: Array[String] = Tagger.search_with_category(
@@ -88,12 +89,12 @@ func on_timer_ended() -> void:
 		auto_container.show()
 
 
-func _gui_input(event):
-	if has_focus() and event.is_action(\"ui_down\") and 0 < auto_fill.item_count:
+func _gui_input(_event):
+	if has_focus() and Input.is_action_just_pressed(\"ui_down\") and 0 < auto_fill.item_count:
 		auto_container.show()
 		auto_fill.select(0)
 		auto_fill.grab_focus()
-	elif has_focus() and event.is_action(\"ui_up\") and 0 < auto_fill.item_count:
+	elif has_focus() and Input.is_action_just_pressed(\"ui_up\") and 0 < auto_fill.item_count:
 		auto_container.show()
 		auto_fill.select(auto_fill.item_count -1)
 		auto_fill.grab_focus()
