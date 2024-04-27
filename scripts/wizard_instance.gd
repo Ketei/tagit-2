@@ -52,6 +52,7 @@ var view_selector: WizardViewSelector
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Tagger.shortcuts_disabled = true
 	char_menu.get_popup().index_pressed.connect(on_menu_selected)
 	character_info_tab.get_tab_bar().tab_close_display_policy = TabBar.CLOSE_BUTTON_SHOW_ACTIVE_ONLY
 	character_info_tab.get_tab_bar().tab_close_pressed.connect(on_close_tab_pressed)
@@ -59,6 +60,12 @@ func _ready():
 	view_select_button.pressed.connect(open_view_selector)
 	cancel_button.pressed.connect(on_cancel_press)
 	done_button.pressed.connect(on_finish_pressed)
+	character_namer.character_created.connect(create_character)
+
+
+func _unhandled_key_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		close_wizard()
 
 
 func open_view_selector() -> void:
@@ -89,34 +96,27 @@ func on_close_tab_pressed(tab_index: int) -> void:
 			break
 
 
-func on_menu_selected(index_selected: int) -> void:
-	var new_character: WizardCharacterInstance = null
+func create_character(character_name: String, set_unknown := false) -> void:
+	character_namer.clear()
+	if character_name.is_empty() or characters_added.has(character_name):
+		return
 	
+	characters_added.append(character_name)
+	var new_character: WizardCharacterInstance = CHARA_INFO_INSTANCE.instantiate()
+	new_character.name = character_name
+	if set_unknown:
+		new_character.known_character = false
+	character_info_tab.add_child(new_character)
+	character_info_tab.current_tab = character_info_tab.get_index()
+
+
+func on_menu_selected(index_selected: int) -> void:
 	if index_selected == 0: # Known Character
 		character_namer.show()
-		
-		await character_namer.finished
-		character_namer.hide()
-		
-		var name_select: String = character_namer.name_selected
-		
-		character_namer.clear()
-		
-		if name_select.is_empty() or characters_added.has(name_select):
-			return
-		
-		characters_added.append(name_select)
-		
-		new_character = CHARA_INFO_INSTANCE.instantiate()
-		new_character.name = name_select
-		
+		character_namer.grab_line_focus()
 	elif index_selected == 1: # UnknowCharacter
-		new_character = CHARA_INFO_INSTANCE.instantiate()
-		new_character.name = "????? #" + str(unknown_count)
-		new_character.known_character = false
+		create_character("????? #" + str(unknown_count), true)
 		unknown_count += 1
-	
-	character_info_tab.add_child(new_character)
 
 
 func on_finish_pressed() -> void:
@@ -177,6 +177,11 @@ func on_finish_pressed() -> void:
 
 
 func on_cancel_press() -> void:
+	close_wizard()
+
+
+func close_wizard() -> void:
 	Tagger.shortcuts_disabled = false
 	queue_free()
+
 

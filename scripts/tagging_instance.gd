@@ -158,7 +158,7 @@ func on_wizard_orgasm(tag_data: Dictionary) -> void:
 	
 	Tagger.search_online_suggestions = _online_suggs
 	Tagger.shortcuts_disabled = false
-	tag_wizard.queue_free()
+	tag_wizard.close_wizard()
 
 
 func on_item_activated(item_index: int) -> void:
@@ -193,7 +193,6 @@ func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
 func open_taglist_importer() -> void:
 	if tag_importer != null:
 		return
-	Tagger.shortcuts_disabled = true
 	tag_importer = TAG_LIST_IMPORTER.instantiate()
 	tag_importer.tags_converted.connect(on_tags_imported)
 	add_child(tag_importer)
@@ -260,7 +259,7 @@ func on_load_pressed(load_data: Dictionary) -> void:
 				load_data["smart"][smart])
 	for black in load_data["blacklist"]:
 		session_blacklist.add_to_blacklist(black)
-	save_window.queue_free()
+	save_window.close_window()
 	
 	Tagger.search_online_suggestions = _load_sugg
 
