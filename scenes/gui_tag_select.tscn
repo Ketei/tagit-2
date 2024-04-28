@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/gui_tag_select.gd" id="1_vd0xt"]
 
 [node name="GUITagSelect" type="Control"]
+top_level = true
 custom_minimum_size = Vector2(900, 320)
 layout_mode = 3
 anchors_preset = 15
@@ -19,7 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1334, 0.17204, 0.23, 0.490196)
+color = Color(0, 0, 0, 0.392157)
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1

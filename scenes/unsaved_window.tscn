@@ -1,7 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://dreln2kou6sgu"]
+[gd_scene load_steps=7 format=3 uid="uid://dreln2kou6sgu"]
 
 [ext_resource type="Script" path="res://scripts/warning_save_window.gd" id="1_2skn8"]
 [ext_resource type="Script" path="res://scripts/save_warning_dialog.gd" id="2_km5lw"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wt6l7"]
+device = -1
+keycode = 83
+unicode = 115
+
+[sub_resource type="Shortcut" id="Shortcut_lndwk"]
+events = [SubResource("InputEventKey_wt6l7")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_7iblo"]
+device = -1
+keycode = 78
+unicode = 110
+
+[sub_resource type="Shortcut" id="Shortcut_vj6se"]
+events = [SubResource("InputEventKey_7iblo")]
 
 [node name="UnsaveWindow" type="Control"]
 top_level = true
@@ -25,7 +41,7 @@ color = Color(0, 0, 0, 0.392157)
 [node name="SaveConfirmWindow" type="Window" parent="."]
 title = "TagIt!"
 initial_position = 1
-size = Vector2i(300, 100)
+size = Vector2i(300, 115)
 wrap_controls = true
 transient = true
 exclusive = true
@@ -61,11 +77,13 @@ alignment = 2
 [node name="SaveButton" type="Button" parent="SaveConfirmWindow/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
+shortcut = SubResource("Shortcut_lndwk")
 text = "Save"
 
 [node name="DontSaveButton" type="Button" parent="SaveConfirmWindow/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+shortcut = SubResource("Shortcut_vj6se")
 text = "Don't save"
 
 [node name="CancelButton" type="Button" parent="SaveConfirmWindow/MarginContainer/VBoxContainer/HBoxContainer"]

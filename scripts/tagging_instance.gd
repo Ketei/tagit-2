@@ -24,6 +24,7 @@ var in_tag_editor: InTagEditor
 var tag_map_browser: TagMapBrowser
 var unsaved_work_window: UnsavedWorkWindow
 
+
 @onready var sites_option_menu = $MarginContainer/MainContainer/Final/Platform/SitesOptionMenu
 @onready var final_tags: TextEdit = $MarginContainer/MainContainer/Final/FinalTags
 
@@ -61,7 +62,8 @@ func _ready():
 	add_tag_line_edit.text_submitted.connect(on_tag_submitted)
 	suggestion_list.item_activated.connect(on_suggestion_activated)
 	smart_list.item_activated.connect(on_special_tag_activated)
-	special_tag_window.prompt_selected.connect(on_tag_submitted)
+	special_tag_window.prompt_selected.connect(on_special_submitted)
+	special_tag_window.multiple_selected.connect(on_multiple_special_submitted)
 	template_button.pressed.connect(display_template_loader)
 	generate_button.pressed.connect(generate_full_tags)
 	copy_button.pressed.connect(on_copy_pressed)
@@ -84,15 +86,37 @@ func _ready():
 	Tagger.tag_updated.connect(on_tag_updated)
 
 
+func on_special_submitted(tag_string: String) -> void:
+	on_tag_submitted(tag_string)
+	if Tagger.remove_after_use:
+		smart_list.remove_item(special_tag_window.selected_index)
+		if Tagger.blacklist_after_remove:
+			session_blacklist.add_to_group_blacklist(special_tag_window.title_label.text)
+	Tagger.shortcuts_disabled = false
+
+
+func on_multiple_special_submitted(tag_array: Array[String]) -> void:
+	load_tag_array(tag_array)
+	if Tagger.remove_after_use:
+		smart_list.remove_item(special_tag_window.selected_index)
+		if Tagger.blacklist_after_remove:
+			session_blacklist.add_to_group_blacklist(special_tag_window.title_label.text)
+	Tagger.shortcuts_disabled = false
+
+
 func sort_tags_alphabetically() -> void:
 	tag_items.sort_items_by_text()
 
 
 func on_full_search_open() -> void:
-	tag_full_search.show()
+	tag_full_search.show_searcher()
 
 
 func on_tag_map_open() -> void:
+	if tag_map_browser != null:
+		return
+	
+	Tagger.shortcuts_disabled = true
 	tag_map_browser = TAG_MAP_BROWSER.instantiate()
 	tag_map_browser.tag_selected.connect(on_map_selected)
 	add_child(tag_map_browser)
@@ -106,6 +130,7 @@ func on_map_selected(tag_to_add: String) -> void:
 
 
 func summon_wizard() -> void:
+	Tagger.shortcuts_disabled = true
 	tag_wizard = WIZARD_INSTANCE.instantiate()
 	tag_wizard.wizard_finished.connect(on_wizard_orgasm)
 	add_child(tag_wizard)
@@ -132,10 +157,14 @@ func on_wizard_orgasm(tag_data: Dictionary) -> void:
 			suggestion_list.add_item(sugg)
 	
 	Tagger.search_online_suggestions = _online_suggs
-	tag_wizard.queue_free()
+	Tagger.shortcuts_disabled = false
+	tag_wizard.close_wizard()
 
 
 func on_item_activated(item_index: int) -> void:
+	if in_tag_editor != null:
+		return
+	Tagger.shortcuts_disabled = true
 	in_tag_editor = IN_TAG_EDITOR.instantiate()
 	in_tag_editor.done_editing.connect(on_tag_edited)
 	in_tag_editor.add_suggestions.connect(on_intag_suggestions)
@@ -157,10 +186,13 @@ func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
 	tag_items.set_item_icon(
 			tag_index,
 			load("res://textures/status/loaded.png"))
+	Tagger.shortcuts_disabled = false
 	#in_tag_editor.queue_free()
 
 
 func open_taglist_importer() -> void:
+	if tag_importer != null:
+		return
 	tag_importer = TAG_LIST_IMPORTER.instantiate()
 	tag_importer.tags_converted.connect(on_tags_imported)
 	add_child(tag_importer)
@@ -188,10 +220,13 @@ func clear_main_list() -> void:
 
 
 func open_session_blacklist() -> void:
-	session_blacklist.show()
+	session_blacklist.show_blacklist()
 
 
 func open_load_window() -> void:
+	if save_window != null:
+		return
+	Tagger.shortcuts_disabled = true
 	if load_list_button.has_focus():
 		load_list_button.release_focus()
 	save_window = SAVE_WINDOW.instantiate()
@@ -199,7 +234,6 @@ func open_load_window() -> void:
 	save_window.file_loaded.connect(on_load_pressed)
 	add_child(save_window)
 	
-
 
 func on_load_pressed(load_data: Dictionary) -> void:
 	clear_all()
@@ -225,20 +259,32 @@ func on_load_pressed(load_data: Dictionary) -> void:
 				load_data["smart"][smart])
 	for black in load_data["blacklist"]:
 		session_blacklist.add_to_blacklist(black)
-	save_window.queue_free()
+	save_window.close_window()
 	
 	Tagger.search_online_suggestions = _load_sugg
 
 
 func open_save_window() -> void:
+	if save_window != null:
+		return
+	Tagger.shortcuts_disabled = true
 	save_window = SAVE_WINDOW.instantiate()
 	save_window.mode = 0
 	save_window.file_saved.connect(on_file_saved)
 	save_window.save_data = get_save_data()
 	add_child(save_window)
-	
+
+
+func is_system_open() -> bool:
+	return template_loader != null or save_window != null or\
+	tag_importer != null or tag_wizard != null or in_tag_editor != null or\
+	tag_map_browser != null
+
 
 func new_list() -> void:
+	#if is_system_open():
+		#return
+	
 	if prompt_save_on_new:
 		unsaved_work_window = UNSAVED_WINDOW.instantiate()
 		unsaved_work_window.save_data = get_save_data()
@@ -250,11 +296,13 @@ func new_list() -> void:
 
 
 func on_save_continue() -> void:
+	Tagger.shortcuts_disabled = false
 	unsaved_work_window.queue_free()
 	clear_all()
 
 
 func on_save_cancelled() -> void:
+	Tagger.shortcuts_disabled = false
 	unsaved_work_window.queue_free()
 
 
@@ -263,12 +311,16 @@ func on_file_saved() -> void:
 
 
 func on_special_tag_activated(tag_index: int) -> void:
+	if not smart_list.delete_timer.is_stopped():
+		return
+	Tagger.shortcuts_disabled = true
 	var medatada: Dictionary = smart_list.get_item_metadata(tag_index)
 	
 	if medatada["type"] == "opt":
 		special_tag_window.show_option_menu(
 			smart_list.get_item_text(tag_index),
-			medatada["tags"])
+			medatada["tags"],
+			tag_index)
 	
 	elif medatada["type"] == "nbr":
 		special_tag_window.show_spinbox_menu(
@@ -446,6 +498,9 @@ func on_tag_updated(tag_name: String) -> void:
 
 
 func on_suggestion_activated(sugg_index: int) -> void:
+	if not suggestion_list.delete_timer.is_stopped():
+		return
+	
 	var tags_to_add: Array[String] = []
 	var selected_indexes: Array[int] = []
 	
@@ -469,10 +524,14 @@ func on_template_loaded(mains: Array[String], suggs: Array[String]):
 	for tag in suggs:
 		if not suggestion_list.has_item(tag):
 			suggestion_list.add_item(tag)
+	Tagger.shortcuts_disabled = false
 	template_loader.queue_free()
 
 
 func display_template_loader() -> void:
+	if template_loader != null:
+		return
+	Tagger.shortcuts_disabled = true
 	template_loader = TEMPLATE_LOADER.instantiate()
 	template_loader.template_selected.connect(on_template_loaded)
 	template_loader.create_template_pressed.connect(on_create_template_pressed)

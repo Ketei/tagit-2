@@ -2,7 +2,25 @@ extends Control
 
 
 func _ready():
-	look_for_repeats()
+	pass
+
+
+func compare_versions() -> void:
+	var local_version: Array[int] = [3,2,1] # Major, Minor, Buffix
+	var online_versions: Array[Array] = [
+		[2,10,10],
+		[5,0,2],
+		[2,10,10],
+		[6,12,8],
+		[0,100,1],
+		[3,16,0],
+		[3,2,2],
+		[3,2,1],
+		[4,0,0]
+	]
+	
+	for online in online_versions:
+		print("{0} < {1} = {2}".format([str(local_version), str(online), local_version<online]))
 
 
 func look_for_repeats() -> void:

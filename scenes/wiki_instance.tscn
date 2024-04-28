@@ -17,6 +17,9 @@ script/source = "extends LineEdit
 
 
 func _ready():
+	timer.wait_time = Tagger.AUTOFILL_TIME
+	timer.autostart = false
+	timer.one_shot = true
 	text_changed.connect(on_text_changed)
 	timer.timeout.connect(on_timer_ended)
 	focus_exited.connect(on_focus_lost)
@@ -219,6 +222,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_top = -350.0
 grow_horizontal = 2
+mouse_filter = 2
 alignment = 2
 
 [node name="AutoFill" type="ItemList" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer"]

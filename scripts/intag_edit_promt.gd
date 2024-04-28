@@ -23,7 +23,6 @@ var original_cat :=  Tagger.Categories.GENERAL
 
 func _ready():
 	visible = false
-	#update_button.pressed.connect(on_done_presssed)
 	done_button.pressed.connect(on_close_pressed)
 	add_selected_button.pressed.connect(on_add_sugg_pressed)
 	fetch_button.pressed.connect(on_fetch_pressed)
@@ -58,17 +57,6 @@ func set_data_and_show(item_index: int, tag_name: String, tag_data: Dictionary) 
 	show()
 
 
-# To be Removed
-func on_done_presssed() -> void:
-	#print("Updates")
-	done_editing.emit(
-			tag_index, 
-			{
-				"category": category_option_button.get_category(),
-				"priority": int(priority_spin_box.value)
-			})
-
-
 func update_data(new_cat: Tagger.Categories, new_prio: int) -> void:
 	done_editing.emit(
 			tag_index, 
@@ -84,6 +72,6 @@ func on_close_pressed() -> void:
 	
 	if new_category != original_cat or new_priority != original_prio:
 		update_data(new_category, new_priority)
-	
+	Tagger.shortcuts_disabled = false
 	queue_free()
 

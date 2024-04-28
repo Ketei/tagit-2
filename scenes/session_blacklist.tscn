@@ -7,6 +7,7 @@
 bg_color = Color(0.176471, 0.227451, 0.301961, 1)
 
 [node name="SessionBlacklist" type="Control"]
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

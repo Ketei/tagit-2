@@ -8,6 +8,8 @@ signal aliases_reloaded
 signal tag_deleted(tag_name)
 signal invalid_added(tag_name)
 signal websites_updated
+signal disabled_shortcuts(is_disabled: bool)
+
 
 enum Categories {
 	GENERAL,
@@ -105,8 +107,9 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.0.2"
+const VERSION: String = "2.1.0"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
+const AUTOFILL_TIME: float = 0.3
 
 enum E621_CATEGORY {
 	ALL = -1,
@@ -178,7 +181,8 @@ var custom_aliases: Dictionary = {}
 var removed_aliases: Dictionary = {}
 var prefixes: Dictionary = {}
 var prefix_sorting: Array[String] = []
-
+var remove_after_use: bool = false
+var blacklist_after_remove: bool = false
 
 # Tagger Settings
 var default_site: String = ""
@@ -209,6 +213,12 @@ var saves: Array[Dictionary] = [
 
 # Internal
 var http_requests: int = 0
+var shortcuts_disabled: bool = false :
+	set(new_disabled):
+		if new_disabled == shortcuts_disabled:
+			return
+		shortcuts_disabled = new_disabled
+		disabled_shortcuts.emit(shortcuts_disabled)
 
 
 func _ready():
@@ -260,6 +270,8 @@ func _ready():
 	hydrus_key = _load_settings.hydrus_key
 	tag_map = _load_settings.tag_map
 	include_invalid = _load_settings.include_invalid
+	remove_after_use = _load_settings.remove_after_use
+	blacklist_after_remove = _load_settings.blacklist_after_remove
 	
 	if loaded_sites.has(_load_settings.default_site):
 		default_site = _load_settings.default_site
@@ -687,7 +699,7 @@ func search_with_category(search_string: String, category: Categories, limit: in
 		for tag in loaded_tags[tag_key]:
 			if limit == 0:
 				break
-			if tag.begins_with(tag_key) and\
+			if tag.begins_with(search_string) and\
 			not return_array.has(tag) and\
 			loaded_tags[tag_key][tag]["category"] == category:
 				if invert:
@@ -931,8 +943,9 @@ func save_settings() -> void:
 		new_settings.custom_aliases = custom_aliases
 		new_settings.include_invalid = include_invalid
 		new_settings.removed_aliases = removed_aliases
+		new_settings.remove_after_use = remove_after_use
+		new_settings.blacklist_after_remove = blacklist_after_remove
 		new_settings.save()
-		#new_saves.save()
 	else:
 		print("Running from source: Skipping saving settings.")
 

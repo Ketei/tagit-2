@@ -42,6 +42,7 @@ func on_template_deleted(_temp_title: String) -> void:
 
 func on_create_template_pressed() -> void:
 	create_template_pressed.emit()
+	Tagger.shortcuts_disabled = false
 	queue_free()
 
 
@@ -50,5 +51,6 @@ func on_template_selected(main_tags: Array[String], suggestions: Array[String]):
 
 
 func on_return_pressed() -> void:
+	Tagger.shortcuts_disabled = false
 	queue_free()
 

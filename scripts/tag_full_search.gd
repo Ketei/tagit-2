@@ -18,6 +18,13 @@ func _ready():
 	tag_line.text_submitted.connect(on_search_submitted)
 	add_selected.pressed.connect(on_add_selected)
 	close_button.pressed.connect(on_close_pressed)
+	set_process_unhandled_key_input(false)
+
+
+func show_searcher() -> void:
+	set_process_unhandled_key_input(true)
+	Tagger.shortcuts_disabled = true
+	visible = true
 
 
 func on_search_submitted(_ignored: String = "") -> void:
@@ -77,5 +84,12 @@ func on_add_selected() -> void:
 
 func on_close_pressed() -> void:
 	hide()
+	set_process_unhandled_key_input(false)
+	Tagger.shortcuts_disabled = false
+
+
+func _unhandled_key_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		on_close_pressed()
 
 

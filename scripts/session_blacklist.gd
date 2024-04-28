@@ -12,10 +12,18 @@ extends Control
 
 func _ready():
 	done_button.pressed.connect(on_done_pressed)
+	set_process_unhandled_key_input(false)
+
+
+func _unhandled_key_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		on_done_pressed()
 
 
 func on_done_pressed() -> void:
-	hide()
+	visible = false
+	Tagger.shortcuts_disabled = false
+	set_process_unhandled_key_input(false)
 
 
 func has_item(item_string: String) -> bool:
@@ -43,4 +51,11 @@ func add_to_group_blacklist(group_to_blacklist: String) -> void:
 
 func get_blacklist_array() -> Array[String]:
 	return temp_item_list.get_tag_array()
+
+
+func show_blacklist() -> void:
+	set_process_unhandled_key_input(true)
+	Tagger.shortcuts_disabled = true
+	visible = true
+
 

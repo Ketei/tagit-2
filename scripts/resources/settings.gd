@@ -29,6 +29,8 @@ extends Resource
 @export var constant_tags: Array[String] = []
 @export var custom_aliases: Dictionary = {} # "s": {"sperm": "cum"}
 @export var removed_aliases: Dictionary = {} # "s": {"sperm": "cum"}
+@export var remove_after_use: bool = false
+@export var blacklist_after_remove: bool = false
 
 # Resources | Holds test info for now
 @export var prefixes: Dictionary = {"@": "{0} (character)"}

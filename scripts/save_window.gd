@@ -49,6 +49,11 @@ func _ready():
 		save_entries_container.add_child(_new_entry)
 
 
+func _unhandled_key_input(event):
+	if event.is_action_pressed("ui_cancel"):
+		on_close_pressed()
+
+
 func on_load_pressed(_name: String, node_ref: SaveDataEntry) -> void:
 	file_loaded.emit(node_ref.save_data)
 
@@ -112,5 +117,11 @@ func save_file(title: String, index:int = -1):
 
 func on_close_pressed() -> void:
 	window_closed.emit()
+	close_window()
+
+
+func close_window() -> void:
+	Tagger.shortcuts_disabled = false
 	queue_free()
+
 

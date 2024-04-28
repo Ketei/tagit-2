@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dvsreawj4roce"]
+[gd_scene load_steps=4 format=3 uid="uid://dvsreawj4roce"]
 
 [ext_resource type="Script" path="res://scripts/promt_tag_window.gd" id="1_kgdc6"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_uvhhg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r3fdw"]
 bg_color = Color(0.196078, 0.309804, 0.458824, 1)
 
 [node name="SpecialTagWindow" type="Control"]
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,11 +59,17 @@ vertical_alignment = 1
 layout_mode = 2
 alignment = 1
 
-[node name="TagOptionButton" type="OptionButton" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
+[node name="DropdownContainer" type="HBoxContainer" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
 layout_mode = 2
-item_count = 1
-popup/item_0/text = "ass"
-popup/item_0/id = 0
+
+[node name="MultipleButton" type="Button" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer/DropdownContainer"]
+layout_mode = 2
+text = " Multiple... "
+
+[node name="TagOptionButton" type="OptionButton" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer/DropdownContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
 
 [node name="ButtonsConainer" type="HBoxContainer" parent="CenterContainer/TagDropdownAdd/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -75,4 +83,46 @@ text = "Cancel"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+text = "Add"
+
+[node name="MultiPanelContainer" type="PanelContainer" parent="CenterContainer"]
+visible = false
+custom_minimum_size = Vector2(256, 320)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r3fdw")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MultiPanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MultiPanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="CenterContainer/MultiPanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_uvhhg")
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+
+[node name="ItemsContainer" type="VBoxContainer" parent="CenterContainer/MultiPanelContainer/MarginContainer/VBoxContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/MultiPanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelMultiAdd" type="Button" parent="CenterContainer/MultiPanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="ConfirmMultiAdd" type="Button" parent="CenterContainer/MultiPanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Add"
