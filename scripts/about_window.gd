@@ -5,7 +5,7 @@ extends Control
 
 @onready var version_label: Label = $PanelContainer/HBoxContainer/MarginContainer/DataContainer/HBoxContainer/VersionLabel
 @onready var close_button: Button = $PanelContainer/HBoxContainer/MarginContainer/DataContainer/HBoxContainer2/Label/CloseButton
-@onready var update_status: Label = $PanelContainer/HBoxContainer/MarginContainer/DataContainer/VersionChecker/UpdateStatus
+@onready var update_status: RichTextLabel = $PanelContainer/HBoxContainer/MarginContainer/DataContainer/VersionChecker/UpdateStatus
 
 
 func _ready():
@@ -71,9 +71,7 @@ func on_close_pressed() -> void:
 
 func set_new_version_available(update_available: bool, update_version: String = "") -> void:
 	if update_available:
-		update_status.text = "Update {0} is available.".format([update_version])
-		update_status.add_theme_color_override("font_color", Color(1, 0.784, 0))
+		update_status.text = "[center][color=ffc800][url=https://github.com/Ketei/tagit-2/releases/latest]Update {0} is available.[/url][/color][/center]".format([update_version])
 	else:
-		update_status.text = "You're using the latest version."
-		update_status.add_theme_color_override("font_color", Color(0.588, 0.98, 0))
+		update_status.text = "[center][color=96fa00]You're using the latest version.[/color][/center]"
 

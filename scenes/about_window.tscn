@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ds6c0exekl6wq"]
+[gd_scene load_steps=7 format=3 uid="uid://ds6c0exekl6wq"]
 
 [ext_resource type="Script" path="res://scripts/about_window.gd" id="1_2qtxm"]
 [ext_resource type="Texture2D" uid="uid://bjpibg4o6rebp" path="res://textures/others/creator.png" id="2_m2eni"]
@@ -10,6 +10,19 @@ keycode = 4194305
 
 [sub_resource type="Shortcut" id="Shortcut_r6ij5"]
 events = [SubResource("InputEventKey_6qhpx")]
+
+[sub_resource type="GDScript" id="GDScript_qmwgg"]
+resource_name = "open_link"
+script/source = "extends RichTextLabel
+
+
+func _ready():
+	meta_clicked.connect(_on_meta_clicked)
+
+
+func _on_meta_clicked(meta_info) -> void:
+	OS.shell_open(str(meta_info))
+"
 
 [node name="AboutWindow" type="Control"]
 top_level = true
@@ -113,10 +126,12 @@ horizontal_alignment = 1
 [node name="VersionChecker" type="HBoxContainer" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
 layout_mode = 2
 
-[node name="UpdateStatus" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/VersionChecker"]
+[node name="UpdateStatus" type="RichTextLabel" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer/VersionChecker"]
 layout_mode = 2
 size_flags_horizontal = 3
-horizontal_alignment = 1
+bbcode_enabled = true
+fit_content = true
+script = SubResource("GDScript_qmwgg")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/HBoxContainer/MarginContainer/DataContainer"]
 layout_mode = 2
