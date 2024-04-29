@@ -44,7 +44,13 @@ func _ready():
 	multiple_button.pressed.connect(_show_multiple_selector)
 	cancel_multi_add.pressed.connect(on_multi_select_cancel)
 	confirm_multi_add.pressed.connect(on_multi_select_submit)
+	amount_spin_box.get_line_edit().text_submitted.connect(on_spinbox_submit)
 	set_process_unhandled_key_input(false)
+
+
+func on_spinbox_submit(spinbox_text: String) -> void:
+	amount_spin_box.value = float(spinbox_text)
+	on_accept_button()
 
 
 func _show_multiple_selector() -> void:
@@ -96,9 +102,9 @@ func show_option_menu(title: String, options: Array[String], index: int) -> void
 		_new_multi.text = option
 		items_container.add_child(_new_multi)
 		
-	dropdown_container.show()
+	dropdown_container.visible = true
+	amount_spin_box.visible = false
 	
-	amount_spin_box.hide()
 	mode = PromptMode.OPTION
 	Tagger.shortcuts_disabled = true
 	set_process_unhandled_key_input(true)
@@ -120,8 +126,8 @@ func show_spinbox_menu(title: String, single_form_tag: String, min_value: int = 
 
 	amount_spin_box.max_value = maxf(min_value, max_value)
 	
-	amount_spin_box.show()
-	tag_option_button.hide()
+	amount_spin_box.visible = true
+	dropdown_container.visible = false
 	mode = PromptMode.NUMBER
 	Tagger.shortcuts_disabled = true
 	set_process_unhandled_key_input(true)

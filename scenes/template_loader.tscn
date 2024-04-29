@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdwih5ycurgtc"]
+[gd_scene load_steps=5 format=3 uid="uid://bdwih5ycurgtc"]
 
 [ext_resource type="Script" path="res://scripts/template_loader.gd" id="1_qc2g8"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_wvvcd"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_bykxp"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_p74xp"]
+events = [SubResource("InputEventKey_bykxp")]
 
 [node name="TemplateLoader" type="Control"]
 top_level = true
@@ -47,6 +54,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 0
+shortcut = SubResource("Shortcut_p74xp")
 text = "Return"
 
 [node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]

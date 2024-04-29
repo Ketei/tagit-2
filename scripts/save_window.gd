@@ -15,12 +15,12 @@ var save_title: String = ""
 var save_data: Dictionary = {}
 
 @onready var save_entries_container: VBoxContainer = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/SmoothScrollContainer/SaveEntriesContainer
-@onready var save_name_edit: LineEdit = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/DataContainer/SaveNameEdit
-@onready var cancel_button: Button = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/CancelButton
-@onready var save_button: Button = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/SaveButton
+@onready var save_name_edit: LineEdit = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/DataContainer/SaveNameEdit
+@onready var cancel_button: Button = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/ButtonsContainer/CancelButton
+@onready var save_button: Button = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/ButtonsContainer/SaveButton
 @onready var overwrite_dialog: ConfirmationDialog = $ConfirmationDialog
 
-@onready var save_data_fields: HBoxContainer =$CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/VBoxContainer/DataContainer
+@onready var save_data_fields: HBoxContainer = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/DataContainer
 
 
 func _ready():
