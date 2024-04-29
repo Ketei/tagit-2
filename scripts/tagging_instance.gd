@@ -613,8 +613,9 @@ func generate_full_tags() -> void:
 				final_array.append(format_tag)
 	
 	for constant in Tagger.constant_tags:
-		if not final_array.has(constant):
-			final_array.append(constant)
+		var format_tag: String = constant.replace(" ", whitespace)
+		if not final_array.has(format_tag):
+			final_array.append(format_tag)
 	
 	final_tags.text = Tagger.loaded_sites[selected_site_key]["separator"].join(final_array)
 
