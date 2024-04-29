@@ -117,7 +117,8 @@ func show_option_menu(title: String, options: Array[String], index: int) -> void
 	tag_option_button.grab_focus()
 
 
-func show_spinbox_menu(title: String, single_form_tag: String, min_value: int = 0, max_value: int = -1) -> void:
+func show_spinbox_menu(title: String, single_form_tag: String, tag_index: int, min_value: int = 0, max_value: int = -1) -> void:
+	selected_index = tag_index
 	if not tag_dropdown_add.visible:
 		tag_dropdown_add.visible = true
 	if multi_panel_container.visible:
