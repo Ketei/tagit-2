@@ -49,7 +49,12 @@ func _ready():
 
 
 func on_spinbox_submit(spinbox_text: String) -> void:
-	amount_spin_box.value = float(spinbox_text)
+	var digit_string: String = ""
+	for character in spinbox_text:
+		if DumbUtils.is_str_digit(character):
+			digit_string += character
+	if not digit_string.is_empty():
+		amount_spin_box.value = float(digit_string)
 	on_accept_button()
 
 
