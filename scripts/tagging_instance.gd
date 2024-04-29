@@ -326,6 +326,7 @@ func on_special_tag_activated(tag_index: int) -> void:
 		special_tag_window.show_spinbox_menu(
 			smart_list.get_item_text(tag_index),
 			medatada["format"],
+			tag_index,
 			medatada["min"],
 			medatada["max"])
 
