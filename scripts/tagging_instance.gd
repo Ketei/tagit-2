@@ -182,10 +182,22 @@ func on_intag_suggestions(suggs:Array[String]) -> void:
 
 
 func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
+	var tag_name: String = tag_items.get_item_text(tag_index)
+	
 	tag_items.get_item_metadata(tag_index).merge(tag_data, true)
-	tag_items.set_item_icon(
-			tag_index,
-			load("res://textures/status/loaded.png"))
+	
+	if Tagger.has_tag(tag_name):
+		tag_items.set_item_icon(
+				tag_index,
+				load("res://textures/status/valid_custom.png"))
+	elif Tagger.has_invalid_tag(tag_name):
+		tag_items.set_item_icon(
+				tag_index,
+				load("res://textures/status/bad_custom.png"))
+	else:
+		tag_items.set_item_icon(
+				tag_index,
+				load("res://textures/status/generic_custom.png"))
 	Tagger.shortcuts_disabled = false
 	#in_tag_editor.queue_free()
 
@@ -246,10 +258,18 @@ func on_load_pressed(load_data: Dictionary) -> void:
 		#on_tag_submitted(main_tag)	
 		var tag_index: int = tag_items.add_item(main_tag)
 		tag_items.set_item_metadata(tag_index, load_data["main"][main_tag])
+		
 		if load_data["main"][main_tag]["valid"]:
-			tag_items.set_item_icon(tag_index, load("res://textures/status/loaded.png"))
+			if Tagger.has_tag(main_tag):
+				tag_items.set_item_icon(
+						tag_index,
+						load("res://textures/status/valid_custom.png"))
+			else:
+				tag_items.set_item_icon(
+						tag_index,
+						load("res://textures/status/generic_custom.png"))
 		else:
-			tag_items.set_item_icon(tag_index, load("res://textures/status/bad.png"))
+			tag_items.set_item_icon(tag_index, load("res://textures/status/bad_custom.png"))
 	for suggestion in load_data["suggs"]:
 		suggestion_list.add_item(suggestion)
 	for smart in load_data["smart"]:
