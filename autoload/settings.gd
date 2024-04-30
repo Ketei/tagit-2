@@ -440,6 +440,10 @@ func add_invalid_tag(tag_name: String) -> void:
 	invalid_added.emit(tag_name)
 
 
+func has_invalid_tag(tag_name: String) -> bool:
+	return invalid_tags.has(tag_name)
+
+
 func sort_prefixes() -> void:
 	prefix_sorting.clear()
 	prefix_sorting.append_array(prefixes.keys())
