@@ -30,6 +30,7 @@ func _ready():
 
 func on_fetch_pressed() -> void:
 	go_to_fetch.emit(tag_name_label.text)
+	Tagger.shortcuts_disabled = false
 	queue_free()
 
 
@@ -54,7 +55,8 @@ func set_data_and_show(item_index: int, tag_name: String, tag_data: Dictionary) 
 	for item in tag_data["suggestions"]:
 		suggestions_item_list.add_item(item)
 	fetch_button.visible = not Tagger.has_tag(tag_name)
-	show()
+	Tagger.shortcuts_disabled = true
+	visible = true
 
 
 func update_data(new_cat: Tagger.Categories, new_prio: int) -> void:
