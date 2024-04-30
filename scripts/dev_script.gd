@@ -45,6 +45,7 @@ func look_for_repeats() -> void:
 							)
 	#print(tag_dictionary)
 
+
 func look_for_smart(smart_option: String) -> void:
 	for tag_index in Tagger.loaded_tags:
 		for tag_name in Tagger.loaded_tags[tag_index]:
