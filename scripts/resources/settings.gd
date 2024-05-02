@@ -5,6 +5,8 @@ extends Resource
 # Run variables
 @export var first_run: bool = true
 @export var database_path: String = ""
+@export var update_notified: bool = false
+@export var version_notified: String = ""
 
 # Basic Settings
 @export var load_images: bool = false # Hydrus Only
