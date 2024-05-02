@@ -38,6 +38,8 @@ enum Categories {
 	LORE,
 }
 
+const NOTIFICATION_DIALOG = preload("res://scenes/notification_dialog.tscn")
+
 const CategorySorting: Array = [
 	{"name": "General", "index": Categories.GENERAL},
 	{"name": "Artist", "index": Categories.ARTIST},
@@ -107,7 +109,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.1.1"
+const VERSION: String = "2.1.2"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 
@@ -123,6 +125,11 @@ enum E621_CATEGORY {
 	LORE = 8,
 	}
 
+# Nodes
+var notification_window: TaggerMainNotification
+
+
+# Data
 var header_data: Dictionary = {}
 
 var custom_sites: Dictionary = {}
@@ -219,6 +226,9 @@ var shortcuts_disabled: bool = false :
 			return
 		shortcuts_disabled = new_disabled
 		disabled_shortcuts.emit(shortcuts_disabled)
+var update_notified: bool = false
+var version_notified: String = ""
+var notifications_queue: Array[Dictionary] = []
 
 
 func _ready():
@@ -239,6 +249,16 @@ func _ready():
 	else:
 		database_path = _load_settings.database_path
 	
+	if _load_settings.version_notified.is_empty():
+		version_notified = VERSION
+		update_notified = false
+	elif _load_settings.version_notified.split(".", false) < VERSION.split(".", false):
+		version_notified = VERSION
+		update_notified = false
+	else:
+		version_notified = _load_settings.version_notified
+		update_notified = _load_settings.update_notified
+
 	if not DirAccess.dir_exists_absolute(database_path):
 		var _err = DirAccess.make_dir_recursive_absolute(database_path)
 		
@@ -323,6 +343,32 @@ func _ready():
 	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
+
+
+func queue_notification(message: String, title: String = "Notification", ok_button: String = "OK") -> void:
+	notifications_queue.append({"message": message, "title": title, "confirm": ok_button})
+	
+	if notification_window == null:
+		notification_window = NOTIFICATION_DIALOG.instantiate()
+		notification_window.notification_closed.connect(on_notification_closed)
+		add_child(notification_window)
+		show_next_notification()
+
+
+func show_next_notification() -> void:
+	var new_notification: Dictionary = notifications_queue.pop_front()
+	
+	notification_window.show_notification(
+		new_notification["message"],
+		new_notification["title"],
+		new_notification["confirm"])
+
+
+func on_notification_closed() -> void:
+	if notifications_queue.is_empty():
+		notification_window.queue_free()
+		return
+	show_next_notification()
 
 
 func clear_tag_map() -> void:
@@ -949,6 +995,8 @@ func save_settings() -> void:
 		new_settings.removed_aliases = removed_aliases
 		new_settings.remove_after_use = remove_after_use
 		new_settings.blacklist_after_remove = blacklist_after_remove
+		new_settings.version_notified = version_notified
+		new_settings.update_notified = update_notified
 		new_settings.save()
 	else:
 		print("Running from source: Skipping saving settings.")
