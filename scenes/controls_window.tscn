@@ -59,6 +59,9 @@ text = "Close"
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("1_ow2g4")
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
 
 [node name="MarginContainer" type="MarginContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer"]
 layout_mode = 2
