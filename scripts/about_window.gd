@@ -37,14 +37,8 @@ func _ready():
 	
 	var version_text: String = json_decoder.data["tag_name"].trim_prefix("v")
 	
-	var online_version_array: Array[int] = []
-	var local_version_array: Array[int] = []
-
-	for version in version_text.split(".", false):
-		online_version_array.append(int(version))
-	
-	for c_version in Tagger.VERSION.split(".", false):
-		local_version_array.append(int(c_version))
+	var online_version_array: Array[int] = Tagger.version_as_int_array(version_text)
+	var local_version_array: Array[int] = Tagger.version_as_int_array(Tagger.VERSION)
 	
 	set_new_version_available(
 			local_version_array < online_version_array,
