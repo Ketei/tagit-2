@@ -80,10 +80,8 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 2
 
 [node name="General" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 12
@@ -223,6 +221,7 @@ disabled = true
 text = "Add to blacklist"
 
 [node name="Wiki" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 12
