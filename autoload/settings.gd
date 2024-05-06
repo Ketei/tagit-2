@@ -252,7 +252,7 @@ func _ready():
 	if _load_settings.version_notified.is_empty():
 		version_notified = VERSION
 		update_notified = false
-	elif _load_settings.version_notified.split(".", false) < VERSION.split(".", false):
+	elif version_as_int_array(_load_settings.version_notified) < version_as_int_array(VERSION):
 		version_notified = VERSION
 		update_notified = false
 	else:
@@ -343,6 +343,13 @@ func _ready():
 	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
+
+
+func version_as_int_array(version: String) -> Array[int]:
+	var version_array: Array[int] = []
+	for letter in version.split(".", false):
+		version_array.append(int(letter))
+	return version_array
 
 
 func queue_notification(message: String, title: String = "Notification", ok_button: String = "OK") -> void:
