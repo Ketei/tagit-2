@@ -32,9 +32,9 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var suggestion_list: TagItemList = $MarginContainer/MainContainer/Suggests/SuggestionList
 @onready var smart_list: TagItemList = $MarginContainer/MainContainer/Suggests/SmartList
 
-@onready var auto_fill: ItemList = $MarginContainer/MainContainer/MainTags/Interact/AddTag/VBoxContainer/AutoFill
+#@onready var auto_fill: ItemList = $MarginContainer/MainContainer/MainTags/Interact/AddTag/VBoxContainer/AutoFill
 
-@onready var add_tag_line_edit: LineEdit = $MarginContainer/MainContainer/MainTags/Interact/AddTag
+@onready var add_tag_line_edit: LineEdit = $MarginContainer/MainContainer/MainTags/Interact/AutoSearch
 
 @onready var full_search_button: Button = $MarginContainer/MainContainer/MainTags/Interact/FullSearchButton
 @onready var select_tag_button: Button = $MarginContainer/MainContainer/MainTags/Interact/SelectTagButton
@@ -67,7 +67,7 @@ func _ready():
 	template_button.pressed.connect(display_template_loader)
 	generate_button.pressed.connect(generate_full_tags)
 	copy_button.pressed.connect(on_copy_pressed)
-	auto_fill.item_submited.connect(on_tag_submitted)
+	#auto_fill.item_submited.connect(on_tag_submitted)
 	suggestion_list.item_deleted.connect(
 			session_blacklist.add_to_blacklist)
 	smart_list.item_deleted.connect(

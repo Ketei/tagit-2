@@ -5,7 +5,7 @@ extends Control
 signal finished
 signal character_created(character_name: String)
 
-@onready var char_name_line_edit: LineEdit = $CharcterPanel/MarginContainer/VBoxContainer/CharInfo/CharNameLineEdit
+@onready var char_name_line_edit: LineEdit = $CharcterPanel/MarginContainer/VBoxContainer/CharInfo/AutoSearch
 @onready var cancel_button: Button = $CharcterPanel/MarginContainer/VBoxContainer/ButtonsContainer/CancelButton
 @onready var accept_button: Button = $CharcterPanel/MarginContainer/VBoxContainer/ButtonsContainer/AcceptButton
 

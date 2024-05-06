@@ -19,7 +19,8 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 @onready var full_screen_view: PanelContainer = $PanelContainer
 @onready var thumbnail_container: HFlowContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer/ThumbnailContainer
 @onready var wiki_desc: RichTextLabel = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer/SmoothScrollContainer/WikiDesc
-@onready var wiki_search: LineEdit = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch
+
+@onready var wiki_search: LineEdit = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/AutoSearch
 
 @onready var close_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/CloseButton
 @onready var search_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/SearchButton
@@ -29,7 +30,7 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 
 @onready var pictures_panel: PanelContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer
 
-@onready var auto_fill: ItemList = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer/AutoFill
+#@onready var auto_fill: ItemList = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer/AutoFill
 
 
 func _ready():
@@ -40,7 +41,7 @@ func _ready():
 	e_six_search.pressed.connect(on_online_search_pressed)
 	Tagger.image_view_toggled.connect(on_view_toggled)
 	wiki_desc.meta_clicked.connect(on_meta_clicked)
-	auto_fill.item_submited.connect(on_wiki_search_submit)
+	#auto_fill.item_submited.connect(on_wiki_search_submit)
 
 
 func _unhandled_input(_event):
