@@ -2,7 +2,7 @@ extends Control
 
 
 func _ready():
-	pass
+	print("- Done -")
 
 
 func compare_versions() -> void:

@@ -671,6 +671,12 @@ func register_tag(tag_string: String, path: String):
 	
 	var tag: Tag = load(path)
 	
+	if loaded_tags[tag_string.left(1)].has(tag_string):
+		print("Tag {0} is duplicate, tag file from {1} will be used".format(
+				[
+					tag_string, path
+				]))
+	
 	loaded_tags[tag_string.left(1)][tag_string] = {
 		"path": path,
 		"category": tag.category
