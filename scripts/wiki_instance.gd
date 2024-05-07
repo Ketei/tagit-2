@@ -11,8 +11,7 @@ Parents: [color=d2f9d6]{2}[/color]
 Suggestions: [color=d2f9d6]{3}[/color]
 Priority: [color=d2f9d6]{4}[/color][/ul]
 [/color]
-{6}\n\n
-[color=8eef97]Aliases: [color=d2f9d6]{5}[/color][/color]"
+{5}"
 
 @onready var full_image: TextureRect = $PanelContainer/FullScreenView
 
@@ -44,7 +43,7 @@ func _ready():
 	#auto_fill.item_submited.connect(on_wiki_search_submit)
 
 
-func _unhandled_input(_event):
+func _unhandled_key_input(_event):
 	if full_screen_view.visible and full_image.visible and Input.is_action_just_pressed("ui_cancel"):
 		full_screen_view.hide() # This is shown when clicked
 		full_image.hide() # This is shown when loaded
@@ -106,6 +105,7 @@ func on_wiki_search_submit(tag_search: String) -> void:
 	suggestions_string = suggestions_string.left(-2)
 	
 # [title, category, parents, suggestions, priority, wiki]
+	
 	wiki_desc.text = WIKI_BASE.format(
 			[
 				tag_to_load.tag.to_upper(),
@@ -113,9 +113,11 @@ func on_wiki_search_submit(tag_search: String) -> void:
 				parents_string,
 				suggestions_string,
 				str(tag_to_load.tag_priority),
-				aliases_string,
 				tag_to_load.wiki_entry
 			])
+
+	if not aliases_string.is_empty():
+		wiki_desc.text += "\n\n[color=8eef97]Aliases: [color=d2f9d6]{0}[/color][/color]".format([aliases_string])
 	
 	if Tagger.load_images and Hydrus.connected:
 		var ids = await Hydrus.search([tag_to_search], Tagger.image_amount)
