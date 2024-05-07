@@ -8,7 +8,6 @@ const CHARA_INFO_INSTANCE = preload("res://scenes/chara_info_instance.tscn")
 const WIZARD_VIEW_SELECTOR = preload("res://scenes/wizard_view_selector.tscn")
 
 var unknown_count: int = 1
-var characters_added: Array[String] = []
 var view_selector: WizardViewSelector
 
 # Charcter Menu
@@ -98,16 +97,22 @@ func on_close_tab_pressed(tab_index: int) -> void:
 
 func create_character(character_name: String, set_unknown := false) -> void:
 	character_namer.clear()
-	if character_name.is_empty() or characters_added.has(character_name):
+	if character_name.is_empty() or has_character(character_name):
 		return
-	
-	characters_added.append(character_name)
+
 	var new_character: WizardCharacterInstance = CHARA_INFO_INSTANCE.instantiate()
 	new_character.name = character_name
 	if set_unknown:
 		new_character.known_character = false
 	character_info_tab.add_child(new_character)
 	character_info_tab.current_tab = character_info_tab.get_index()
+
+
+func has_character(character_name: String) -> bool:
+	for character_tab in character_info_tab.get_children():
+		if character_tab.name == character_name:
+			return true
+	return false
 
 
 func on_menu_selected(index_selected: int) -> void:
