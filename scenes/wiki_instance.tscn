@@ -101,12 +101,13 @@ size_flags_stretch_ratio = 0.4
 
 [node name="AutoSearch" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus" instance=ExtResource("3_cy5fh")]
 layout_mode = 2
+size_flags_stretch_ratio = 5.0
 placeholder_text = "Search on Wiki"
 
 [node name="SearchButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
+size_flags_stretch_ratio = 1.5
 text = "Search"
 
 [node name="ESixSearch" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus"]
