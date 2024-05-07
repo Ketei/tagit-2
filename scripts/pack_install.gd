@@ -51,11 +51,11 @@ func on_install_pressed() -> void:
 					Tagger.TAGS_PATH +\
 					tagger_load.subfolder + "/"
 	
-	if not DirAccess.dir_exists_absolute(pack_path):
+	if DirAccess.dir_exists_absolute(pack_path):
+		OS.move_to_trash(pack_path)
+		DirAccess.make_dir_absolute(pack_path)
+	else:
 		DirAccess.make_dir_recursive_absolute(pack_path)
-	
-	for exisitng_file in DirAccess.get_files_at(pack_path):
-		OS.move_to_trash(pack_path + exisitng_file)
 	
 	for type in tagger_load.pack_tag_map:
 		if not Tagger.tag_map.has(type):
