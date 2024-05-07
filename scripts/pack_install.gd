@@ -99,12 +99,12 @@ func on_install_pressed() -> void:
 					tagger_load.subfolder + "/" +
 					new_tag.file_name)
 		
-		Tagger.tag_updated.emit(new_tag.tag)
+		#Tagger.tag_updated.emit(new_tag.tag)
 	
 	clear_all()
 	tagger_load = null
 	install_button.disabled = true
-	Tagger.reload_tags()
+	Tagger.reload_tags() # <- Moved the updated signals here.
 	pack_installed.show()
 
 

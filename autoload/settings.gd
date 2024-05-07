@@ -576,6 +576,7 @@ func reload_tags() -> void:
 			tag.file_name = file
 		
 		register_tag(tag.tag, database_path + TAGS_PATH + file)
+		tag_updated.emit(tag.tag)
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
@@ -584,7 +585,7 @@ func reload_tags() -> void:
 				tag.file_name = tag_file
 			
 			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file)
-	
+			tag_updated.emit(tag.tag)
 	aliases_reloaded.emit()
 
 
