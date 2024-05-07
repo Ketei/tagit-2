@@ -17,6 +17,7 @@ const TAG_CHECK_BOX = preload("res://scenes/tag_check_box.tscn")
 
 @onready var select_all_button: Button = $VBoxContainer/HBoxContainer/SelectAllButton
 @onready var deselect_all_button: Button = $VBoxContainer/HBoxContainer/DeselectAllButton
+@onready var check_from_folder_button: Button = $VBoxContainer/SearchContainer/CheckFromFolderButton
 
 @onready var pack_name_line_edit: LineEdit = $VBoxContainer/HBoxContainer/HBoxContainer/PackNameLineEdit
 @onready var pack_desc_line_edit: LineEdit = $VBoxContainer/HBoxContainer/HBoxContainer/PackDescLineEdit
@@ -33,6 +34,7 @@ func _ready():
 	close_button.pressed.connect(queue_free)
 	select_all_button.pressed.connect(on_select_all_pressed)
 	deselect_all_button.pressed.connect(on_deselect_all_pressed)
+	check_from_folder_button.pressed.connect(check_from_folder)
 	for key in Tagger.loaded_tags:
 		for tag in Tagger.loaded_tags[key]:
 			var tag_load: Tag = Tagger.get_tag(tag)
@@ -40,7 +42,7 @@ func _ready():
 			new_tag.tag_name = tag
 			new_tag.tag_category = tag_load.category
 			new_tag.tag_priority = tag_load.tag_priority
-			new_tag.tag_path = Tagger.loaded_tags[key][tag]
+			new_tag.tag_path = Tagger.loaded_tags[key][tag]["path"]
 			tags_container.add_child(new_tag)
 	
 
@@ -115,4 +117,14 @@ func get_pack_desc() -> String:
 func is_tagmap_enabled() -> bool:
 	return create_map_check_box.button_pressed
 
+
+# So many loops, so ugly.
+func check_from_folder() -> void:
+	var pack_path: String = Tagger.database_path + Tagger.TAGS_PATH + name + "/"
+	for tag_in_folder in DirAccess.get_files_at(pack_path):
+		var loaded_tag: Tag = load(pack_path + tag_in_folder)
+		for check:TagCheckBox in tags_container.get_children():
+			if check.text == loaded_tag.tag:
+				check.button_pressed = true
+				break
 
