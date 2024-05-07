@@ -47,14 +47,15 @@ func on_file_selected(file_path: String) -> void:
 
 
 func on_install_pressed() -> void:
-	if not DirAccess.dir_exists_absolute(
-			Tagger.database_path + 
-			Tagger.TAGS_PATH +
-			tagger_load.subfolder + "/"):
-		DirAccess.make_dir_recursive_absolute(
-				Tagger.database_path + 
-				Tagger.TAGS_PATH +
-				tagger_load.subfolder + "/")
+	var pack_path: String = Tagger.database_path +\
+					Tagger.TAGS_PATH +\
+					tagger_load.subfolder + "/"
+	
+	if not DirAccess.dir_exists_absolute(pack_path):
+		DirAccess.make_dir_recursive_absolute(pack_path)
+	
+	for exisitng_file in DirAccess.get_files_at(pack_path):
+		OS.move_to_trash(pack_path + exisitng_file)
 	
 	for type in tagger_load.pack_tag_map:
 		if not Tagger.tag_map.has(type):
@@ -93,14 +94,10 @@ func on_install_pressed() -> void:
 		new_tag.smart_tags = tag_dict["smart"]
 		
 		ResourceSaver.save(
-			new_tag,
-			Tagger.database_path +
-					Tagger.TAGS_PATH + 
-					tagger_load.subfolder + "/" +
-					new_tag.file_name)
-		
-		#Tagger.tag_updated.emit(new_tag.tag)
-	
+				new_tag,
+				pack_path +
+				new_tag.file_name)
+
 	clear_all()
 	tagger_load = null
 	install_button.disabled = true
