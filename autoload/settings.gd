@@ -177,7 +177,7 @@ var hydrus_port: int = 0
 var hydrus_key: String = ""
 
 # List Settings
-var invalid_tags: Array[String] = []
+var invalid_tags: Dictionary = {}
 var suggestion_blacklist: Array[String] = []
 var constant_tags: Array[String] = []
 var alias_list: Dictionary = {
@@ -487,14 +487,27 @@ func has_alias(from: String) -> bool:
 
 
 func add_invalid_tag(tag_name: String) -> void:
-	if invalid_tags.has(tag_name):
+	var tag_key: String = tag_name.left(1)
+	
+	if not invalid_tags.has(tag_key):
+		invalid_tags[tag_key] = []
+	
+	if invalid_tags[tag_key].has(tag_name):
 		return
-	invalid_tags.append(tag_name)
+	
+	invalid_tags[tag_key].append(tag_name)
 	invalid_added.emit(tag_name)
 
 
+func remove_invalid_tag(invalid_to_remove: String) -> void:
+	var tag_key: String = invalid_to_remove.left(1)
+	invalid_tags[tag_key].erase(invalid_to_remove)
+	if invalid_tags[tag_key].is_empty():
+		invalid_tags.erase(tag_key)
+
+
 func has_invalid_tag(tag_name: String) -> bool:
-	return invalid_tags.has(tag_name)
+	return invalid_tags.has(tag_name.left(1)) and invalid_tags[tag_name.left(1)].has(tag_name)
 
 
 func sort_prefixes() -> void:

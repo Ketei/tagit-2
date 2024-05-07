@@ -26,7 +26,7 @@ extends Resource
 @export var include_invalid: bool = false
 
 # List Settings
-@export var invalid_tags: Array[String] = []
+@export var invalid_tags: Dictionary = {}
 @export var suggestion_blacklist: Array[String] = []
 @export var constant_tags: Array[String] = []
 @export var custom_aliases: Dictionary = {} # "s": {"sperm": "cum"}

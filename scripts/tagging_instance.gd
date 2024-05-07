@@ -430,7 +430,7 @@ func on_tag_submitted(tag_text: String) -> void:
 				)
 		
 	else:
-		if Tagger.invalid_tags.has(end_tag):
+		if Tagger.has_invalid_tag(end_tag):
 			status_icon = "res://textures/status/bad.png"
 			tag_items.set_item_tooltip(
 					item_index,
