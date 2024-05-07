@@ -27,23 +27,31 @@ func _ready():
 	timer.autostart = false
 	timer.one_shot = true
 	text_changed.connect(on_text_changed)
+	
 	if prompt_type == SearchType.TAGS:
 		timer.timeout.connect(search_for_tags)
 	elif prompt_type == SearchType.TAG_TYPE:
 		timer.timeout.connect(search_for_type)
+	
 	if use_alt_container == null:
 		if container_direction == 0:
 			auto_container.position.y = -auto_container.size.y
 			auto_container.alignment = VBoxContainer.ALIGNMENT_END
+			auto_fill.focus_neighbor_bottom = auto_fill.get_path_to(self)
 		else:
 			auto_container.position.y = size.y
 			auto_container.alignment = VBoxContainer.ALIGNMENT_BEGIN
+			auto_fill.focus_neighbor_top = auto_fill.get_path_to(self)
 	else:
 		auto_container.queue_free()
 		auto_container = use_alt_container
 		if not auto_container.is_node_ready():
 			await auto_container.ready
 		auto_fill = auto_container.auto_fill
+		if container_direction == 0:
+			auto_fill.focus_neighbor_bottom = auto_fill.get_path_to(self)
+		else:
+			auto_fill.focus_neighbor_top = auto_fill.get_path_to(self)
 	
 	focus_exited.connect(on_focus_lost)
 	text_submitted.connect(on_text_submitted)

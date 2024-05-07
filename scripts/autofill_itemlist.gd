@@ -15,6 +15,12 @@ func _ready():
 	#focus_exited.connect(on_focus_exited)
 	item_clicked.connect(on_item_clicked)
 	item_activated.connect(on_item_activated)
+	focus_neighbor_bottom = "."
+	focus_neighbor_left = "."
+	focus_neighbor_right = "."
+	focus_neighbor_top = "."
+	focus_next = "."
+	focus_previous = "."
 
 
 func _unhandled_key_input(event):
