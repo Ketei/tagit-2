@@ -60,11 +60,12 @@ func _ready():
 	auto_fill.item_tabbed.connect(on_item_tabbed)
 
 
-func _unhandled_key_input(event):
+func _gui_input(event):
 	if has_focus() and event.is_action(key_direction) and 0 < auto_fill.item_count:
 		auto_container.show()
 		select_nearest()
 		auto_fill.grab_focus()
+		accept_event()
 
 
 func on_item_selected(item_text: String) -> void:
