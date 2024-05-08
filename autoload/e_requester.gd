@@ -177,7 +177,9 @@ func on_prio_request_completed(result: int, response_code: int, _headers: Packed
 func parse_tag_strength(parse_string: String) -> Dictionary:
 	var return_dictionary: Dictionary = {}
 	
-	if parse_string.is_empty():
+	# I'm seriously starting to question the logic of whoever
+	# designed the e621 API.
+	if parse_string.is_empty() or parse_string == "[]":
 		return return_dictionary
 	
 	var tags: Array[String] = []
