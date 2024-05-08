@@ -9,7 +9,7 @@ enum SearchType {
 
 @export var prompt_type: SearchType = SearchType.TAGS
 @export var tag_type_search := Tagger.Categories.GENERAL
-@export_range(0,10,1) var items_to_fetch: int = 10
+@export_range(1,10,1) var items_to_fetch: int = 10
 @export var invert_list: bool = true
 @export var key_direction: StringName = "ui_up" ## If up, invert is usually true.
 @export_enum("Up","Down") var container_direction: int = 0
@@ -58,6 +58,7 @@ func _ready():
 	auto_fill.focus_exited.connect(on_item_list_focus_lost)
 	auto_fill.item_submited.connect(on_item_selected)
 	auto_fill.item_tabbed.connect(on_item_tabbed)
+	auto_fill.cancel_pressed.connect(cancel_grab)
 
 
 func _gui_input(event):
@@ -165,5 +166,12 @@ func select_nearest() -> void:
 func close_and_clear_items() -> void:
 	auto_container.hide()
 	auto_fill.clear()
+	grab_focus()
+
+
+func cancel_grab() -> void:
+	auto_container.hide()
+	if auto_fill.is_anything_selected():
+		auto_fill.deselect_all()
 	grab_focus()
 
