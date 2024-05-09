@@ -7,8 +7,8 @@ extends Control
 @onready var suggestions: TagItemList = $MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer/Suggestions
 
 @onready var name_line_edit: LineEdit = $MarginContainer/VBoxContainer/NameContainer/NameLineEdit
-@onready var tags_line_edit: LineEdit = $MarginContainer/VBoxContainer/TemplateTags/NormalContainer/InputContainer/TagsLineEdit
-@onready var suggestions_line_edit: LineEdit = $MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer/InputContainer/SuggestionsLineEdit
+@onready var tags_line_edit: LineEdit = $MarginContainer/VBoxContainer/TemplateTags/NormalContainer/InputContainer/AutoSearch
+@onready var suggestions_line_edit: LineEdit = $MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer/InputContainer/AutoSearch
 
 @onready var add_tag_button: Button = $MarginContainer/VBoxContainer/TemplateTags/NormalContainer/InputContainer/AddTagButton
 @onready var add_suggestion_button: Button = $MarginContainer/VBoxContainer/TemplateTags/SuggestionsContainer/InputContainer/AddSuggestionButton

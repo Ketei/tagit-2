@@ -38,6 +38,8 @@ enum Categories {
 	LORE,
 }
 
+const NOTIFICATION_DIALOG = preload("res://scenes/notification_dialog.tscn")
+
 const CategorySorting: Array = [
 	{"name": "General", "index": Categories.GENERAL},
 	{"name": "Artist", "index": Categories.ARTIST},
@@ -107,7 +109,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.1.1"
+const VERSION: String = "2.1.2"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 
@@ -123,6 +125,11 @@ enum E621_CATEGORY {
 	LORE = 8,
 	}
 
+# Nodes
+var notification_window: TaggerMainNotification
+
+
+# Data
 var header_data: Dictionary = {}
 
 var custom_sites: Dictionary = {}
@@ -170,7 +177,7 @@ var hydrus_port: int = 0
 var hydrus_key: String = ""
 
 # List Settings
-var invalid_tags: Array[String] = []
+var invalid_tags: Dictionary = {}
 var suggestion_blacklist: Array[String] = []
 var constant_tags: Array[String] = []
 var alias_list: Dictionary = {
@@ -219,6 +226,9 @@ var shortcuts_disabled: bool = false :
 			return
 		shortcuts_disabled = new_disabled
 		disabled_shortcuts.emit(shortcuts_disabled)
+var update_notified: bool = false
+var version_notified: String = ""
+var notifications_queue: Array[Dictionary] = []
 
 
 func _ready():
@@ -239,6 +249,16 @@ func _ready():
 	else:
 		database_path = _load_settings.database_path
 	
+	if _load_settings.version_notified.is_empty():
+		version_notified = VERSION
+		update_notified = false
+	elif version_as_int_array(_load_settings.version_notified) < version_as_int_array(VERSION):
+		version_notified = VERSION
+		update_notified = false
+	else:
+		version_notified = _load_settings.version_notified
+		update_notified = _load_settings.update_notified
+
 	if not DirAccess.dir_exists_absolute(database_path):
 		var _err = DirAccess.make_dir_recursive_absolute(database_path)
 		
@@ -323,6 +343,39 @@ func _ready():
 	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
+
+
+func version_as_int_array(version: String) -> Array[int]:
+	var version_array: Array[int] = []
+	for letter in version.split(".", false):
+		version_array.append(int(letter))
+	return version_array
+
+
+func queue_notification(message: String, title: String = "Notification", ok_button: String = "OK") -> void:
+	notifications_queue.append({"message": message, "title": title, "confirm": ok_button})
+	
+	if notification_window == null:
+		notification_window = NOTIFICATION_DIALOG.instantiate()
+		notification_window.notification_closed.connect(on_notification_closed)
+		add_child(notification_window)
+		show_next_notification()
+
+
+func show_next_notification() -> void:
+	var new_notification: Dictionary = notifications_queue.pop_front()
+	
+	notification_window.show_notification(
+		new_notification["message"],
+		new_notification["title"],
+		new_notification["confirm"])
+
+
+func on_notification_closed() -> void:
+	if notifications_queue.is_empty():
+		notification_window.queue_free()
+		return
+	show_next_notification()
 
 
 func clear_tag_map() -> void:
@@ -434,10 +487,27 @@ func has_alias(from: String) -> bool:
 
 
 func add_invalid_tag(tag_name: String) -> void:
-	if invalid_tags.has(tag_name):
+	var tag_key: String = tag_name.left(1)
+	
+	if not invalid_tags.has(tag_key):
+		invalid_tags[tag_key] = []
+	
+	if invalid_tags[tag_key].has(tag_name):
 		return
-	invalid_tags.append(tag_name)
+	
+	invalid_tags[tag_key].append(tag_name)
 	invalid_added.emit(tag_name)
+
+
+func remove_invalid_tag(invalid_to_remove: String) -> void:
+	var tag_key: String = invalid_to_remove.left(1)
+	invalid_tags[tag_key].erase(invalid_to_remove)
+	if invalid_tags[tag_key].is_empty():
+		invalid_tags.erase(tag_key)
+
+
+func has_invalid_tag(tag_name: String) -> bool:
+	return invalid_tags.has(tag_name.left(1)) and invalid_tags[tag_name.left(1)].has(tag_name)
 
 
 func sort_prefixes() -> void:
@@ -528,6 +598,10 @@ func reload_tags() -> void:
 			
 			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file)
 	
+	# Prevents repeated/replaced tags from packs to be signaled.
+	for tag_char in loaded_tags:
+		for tag_name in loaded_tags[tag_char]:
+			tag_updated.emit(tag_name)
 	aliases_reloaded.emit()
 
 
@@ -609,6 +683,12 @@ func register_tag(tag_string: String, path: String):
 		loaded_tags[tag_string.left(1)] = {}
 	
 	var tag: Tag = load(path)
+	
+	if loaded_tags[tag_string.left(1)].has(tag_string):
+		print("Tag {0} is duplicate, tag file from {1} will be used".format(
+				[
+					tag_string, path
+				]))
 	
 	loaded_tags[tag_string.left(1)][tag_string] = {
 		"path": path,
@@ -945,6 +1025,8 @@ func save_settings() -> void:
 		new_settings.removed_aliases = removed_aliases
 		new_settings.remove_after_use = remove_after_use
 		new_settings.blacklist_after_remove = blacklist_after_remove
+		new_settings.version_notified = version_notified
+		new_settings.update_notified = update_notified
 		new_settings.save()
 	else:
 		print("Running from source: Skipping saving settings.")

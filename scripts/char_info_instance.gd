@@ -67,14 +67,26 @@ func is_sub() -> bool:
 func get_ages() -> Array[String]:
 	var age_array: Array[String] = []
 	
-	var age: String = age_option_button.get_age_tag()
+	var age_tag: String = age_option_button.get_age_tag()
+	var lore_age_group: AgeOptionButton.AgeRange = lore_age_option_button.get_age_category()
 	
-	if age != "adult":
-		age_array.append(age_option_button.get_age_tag())
+	if not age_tag.is_empty():
+		age_array.append(age_tag)
+	
 	if not lore_age_option_button.disabled:
-		age_array.append(
-			lore_age_option_button.get_age_tag() + " (lore)"
-		)
+		if lore_age_group == AgeOptionButton.AgeRange.YOUNG:
+			age_array.append("young (lore)")
+		else:
+			age_array.append("adult (lore)")
+		
+		# Mature doesn't have a tag, same as "adult". But that's handled
+		# up there ^
+		if  lore_age_group == AgeOptionButton.AgeRange.MATURE:
+			age_array.append("mature (lore)")
+		elif not age_tag.is_empty(): # "mature" and "adult" = false
+			age_array.append(
+				age_tag + " (lore)")
+
 	return age_array
 
 
@@ -85,9 +97,10 @@ func get_tag_dict() -> Dictionary:
 	var clothing_dict: Dictionary = clothing_scoring.get_tags()
 	
 	var gender: String = gender_opt.get_gender_tag()
-	
-	
+
 	var body_tags: Array = bod_type_opt_btn.get_body_type()
+	
+	var age_group: AgeOptionButton.AgeRange = age_option_button.get_age_category()
 	
 	if gender == "ambiguous gender":
 		gender = "ambiguous"
@@ -111,6 +124,19 @@ func get_tag_dict() -> Dictionary:
 	main_tags.append_array(pose_container.get_tags())
 	suggestion_array.append_array(clothing_dict["suggestions"])
 	
+	if age_group == AgeOptionButton.AgeRange.YOUNG:
+		main_tags.append("young " + gender)
+		for form in body_tags:
+			main_tags.append("young " + form)
+	elif age_group == AgeOptionButton.AgeRange.MATURE:
+		main_tags.append("mature " + gender)
+		for form in body_tags:
+			main_tags.append("mature " + form)
+	elif age_group == AgeOptionButton.AgeRange.OLD:
+		main_tags.append("old " + gender)
+		for form in body_tags:
+			main_tags.append("old " + form)
+	
 	if is_sub():
 		main_tags.append("submissive")
 		main_tags.append("submissive " + gender)
@@ -127,7 +153,6 @@ func get_tag_dict() -> Dictionary:
 		main_tags.append(gender + " on bottom")
 		for body in body_tags:
 			main_tags.append(body + " on bottom")
-	
 	elif is_top():
 		main_tags.append("on top")
 		main_tags.append(gender + " on top")

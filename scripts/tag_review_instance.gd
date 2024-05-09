@@ -73,8 +73,9 @@ func on_search_submit(tag_string: String) -> void:
 	tag_name_line_edit.editable = false
 	load_button.disabled = true
 	fetch_button.disabled = true
-	var tag_search: String = Tagger.get_alias(
-			tag_string.strip_edges().to_lower())
+	var tag_search: String = tag_string.strip_edges().to_lower()
+	#var tag_search: String = Tagger.get_alias(
+			#tag_string.strip_edges().to_lower())
 	
 	clear_all(false)
 	groups_list.disable_manual_input()

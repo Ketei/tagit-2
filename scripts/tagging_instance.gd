@@ -32,9 +32,9 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var suggestion_list: TagItemList = $MarginContainer/MainContainer/Suggests/SuggestionList
 @onready var smart_list: TagItemList = $MarginContainer/MainContainer/Suggests/SmartList
 
-@onready var auto_fill: ItemList = $MarginContainer/MainContainer/MainTags/Interact/AddTag/VBoxContainer/AutoFill
+#@onready var auto_fill: ItemList = $MarginContainer/MainContainer/MainTags/Interact/AddTag/VBoxContainer/AutoFill
 
-@onready var add_tag_line_edit: LineEdit = $MarginContainer/MainContainer/MainTags/Interact/AddTag
+@onready var add_tag_line_edit: LineEdit = $MarginContainer/MainContainer/MainTags/Interact/AutoSearch
 
 @onready var full_search_button: Button = $MarginContainer/MainContainer/MainTags/Interact/FullSearchButton
 @onready var select_tag_button: Button = $MarginContainer/MainContainer/MainTags/Interact/SelectTagButton
@@ -67,7 +67,7 @@ func _ready():
 	template_button.pressed.connect(display_template_loader)
 	generate_button.pressed.connect(generate_full_tags)
 	copy_button.pressed.connect(on_copy_pressed)
-	auto_fill.item_submited.connect(on_tag_submitted)
+	#auto_fill.item_submited.connect(on_tag_submitted)
 	suggestion_list.item_deleted.connect(
 			session_blacklist.add_to_blacklist)
 	smart_list.item_deleted.connect(
@@ -182,10 +182,22 @@ func on_intag_suggestions(suggs:Array[String]) -> void:
 
 
 func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
+	var tag_name: String = tag_items.get_item_text(tag_index)
+	
 	tag_items.get_item_metadata(tag_index).merge(tag_data, true)
-	tag_items.set_item_icon(
-			tag_index,
-			load("res://textures/status/loaded.png"))
+	
+	if Tagger.has_tag(tag_name):
+		tag_items.set_item_icon(
+				tag_index,
+				load("res://textures/status/valid_custom.png"))
+	elif Tagger.has_invalid_tag(tag_name):
+		tag_items.set_item_icon(
+				tag_index,
+				load("res://textures/status/bad_custom.png"))
+	else:
+		tag_items.set_item_icon(
+				tag_index,
+				load("res://textures/status/generic_custom.png"))
 	Tagger.shortcuts_disabled = false
 	#in_tag_editor.queue_free()
 
@@ -246,10 +258,18 @@ func on_load_pressed(load_data: Dictionary) -> void:
 		#on_tag_submitted(main_tag)	
 		var tag_index: int = tag_items.add_item(main_tag)
 		tag_items.set_item_metadata(tag_index, load_data["main"][main_tag])
+		
 		if load_data["main"][main_tag]["valid"]:
-			tag_items.set_item_icon(tag_index, load("res://textures/status/loaded.png"))
+			if Tagger.has_tag(main_tag):
+				tag_items.set_item_icon(
+						tag_index,
+						load("res://textures/status/valid_custom.png"))
+			else:
+				tag_items.set_item_icon(
+						tag_index,
+						load("res://textures/status/generic_custom.png"))
 		else:
-			tag_items.set_item_icon(tag_index, load("res://textures/status/bad.png"))
+			tag_items.set_item_icon(tag_index, load("res://textures/status/bad_custom.png"))
 	for suggestion in load_data["suggs"]:
 		suggestion_list.add_item(suggestion)
 	for smart in load_data["smart"]:
@@ -410,7 +430,7 @@ func on_tag_submitted(tag_text: String) -> void:
 				)
 		
 	else:
-		if Tagger.invalid_tags.has(end_tag):
+		if Tagger.has_invalid_tag(end_tag):
 			status_icon = "res://textures/status/bad.png"
 			tag_items.set_item_tooltip(
 					item_index,

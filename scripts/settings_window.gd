@@ -7,13 +7,14 @@ const WEB_INSTALL_WINDOW = preload("res://scenes/web_install_window.tscn")
 var pack_installer: PakInstallWindow
 var website_installer: WebsiteInstallWindow
 
-@onready var hydrus_connect_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusConnectButton
+@onready var hydrus_connect_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusButtons/HydrusConnectButton
 @onready var browse_path_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DatabaseContainer/HBoxContainer/BrowsePathButton
 @onready var reload_tag_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer/ReloadTagButton
 @onready var open_tag_folder_btn: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2/OpenTagFolderBtn
 @onready var install_pak_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2/InstallPakButton
 @onready var install_website_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer2/InstallWebsiteButton
 @onready var clear_tag_map_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ButtonsContainer/VBoxContainer/ClearTagMapButton
+@onready var hydrus_request_button: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusButtons/RequestHydrus
 
 @onready var autofill_enabled: CheckButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/FunctionallityToggle/AutofillEnabled
 @onready var wiki_esix_search: CheckButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/WikiESixSearch
@@ -77,6 +78,24 @@ func _ready():
 	clear_tag_map_button.pressed.connect(on_clear_tagmap_pressed)
 	remove_after_use.toggled.connect(on_remove_after_use)
 	blacklist_after_remove.toggled.connect(on_blacklist_after_remove)
+	hydrus_request_button.pressed.connect(on_request_pressed)
+
+
+func on_request_pressed() -> void:
+	disable_hydrus_connect_buttons()
+	Hydrus.request_permissions(int(port_spinbox.value))
+	
+	var access_key: String = await Hydrus.permissions_received
+	
+	if not access_key.is_empty():
+		key_secret.text = access_key
+		Tagger.queue_notification(
+			"Received access key.
+			Apply permissions on Hydrus then
+			press \"Connect to Hydrus\"",
+			"Key Received")
+	
+	disable_hydrus_connect_buttons(false)
 
 
 func on_remove_after_use(is_toggled: bool) -> void:
@@ -172,4 +191,10 @@ func on_folder_selected(folder_path: String) -> void:
 	accept_dialog.show()
 	await accept_dialog.confirmed
 	Tagger.database_changed()
+
+
+func disable_hydrus_connect_buttons(set_disabled := true) -> void:
+	hydrus_request_button.disabled = set_disabled
+	hydrus_connect_button.disabled = set_disabled
+
 

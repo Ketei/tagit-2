@@ -31,6 +31,11 @@ layout_mode = 2
 size_flags_horizontal = 2
 text = "X"
 
+[node name="CheckFromFolderButton" type="Button" parent="VBoxContainer/SearchContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Check from folder"
+
 [node name="SearchNameLineEdit" type="LineEdit" parent="VBoxContainer/SearchContainer"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2

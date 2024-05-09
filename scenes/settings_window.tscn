@@ -113,6 +113,7 @@ layout_mode = 2
 [node name="OnlineCheckButton" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/OnlineContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Load tag suggesstions from the e621 API."
 text = "Load Online Suggestions"
 icon = ExtResource("3_bur4n")
 
@@ -125,12 +126,13 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/SuggestContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Confidence"
+text = "Suggestion Relevancy"
 
 [node name="ConfidenceSpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/SuggestContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+tooltip_text = "How relevant the tags suggested need to be in order to be suggested."
 value = 45.0
 alignment = 1
 suffix = "%"
@@ -308,8 +310,16 @@ size_flags_horizontal = 3
 select_all_on_focus = true
 secret = true
 
-[node name="HydrusConnectButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer"]
+[node name="HydrusButtons" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer"]
 layout_mode = 2
+
+[node name="RequestHydrus" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusButtons"]
+layout_mode = 2
+text = "Request to Hydrus"
+
+[node name="HydrusConnectButton" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Connect to Hydrus"
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox"]

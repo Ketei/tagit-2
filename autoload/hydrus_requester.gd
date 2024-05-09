@@ -3,6 +3,7 @@ extends Node
 
 signal image_created(image: Texture2D)
 signal hydrus_connected(is_connected)
+signal permissions_received(access_key: String)
 
 const LOCAL_ADDRESS: String = "http://127.0.0.1:{0}/"
 const HEADER: String = "Hydrus-Client-API-Access-Key:"
@@ -209,5 +210,20 @@ func parse_tag(input_tag: String) -> String:
 		final_tag += aliased_tag
 	
 	return final_tag
+
+
+func request_permissions(port: int) -> void:
+	var request_url: String = LOCAL_ADDRESS.format([str(port)]) + "request_new_permissions?name=TagIt%20-%20Tag%20List%20Assistant&basic_permissions=[3]"
+	requester.request(request_url)
+	var client_response: Array = await requester.request_completed
+	print(client_response[0])
+	print(client_response[1])
+	if client_response[0] != OK or client_response[1] != 200:
+		permissions_received.emit("")
+		return
+	var json: JSON = JSON.new()
+	json.parse(client_response[3].get_string_from_utf8())
+	print(json.data)
+	permissions_received.emit(json.data["access_key"])
 
 

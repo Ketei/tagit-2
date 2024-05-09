@@ -11,15 +11,15 @@ Parents: [color=d2f9d6]{2}[/color]
 Suggestions: [color=d2f9d6]{3}[/color]
 Priority: [color=d2f9d6]{4}[/color][/ul]
 [/color]
-{6}\n\n
-[color=8eef97]Aliases: [color=d2f9d6]{5}[/color][/color]"
+{5}"
 
 @onready var full_image: TextureRect = $PanelContainer/FullScreenView
 
 @onready var full_screen_view: PanelContainer = $PanelContainer
 @onready var thumbnail_container: HFlowContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer/ThumbnailContainer
 @onready var wiki_desc: RichTextLabel = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer/SmoothScrollContainer/WikiDesc
-@onready var wiki_search: LineEdit = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch
+
+@onready var wiki_search: LineEdit = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/AutoSearch
 
 @onready var close_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/CloseButton
 @onready var search_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/SearchButton
@@ -29,7 +29,7 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 
 @onready var pictures_panel: PanelContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer
 
-@onready var auto_fill: ItemList = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer/AutoFill
+#@onready var auto_fill: ItemList = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer/AutoFill
 
 
 func _ready():
@@ -40,10 +40,10 @@ func _ready():
 	e_six_search.pressed.connect(on_online_search_pressed)
 	Tagger.image_view_toggled.connect(on_view_toggled)
 	wiki_desc.meta_clicked.connect(on_meta_clicked)
-	auto_fill.item_submited.connect(on_wiki_search_submit)
+	#auto_fill.item_submited.connect(on_wiki_search_submit)
 
 
-func _unhandled_input(_event):
+func _unhandled_key_input(_event):
 	if full_screen_view.visible and full_image.visible and Input.is_action_just_pressed("ui_cancel"):
 		full_screen_view.hide() # This is shown when clicked
 		full_image.hide() # This is shown when loaded
@@ -105,6 +105,7 @@ func on_wiki_search_submit(tag_search: String) -> void:
 	suggestions_string = suggestions_string.left(-2)
 	
 # [title, category, parents, suggestions, priority, wiki]
+	
 	wiki_desc.text = WIKI_BASE.format(
 			[
 				tag_to_load.tag.to_upper(),
@@ -112,9 +113,11 @@ func on_wiki_search_submit(tag_search: String) -> void:
 				parents_string,
 				suggestions_string,
 				str(tag_to_load.tag_priority),
-				aliases_string,
 				tag_to_load.wiki_entry
 			])
+
+	if not aliases_string.is_empty():
+		wiki_desc.text += "\n\n[color=8eef97]Aliases: [color=d2f9d6]{0}[/color][/color]".format([aliases_string])
 	
 	if Tagger.load_images and Hydrus.connected:
 		var ids = await Hydrus.search([tag_to_search], Tagger.image_amount)

@@ -57,7 +57,7 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 		tagger_menu.show()
 	elif target_window == 1: # Review Tag
 		reviewer.show()
-		reviewer.clear_fields()
+		reviewer.clear_all()
 		reviewer.tag_name_line_edit.text = args["tag"]
 		reviewer.on_fetch_pressed()
 	elif target_window == 2: # Tools

@@ -3,8 +3,11 @@
 [ext_resource type="Script" path="res://scripts/age_option_button.gd" id="1_t0qbp"]
 
 [node name="AgeOptionButton" type="OptionButton"]
-tooltip_text = "Aprox. ages:
-Adult: >17
+tooltip_text = "Aproximate ages:
+Elderly: 65+
+Mature: 40-65
+Adult: Anything over 17.
+Young Adult: 18 to early 30s. Must look youthful.
 Teen ages: 13-17
 Child: 3-12
 Toddler: 1-3

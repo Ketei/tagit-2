@@ -2,7 +2,7 @@ extends Control
 
 
 func _ready():
-	pass
+	print("- Done -")
 
 
 func compare_versions() -> void:
@@ -44,6 +44,23 @@ func look_for_repeats() -> void:
 								)
 							)
 	#print(tag_dictionary)
+
+
+func look_for_suggestion(suggestion: String) -> void:
+	for tag_index in Tagger.loaded_tags:
+		for tag_name in Tagger.loaded_tags[tag_index]:
+			var tag_load: Tag = Tagger.get_tag(tag_name)
+			for tag_suggestion in tag_load.suggestions:
+				if suggestion == tag_suggestion:
+					print(
+						"Tag {0} contains {1}".format(
+							[
+								tag_load.tag,
+								suggestion
+							]
+						)
+					)
+
 
 func look_for_smart(smart_option: String) -> void:
 	for tag_index in Tagger.loaded_tags:

@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8uqd4iwfeg78"]
+
+[ext_resource type="Script" path="res://scripts/auto_search.gd" id="1_rv7md"]
+[ext_resource type="Script" path="res://scripts/auto_list_container.gd" id="2_apoj7"]
+[ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="2_wqpc8"]
+[ext_resource type="Script" path="res://scripts/autofill_itemlist.gd" id="3_stxbi"]
+
+[node name="AutoSearch" type="LineEdit"]
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+context_menu_enabled = false
+script = ExtResource("1_rv7md")
+
+[node name="AutoContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -350.0
+grow_horizontal = 2
+mouse_filter = 2
+alignment = 2
+script = ExtResource("2_apoj7")
+
+[node name="AutoFill" type="ItemList" parent="AutoContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath(".")
+mouse_filter = 1
+theme = ExtResource("2_wqpc8")
+auto_height = true
+script = ExtResource("3_stxbi")
+
+[node name="PromptTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true

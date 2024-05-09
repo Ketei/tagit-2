@@ -72,4 +72,6 @@ func remove_indexes(indexes_to_remove: Array[int]) -> void:
 	for index in _indexes:
 		item_deleted.emit(get_item_text(index))
 		remove_item(index)
+	if item_count == 0:
+		list_emptied.emit()
 

@@ -37,14 +37,8 @@ func _ready():
 	
 	var version_text: String = json_decoder.data["tag_name"].trim_prefix("v")
 	
-	var online_version_array: Array[int] = []
-	var local_version_array: Array[int] = []
-
-	for version in version_text.split(".", false):
-		online_version_array.append(int(version))
-	
-	for c_version in Tagger.VERSION.split(".", false):
-		local_version_array.append(int(c_version))
+	var online_version_array: Array[int] = Tagger.version_as_int_array(version_text)
+	var local_version_array: Array[int] = Tagger.version_as_int_array(Tagger.VERSION)
 	
 	set_new_version_available(
 			local_version_array < online_version_array,
@@ -72,6 +66,12 @@ func on_close_pressed() -> void:
 func set_new_version_available(update_available: bool, update_version: String = "") -> void:
 	if update_available:
 		update_status.text = "[center][color=ffc800][url=https://github.com/Ketei/tagit-2/releases/latest]Update {0} is available.[/url][/color][/center]".format([update_version])
+		if not Tagger.update_notified:
+			Tagger.queue_notification(
+				"A new update is available: " + update_version,
+				"Update Available!",
+				"Close")
+			Tagger.update_notified = true
 	else:
 		update_status.text = "[center][color=96fa00]You're using the latest version.[/color][/center]"
 
