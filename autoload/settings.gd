@@ -305,7 +305,16 @@ func _ready():
 	var directories := DirAccess.get_directories_at(database_path + TAGS_PATH)
 
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
-		var tag: Tag = load(database_path + TAGS_PATH + file)
+		if file.get_extension() != "tres":
+			print("File " + file +  " is not a resource file. Skipping -")
+			continue
+		
+		var tag: Resource = load(database_path + TAGS_PATH + file)
+		
+		if not tag is Tag:
+			print("File " + file +  " is not a Tag file. Skipping -")
+			continue
+		
 		if tag.file_name != file:
 			tag.file_name = file
 		for alias in tag.aliases:
@@ -317,11 +326,13 @@ func _ready():
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
 			if tag_file.get_extension() != "tres":
+				print("- File " + tag_file +  " is not a resource file. Skipping -")
 				continue
 			
 			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
 			
 			if not tag is Tag:
+				print("- File " + tag_file +  " is not a Tag file. Skipping -")
 				continue
 			
 			if tag.file_name != tag_file:
