@@ -109,7 +109,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.1.2"
+const VERSION: String = "2.1.3"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 
@@ -316,9 +316,17 @@ func _ready():
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
-			var tag: Tag = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			if tag_file.get_extension() != "tres":
+				continue
+			
+			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			
+			if not tag is Tag:
+				continue
+			
 			if tag.file_name != tag_file:
 				tag.file_name = tag_file
+			
 			for alias in tag.aliases:
 				if not alias_list.has(alias.left(1)):
 					alias_list[alias.left(1)] = {}
