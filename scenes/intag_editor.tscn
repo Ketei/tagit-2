@@ -52,6 +52,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 8
 
 [node name="TagNameLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer"]
 layout_mode = 2
@@ -99,9 +100,17 @@ size_flags_stretch_ratio = 2.0
 alignment = 1
 max_heigth = 200
 
-[node name="FetchButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer"]
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_vertical = 3
+alignment = 2
+
+[node name="ResetButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/VBoxContainer"]
+layout_mode = 2
+text = "Reset Tag"
+
+[node name="FetchButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/VBoxContainer"]
+layout_mode = 2
 tooltip_text = "Go to the review window and fetch data from e621."
 text = "Fetch Data"
 

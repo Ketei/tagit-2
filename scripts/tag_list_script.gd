@@ -9,6 +9,7 @@ signal list_emptied
 @export var deselect_on_focus_lost: bool = true
 var delete_timer: Timer
 
+
 func _ready():
 	focus_exited.connect(on_focus_lost)
 	delete_timer = Timer.new()
@@ -74,4 +75,36 @@ func remove_indexes(indexes_to_remove: Array[int]) -> void:
 		remove_item(index)
 	if item_count == 0:
 		list_emptied.emit()
+
+
+func reset_all_tags() -> void:
+	var tag_memory: Dictionary = {}
+	var tag_metadata: Dictionary = {}
+	
+	for index in range(item_count):
+		tag_metadata = get_item_metadata(index)
+		if Tagger.has_tag(get_item_text(index)):
+			tag_memory = Tagger.build_tag_meta(
+					Tagger.get_tag(
+							get_item_text(index)))
+			for category in tag_metadata:
+				tag_metadata[category] = tag_memory[category]
+			set_item_icon(
+					index,
+					load("res://textures/status/valid.png"))
+		elif Tagger.has_invalid_tag(get_item_text(index)):
+			tag_memory = Tagger.get_empty_meta(false)
+			for category in tag_metadata:
+				tag_metadata[category] = tag_memory[category]
+			set_item_icon(
+				index,
+				load("res://textures/status/bad.png"))
+		else:
+			tag_memory = Tagger.get_empty_meta()
+			for category in tag_metadata:
+				tag_metadata[category] = tag_memory[category]
+			set_item_icon(
+					index,
+					load("res://textures/status/generic.png"))
+
 
