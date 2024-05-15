@@ -12,7 +12,7 @@ signal tags_converted(tags_array: Array[String])
 
 
 func _ready():
-	Tagger.shortcuts_disabled = true
+	Tagger.disable_shortcuts()
 	cancel_button.pressed.connect(on_close_pressed)
 	transfer_tags.pressed.connect(convert_to_tags)
 
@@ -41,6 +41,6 @@ func convert_to_tags() -> void:
 
 
 func on_close_pressed() -> void:
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	queue_free()
 

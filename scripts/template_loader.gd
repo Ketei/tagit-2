@@ -16,6 +16,7 @@ const TEMPLATE_ITEM = preload("res://scenes/template_item.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Tagger.disable_shortcuts()
 	back_button.pressed.connect(on_return_pressed)
 	go_create_template_button.pressed.connect(on_create_template_pressed)
 	
@@ -31,7 +32,6 @@ func _ready():
 	
 	template_container.visible = not Tagger.templates.is_empty()
 	no_templates_found.visible = Tagger.templates.is_empty()
-	
 
 
 func on_template_deleted(_temp_title: String) -> void:
@@ -42,7 +42,7 @@ func on_template_deleted(_temp_title: String) -> void:
 
 func on_create_template_pressed() -> void:
 	create_template_pressed.emit()
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	queue_free()
 
 
@@ -51,6 +51,6 @@ func on_template_selected(main_tags: Array[String], suggestions: Array[String]):
 
 
 func on_return_pressed() -> void:
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	queue_free()
 
