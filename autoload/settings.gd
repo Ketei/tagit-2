@@ -39,6 +39,7 @@ enum Categories {
 }
 
 const NOTIFICATION_DIALOG = preload("res://scenes/notification_dialog.tscn")
+const CONFIRMATION_DIALOG = preload("res://scenes/confirmation_dialog.tscn")
 
 const CategorySorting: Array = [
 	{"name": "General", "index": Categories.GENERAL},
@@ -229,6 +230,13 @@ var shortcuts_disabled: bool = false :
 var update_notified: bool = false
 var version_notified: String = ""
 var notifications_queue: Array[Dictionary] = []
+var disable_shortcuts_count: int = 0:
+	set(new_disable):
+		disable_shortcuts_count = maxi(0, new_disable)
+		if disable_shortcuts_count == 0 and shortcuts_disabled:
+			shortcuts_disabled = false
+		elif 0 < disable_shortcuts_count and not shortcuts_disabled:
+			shortcuts_disabled = true
 
 
 func _ready():
@@ -362,6 +370,18 @@ func _ready():
 	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
+
+
+func disable_shortcuts() -> void:
+	disable_shortcuts_count += 1
+
+
+func enable_shortcuts() -> void:
+	disable_shortcuts_count -= 1
+	
+
+func force_enable_shortcuts() -> void:
+	disable_shortcuts_count = 0
 
 
 func version_as_int_array(version: String) -> Array[int]:
@@ -952,6 +972,14 @@ func split_and_strip(string_to_split: String, split_mark: String) -> Array[Strin
 		return_array.append(item.strip_edges())
 	
 	return return_array
+
+
+## Creates a new confirmation dialog and adds it to the tree. 
+## REMEMBER to free it when done.
+func create_confirmation_dialog() -> TaggerConfirmationDialog:
+	var new_confirmation: TaggerConfirmationDialog = CONFIRMATION_DIALOG.instantiate()
+	add_child(new_confirmation)
+	return new_confirmation
 
 
 func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert := true) -> Array[String]:
