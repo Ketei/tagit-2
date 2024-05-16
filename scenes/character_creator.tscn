@@ -71,7 +71,6 @@ text = "Form"
 
 [node name="BodTypeOptBtn" parent="BaseData/BodyForm" instance=ExtResource("3_mau78")]
 layout_mode = 2
-selected = -1
 
 [node name="WikiInfo" type="VBoxContainer" parent="BaseData"]
 layout_mode = 2
