@@ -13,6 +13,7 @@ const SAVE_DATA_ENTRY = preload("res://scenes/save_data_entry.tscn")
 var save_idx: int = -1
 var save_title: String = ""
 var save_data: Dictionary = {}
+var save_triggered: bool = false
 
 @onready var save_entries_container: VBoxContainer = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/SmoothScrollContainer/SaveEntriesContainer
 @onready var save_name_edit: LineEdit = $CenterContainer/ExistingSavesWindow/MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/DataContainer/SaveNameEdit
@@ -24,6 +25,7 @@ var save_data: Dictionary = {}
 
 
 func _ready():
+	Tagger.disable_shortcuts()
 	if mode == 0:
 		save_button.text = "Save"
 		overwrite_dialog.confirmed.connect(on_overwirte_close.bind(true))
@@ -112,6 +114,7 @@ func save_file(title: String, index:int = -1):
 		_new_entry.save_pressed.connect(on_overwrite_pressed)
 		save_entries_container.add_child(_new_entry)
 
+	save_triggered = true
 	file_saved.emit()
 
 
@@ -121,7 +124,7 @@ func on_close_pressed() -> void:
 
 
 func close_window() -> void:
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	queue_free()
 
 

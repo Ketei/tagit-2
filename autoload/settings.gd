@@ -39,6 +39,7 @@ enum Categories {
 }
 
 const NOTIFICATION_DIALOG = preload("res://scenes/notification_dialog.tscn")
+const CONFIRMATION_DIALOG = preload("res://scenes/confirmation_dialog.tscn")
 
 const CategorySorting: Array = [
 	{"name": "General", "index": Categories.GENERAL},
@@ -109,7 +110,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.1.2"
+const VERSION: String = "2.1.3"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 
@@ -229,6 +230,13 @@ var shortcuts_disabled: bool = false :
 var update_notified: bool = false
 var version_notified: String = ""
 var notifications_queue: Array[Dictionary] = []
+var disable_shortcuts_count: int = 0:
+	set(new_disable):
+		disable_shortcuts_count = maxi(0, new_disable)
+		if disable_shortcuts_count == 0 and shortcuts_disabled:
+			shortcuts_disabled = false
+		elif 0 < disable_shortcuts_count and not shortcuts_disabled:
+			shortcuts_disabled = true
 
 
 func _ready():
@@ -305,7 +313,16 @@ func _ready():
 	var directories := DirAccess.get_directories_at(database_path + TAGS_PATH)
 
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
-		var tag: Tag = load(database_path + TAGS_PATH + file)
+		if file.get_extension() != "tres":
+			print("File " + file +  " is not a resource file. Skipping -")
+			continue
+		
+		var tag: Resource = load(database_path + TAGS_PATH + file)
+		
+		if not tag is Tag:
+			print("File " + file +  " is not a Tag file. Skipping -")
+			continue
+		
 		if tag.file_name != file:
 			tag.file_name = file
 		for alias in tag.aliases:
@@ -316,9 +333,19 @@ func _ready():
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
-			var tag: Tag = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			if tag_file.get_extension() != "tres":
+				print("- File " + tag_file +  " is not a resource file. Skipping -")
+				continue
+			
+			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			
+			if not tag is Tag:
+				print("- File " + tag_file +  " is not a Tag file. Skipping -")
+				continue
+			
 			if tag.file_name != tag_file:
 				tag.file_name = tag_file
+			
 			for alias in tag.aliases:
 				if not alias_list.has(alias.left(1)):
 					alias_list[alias.left(1)] = {}
@@ -343,6 +370,18 @@ func _ready():
 	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
+
+
+func disable_shortcuts() -> void:
+	disable_shortcuts_count += 1
+
+
+func enable_shortcuts() -> void:
+	disable_shortcuts_count -= 1
+	
+
+func force_enable_shortcuts() -> void:
+	disable_shortcuts_count = 0
 
 
 func version_as_int_array(version: String) -> Array[int]:
@@ -933,6 +972,14 @@ func split_and_strip(string_to_split: String, split_mark: String) -> Array[Strin
 		return_array.append(item.strip_edges())
 	
 	return return_array
+
+
+## Creates a new confirmation dialog and adds it to the tree. 
+## REMEMBER to free it when done.
+func create_confirmation_dialog() -> TaggerConfirmationDialog:
+	var new_confirmation: TaggerConfirmationDialog = CONFIRMATION_DIALOG.instantiate()
+	add_child(new_confirmation)
+	return new_confirmation
 
 
 func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert := true) -> Array[String]:

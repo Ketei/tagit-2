@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cl2hmfmfrdrmg"]
+
+[ext_resource type="Script" path="res://scripts/tagger_confirmation_dialog.gd" id="1_p78bo"]
+
+[node name="ConfirmationDialog" type="ConfirmationDialog"]
+initial_position = 1
+ok_button_text = "Confirm"
+script = ExtResource("1_p78bo")

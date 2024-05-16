@@ -2,6 +2,7 @@ extends Control
 
 
 func _ready():
+	print("- Start -")
 	print("- Done -")
 
 
@@ -72,6 +73,21 @@ func look_for_smart(smart_option: String) -> void:
 				
 				for tag_option in smart_tag["data"]["tags"]:
 					if tag_option == smart_option:
+						print("Tag {0} with title {1} contains {2}".format(
+								[tag_name, smart_tag["title"], smart_option]
+						))
+
+
+func smart_tag_contains(smart_option: String) -> void:
+	for tag_index in Tagger.loaded_tags:
+		for tag_name in Tagger.loaded_tags[tag_index]:
+			var tag_load: Tag = Tagger.get_tag(tag_name)
+			for smart_tag in tag_load.smart_tags:
+				if smart_tag["data"]["type"] == "nbr":
+					continue
+				
+				for tag_option in smart_tag["data"]["tags"]:
+					if tag_option.contains(smart_option):
 						print("Tag {0} with title {1} contains {2}".format(
 								[tag_name, smart_tag["title"], smart_option]
 						))

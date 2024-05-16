@@ -20,7 +20,7 @@ var max_height: int = 400
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Tagger.shortcuts_disabled = true
+	Tagger.disable_shortcuts()
 	var type_index: int = 0
 	type_option_button.get_popup().max_size.y = max_height
 	category_option_button.get_popup().max_size.y = max_height
@@ -112,6 +112,6 @@ func get_tag() -> void:
 
 
 func on_cancel_pressed() -> void:
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	queue_free()
 

@@ -51,7 +51,7 @@ var view_selector: WizardViewSelector
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Tagger.shortcuts_disabled = true
+	Tagger.disable_shortcuts()
 	char_menu.get_popup().index_pressed.connect(on_menu_selected)
 	character_info_tab.get_tab_bar().tab_close_display_policy = TabBar.CLOSE_BUTTON_SHOW_ACTIVE_ONLY
 	character_info_tab.get_tab_bar().tab_close_pressed.connect(on_close_tab_pressed)
@@ -186,7 +186,7 @@ func on_cancel_press() -> void:
 
 
 func close_wizard() -> void:
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	queue_free()
 
 

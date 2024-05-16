@@ -27,6 +27,16 @@ func _ready():
 	tagger_menu.get_popup().index_pressed.connect(on_tagger_menu_selected)
 	tagger.window_switch_signaled.connect(on_window_switch_signaled)
 	help_menu.get_popup().index_pressed.connect(on_help_menu_selected)
+	tagger_menu.sort_alphabetical_pressed.connect(sort_tags_aphabetically)
+	tagger_menu.sort_high_index_pressed.connect(sort_by_priority)
+
+
+func sort_by_priority() -> void:
+	tagger.sort_tags_by_priority()
+
+
+func sort_tags_aphabetically() -> void:
+	tagger.sort_tags_alphabetically()
 
 
 func show_controls_window() -> void:
@@ -95,14 +105,17 @@ func on_tagger_menu_selected(menu_index: int) -> void:
 		tagger.clear_main_list()
 	elif menu_id ==5: # Session Blacklist
 		tagger.open_session_blacklist()
-	elif menu_id == 10: # Sort Tags
-		tagger.sort_tags_alphabetically()
+	# No longer needed
+	#elif menu_id == 10:
+		#tagger.sort_tags_alphabetically()
 	elif menu_id == 7: # Wizard
 		tagger.summon_wizard()
 	elif menu_id == 8: # Load from Text
 		tagger.open_taglist_importer()
 	elif menu_id == 9: # Load Template
 		tagger.display_template_loader()
+	elif menu_id == 11: # Reset tag Data
+		tagger.reset_tag_data()
 
 
 func on_menu_changed(menu_index: int) -> void:

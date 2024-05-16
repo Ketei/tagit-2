@@ -22,7 +22,7 @@ func _unhandled_key_input(event):
 
 func on_done_pressed() -> void:
 	visible = false
-	Tagger.shortcuts_disabled = false
+	Tagger.enable_shortcuts()
 	set_process_unhandled_key_input(false)
 
 
@@ -55,7 +55,7 @@ func get_blacklist_array() -> Array[String]:
 
 func show_blacklist() -> void:
 	set_process_unhandled_key_input(true)
-	Tagger.shortcuts_disabled = true
+	Tagger.disable_shortcuts()
 	visible = true
 
 
