@@ -5,8 +5,8 @@ extends OptionButton
 const BODY_TYPES: Dictionary = {
 	"anthro": {"name": "Anthro", "tags": ["anthro"]},
 	"semian": {"name": "Semi-anthro", "tags": ["anthro", "semi-anthro"]},
-	"stud": {"name": "Feral", "tags": ["feral"]},
 	"semife": {"name": "Semi-feral", "tags": ["feral", "semi-anthro"]},
+	"stud": {"name": "Feral", "tags": ["feral"]},
 	"hooman": {"name": "Human", "tags": ["human"]},
 	"humanoid": {"name": "Humanoid", "tags": ["humanoid"]},
 	"tahuff": {"name": "Taur", "tags": ["taur"]},
