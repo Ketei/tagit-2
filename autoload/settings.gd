@@ -837,6 +837,10 @@ func get_tag_filepath(tag_name: String) -> String:
 		return database_path + TAGS_PATH + tag_name + ".tres"
 
 
+func get_default_tag_filepath(tag_name: String) -> String:
+	return database_path + TAGS_PATH + tag_name + ".tres"
+
+
 func remove_tag(tag_name: String) -> void:
 	loaded_tags[tag_name.left(1)].erase(tag_name)
 	if loaded_tags[tag_name.left(1)].is_empty():

@@ -1,0 +1,339 @@
+[gd_scene load_steps=8 format=3 uid="uid://bw8mx12laf44e"]
+
+[ext_resource type="Script" path="res://scripts/tool_color_tag_generation.gd" id="1_drtv6"]
+[ext_resource type="PackedScene" uid="uid://b0pf1366qxb7y" path="res://scenes/category_option_button.tscn" id="2_2d87s"]
+[ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="2_b2nvx"]
+[ext_resource type="Script" path="res://scripts/tool_color_checkbox.gd" id="3_msb44"]
+
+[sub_resource type="GDScript" id="GDScript_xvd5j"]
+resource_name = "parents_connect"
+script/source = "extends VBoxContainer
+
+@onready var parents_tag_item_list: TagItemList = $ParentsTagItemList
+@onready var parent_line_edit: LineEdit = $ParentLineEdit
+
+
+func _ready():
+	parent_line_edit.text_submitted.connect(submit_tag)
+
+
+func submit_tag(tag_to_submit: String) -> void:
+	parent_line_edit.clear()
+	var clean_tag: String = tag_to_submit.strip_edges().to_lower()
+	if not parents_tag_item_list.has_item(clean_tag):
+		parents_tag_item_list.add_item(clean_tag)
+
+"
+
+[sub_resource type="GDScript" id="GDScript_geggh"]
+resource_name = "suggestion_connect"
+script/source = "extends VBoxContainer
+
+
+@onready var suggs_tag_item_list: TagItemList = $SuggestionsTagItemList
+@onready var suggs_line_edit: LineEdit = $SuggestionLineEdit
+
+
+func _ready():
+	suggs_line_edit.text_submitted.connect(submit_tag)
+
+
+func submit_tag(tag_to_submit: String) -> void:
+	suggs_line_edit.clear()
+	var clean_tag: String = tag_to_submit.strip_edges().to_lower()
+	if not suggs_tag_item_list.has_item(clean_tag):
+		suggs_tag_item_list.add_item(clean_tag)
+"
+
+[sub_resource type="GDScript" id="GDScript_njf5f"]
+resource_name = "custom_cols_connect"
+script/source = "extends VBoxContainer
+
+
+@onready var meta_item_list: TagItemList = $MetaItemList
+@onready var meta_line_edit: LineEdit = $CustomMetaLineEdit
+
+
+func _ready():
+	meta_line_edit.text_submitted.connect(submit_tag)
+
+
+func submit_tag(tag_to_submit: String) -> void:
+	meta_line_edit.clear()
+	var clean_tag: String = tag_to_submit.strip_edges().to_lower()
+	if not meta_item_list.has_item(clean_tag):
+		meta_item_list.add_item(clean_tag)
+"
+
+[node name="BatchTagTool" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_drtv6")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="MainContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="FieldsContainer" type="HBoxContainer" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="DataContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="BasicsContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LineContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/LineContainer"]
+layout_mode = 2
+text = "Tag:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/LineContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CatContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/CatContainer"]
+layout_mode = 2
+text = "Category:"
+
+[node name="CategoryOptionButton" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/CatContainer" instance=ExtResource("2_2d87s")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WikiInfo" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/WikiInfo"]
+layout_mode = 2
+text = "Wiki"
+horizontal_alignment = 1
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/WikiInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TooltipContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TooltipContainer"]
+layout_mode = 2
+text = "Tooltip: "
+
+[node name="TooltipLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TooltipContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TagsContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="ParentsContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = SubResource("GDScript_xvd5j")
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/ParentsContainer"]
+layout_mode = 2
+text = "Parents"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ParentsTagItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/ParentsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_b2nvx")
+
+[node name="ParentLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/ParentsContainer"]
+layout_mode = 2
+
+[node name="SuggestionContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = SubResource("GDScript_geggh")
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer"]
+layout_mode = 2
+text = "Suggestions"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SuggestionsTagItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_b2nvx")
+
+[node name="SuggestionLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer"]
+layout_mode = 2
+
+[node name="MetaContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ColorsContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/ColorsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/ColorsContainer"]
+layout_mode = 2
+text = "Colors"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/ColorsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StandardColContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer"]
+layout_mode = 2
+
+[node name="ColorContainer1" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer"]
+layout_mode = 2
+
+[node name="ColorCheckBox" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "black"
+
+[node name="ColorCheckBox2" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "blue"
+
+[node name="ColorCheckBox3" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "brown"
+
+[node name="ColorCheckBox4" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "green"
+
+[node name="ColorContainer2" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer"]
+layout_mode = 2
+
+[node name="ColorCheckBox" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "grey"
+
+[node name="ColorCheckBox2" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "orange"
+
+[node name="ColorCheckBox3" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "pink"
+
+[node name="ColorCheckBox4" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "purple"
+
+[node name="ColorContainer3" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer"]
+layout_mode = 2
+
+[node name="ColorCheckBox" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "red"
+
+[node name="ColorCheckBox2" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "tan"
+
+[node name="ColorCheckBox3" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "white"
+
+[node name="ColorCheckBox4" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "yellow"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer"]
+layout_mode = 2
+
+[node name="CustomMetaContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = SubResource("GDScript_njf5f")
+
+[node name="MetaItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_b2nvx")
+
+[node name="CustomMetaLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+
+[node name="GenerateButton" type="Button" parent="MarginContainer/MainContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Generate"

@@ -64,3 +64,13 @@ func save() -> void:
 			self, 
 			Tagger.get_tag_filepath(tag))
 
+
+func save_default() -> void:
+	if file_name.is_empty():
+		file_name = tag.validate_filename() + ".tres"
+	
+	ResourceSaver.save(
+			self,
+			Tagger.get_default_tag_filepath(tag))
+
+
