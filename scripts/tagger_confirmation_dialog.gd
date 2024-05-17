@@ -9,13 +9,10 @@ func _ready():
 	Tagger.shortcuts_disabled = true
 	get_label().horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	get_label().vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	#canceled.connect(on_canceled)
-	confirmed.connect(on_confirmed)
-	get_cancel_button().pressed.disconnect(
-		get_cancel_button().pressed.get_connections()[0]["callable"]
-	)
+	DumbUtils.signal_disconnect_all(get_cancel_button().pressed)
+	DumbUtils.signal_disconnect_all(get_ok_button().pressed)
+	get_ok_button().pressed.connect(on_confirmed)
 	get_cancel_button().pressed.connect(on_canceled)
-	
 
 
 ## Sets title, dialog AND buttons text in a single method call
@@ -33,5 +30,6 @@ func on_canceled() -> void:
 
 func on_confirmed() -> void:
 	dialog_confirmed.emit(true)
+	confirmed.emit()
 
 
