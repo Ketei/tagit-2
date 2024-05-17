@@ -129,6 +129,7 @@ text = "Category:"
 [node name="CategoryOptionButton" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/CatContainer" instance=ExtResource("2_2d87s")]
 layout_mode = 2
 size_flags_horizontal = 3
+max_heigth = 350
 
 [node name="WikiInfo" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer"]
 layout_mode = 2
