@@ -40,8 +40,25 @@ func on_generate_clicked() -> void:
 			continue
 		meta_array.append(custom_meta)
 	
+	var replace_confirmation: TaggerConfirmationDialog = Tagger.create_confirmation_dialog()
+	
 	for item in meta_array:
 		var tag_data: Dictionary = generate_tag_data(item)
+		if Tagger.has_tag(tag_data["tag"]):
+			replace_confirmation.set_data(
+					"Replace Existing Tag",
+					"The tag {0} already exists in your local database.\nReplace it with the generated one?".format([tag_data["tag"]]),
+					"Replace",
+					"Skip")
+			replace_confirmation.visible = true
+			await get_tree().process_frame
+			# Wait a frame to move to center
+			replace_confirmation.move_to_center()
+			var replace_tag: bool = await replace_confirmation.dialog_confirmed
+			if not replace_tag:
+				continue
+			replace_confirmation.visible = false
+
 		var new_tag := Tag.new()
 		new_tag.tag = tag_data["tag"]
 		new_tag.category = tag_data["category"]
@@ -53,6 +70,8 @@ func on_generate_clicked() -> void:
 				new_tag.tag,
 				Tagger.get_default_tag_filepath(new_tag.tag))
 		Tagger.tag_updated.emit(new_tag.tag)
+	
+	replace_confirmation.queue_free()
 
 
 func generate_tag_data(tag_meta: String) -> Dictionary:
