@@ -1,8 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://cl2hmfmfrdrmg"]
+[gd_scene load_steps=4 format=3 uid="uid://cl2hmfmfrdrmg"]
 
+[ext_resource type="Texture2D" uid="uid://chuuy1y2oete0" path="res://textures/others/empty_texture.tres" id="1_4ld7h"]
 [ext_resource type="Script" path="res://scripts/tagger_confirmation_dialog.gd" id="1_p78bo"]
+
+[sub_resource type="Theme" id="Theme_4uk85"]
+Window/icons/close = ExtResource("1_4ld7h")
+Window/icons/close_pressed = ExtResource("1_4ld7h")
 
 [node name="ConfirmationDialog" type="ConfirmationDialog"]
 initial_position = 1
+visible = true
+theme = SubResource("Theme_4uk85")
 ok_button_text = "Confirm"
+dialog_hide_on_ok = false
+dialog_close_on_escape = false
 script = ExtResource("1_p78bo")
