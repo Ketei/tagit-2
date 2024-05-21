@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cfyhxk122nic0"]
+[gd_scene load_steps=10 format=3 uid="uid://cfyhxk122nic0"]
 
 [ext_resource type="Script" path="res://scripts/genders_option_button.gd" id="1_h3cwt"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_mefd6"]
 [ext_resource type="Script" path="res://scripts/age_option_button.gd" id="2_6d0b0"]
 [ext_resource type="PackedScene" uid="uid://ukl5t5mc7rq2" path="res://scenes/bod_type_opt_btn.tscn" id="3_mau78"]
+[ext_resource type="PackedScene" uid="uid://bspxqadlbq7s5" path="res://scenes/named_separator.tscn" id="5_6vekm"]
+[ext_resource type="Script" path="res://scripts/tag_option_button.gd" id="6_8b3vy"]
+[ext_resource type="Script" path="res://scripts/char_tag_checkbox.gd" id="7_xjq8m"]
+[ext_resource type="Script" path="res://scripts/char_hflow.gd" id="8_yptlf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nyjbn"]
 
 [node name="CharacterCreator" type="Control"]
 layout_mode = 3
@@ -12,7 +19,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BaseData" type="VBoxContainer" parent="."]
+[node name="CharacterCreator" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,74 +27,1518 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NameContainer" type="HBoxContainer" parent="BaseData"]
+[node name="DataContainer" type="HBoxContainer" parent="CharacterCreator"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="CharacterCreator/DataContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InfoSide" type="MarginContainer" parent="CharacterCreator/DataContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="InfoSmoothScrollContainer" type="ScrollContainer" parent="CharacterCreator/DataContainer/PanelContainer/InfoSide"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+script = ExtResource("1_mefd6")
+drag_with_mouse = false
+drag_with_touch = false
+follow_focus_ = false
+allow_horizontal_scroll = false
+
+[node name="CategoryInfo" type="RichTextLabel" parent="CharacterCreator/DataContainer/PanelContainer/InfoSide/InfoSmoothScrollContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+bbcode_enabled = true
+text = "Info about the category options will appear here.
+
+Example:
+
+[b]Iris:[/b] It refers to the annular structure in the eye. It is what most people define eye color with.
+
+[b]Pupil:[/b] The pupil is a hole located in the center of the iris of the eye that allows light to come into the eye. "
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="InteractSide" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide"]
+layout_mode = 2
+script = ExtResource("1_mefd6")
+allow_overdragging = false
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+
+[node name="TabContainer" type="TabContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
+current_tab = 2
+
+[node name="BaseData" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BaseData/NameContainer"]
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Basic Info"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/NameContainer"]
+layout_mode = 2
+mouse_filter = 1
 text = "Name"
 
-[node name="NameLineEdit" type="LineEdit" parent="BaseData/NameContainer"]
+[node name="NameLineEdit" type="LineEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/NameContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="SpeciesContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
 
-[node name="SpeciesContainer" type="HBoxContainer" parent="BaseData"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/SpeciesContainer"]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="BaseData/SpeciesContainer"]
-layout_mode = 2
+mouse_filter = 1
 text = "Species"
 
-[node name="SpeciesLineEdit" type="LineEdit" parent="BaseData/SpeciesContainer"]
+[node name="SpeciesLineEdit" type="LineEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/SpeciesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="GenderContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
 
-[node name="GenderContainer" type="HBoxContainer" parent="BaseData"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/GenderContainer"]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="BaseData/GenderContainer"]
-layout_mode = 2
+mouse_filter = 1
 text = "Gender"
 
-[node name="GenderOptionButton" type="OptionButton" parent="BaseData/GenderContainer"]
+[node name="GenderOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/GenderContainer"]
 layout_mode = 2
+mouse_filter = 1
 script = ExtResource("1_h3cwt")
 
-[node name="AgeContainer" type="HBoxContainer" parent="BaseData"]
+[node name="AgeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BaseData/AgeContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/AgeContainer"]
 layout_mode = 2
+mouse_filter = 1
 text = "Age"
 
-[node name="AgeOptionButton" type="OptionButton" parent="BaseData/AgeContainer"]
+[node name="AgeOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/AgeContainer"]
 layout_mode = 2
+mouse_filter = 1
 script = ExtResource("2_6d0b0")
 
-[node name="BodyForm" type="HBoxContainer" parent="BaseData"]
+[node name="HeightContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BaseData/BodyForm"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/HeightContainer"]
 layout_mode = 2
+mouse_filter = 1
+text = "Height"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/HeightContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["micro"],
+"title": "Micro"
+}, {
+"include": ["short"],
+"title": "Short"
+}, {
+"include": ["tall"],
+"title": "Tall"
+}, {
+"include": ["macro"],
+"title": "Macro"
+}])
+
+[node name="BodyForm" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm"]
+layout_mode = 2
+mouse_filter = 1
 text = "Form"
 
-[node name="BodTypeOptBtn" parent="BaseData/BodyForm" instance=ExtResource("3_mau78")]
+[node name="BodTypeOptBtn" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm" instance=ExtResource("3_mau78")]
 layout_mode = 2
 
-[node name="WikiInfo" type="VBoxContainer" parent="BaseData"]
+[node name="BodyForm2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BaseData/WikiInfo"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm2"]
 layout_mode = 2
+mouse_filter = 1
+text = "Body Fat"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["skinny"],
+"title": "Skinny"
+}, {
+"include": ["slightly chubby"],
+"title": "Chubby"
+}, {
+"include": ["overweigth"],
+"title": "Overweigth"
+}, {
+"include": ["musclegut"],
+"title": "Muscle Gut"
+}])
+
+[node name="ExtrasContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Extra Features"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
+layout_mode = 2
+
+[node name="WikiInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/WikiInfo"]
+layout_mode = 2
+mouse_filter = 1
 text = "Wiki"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="WikiTextEdit" type="TextEdit" parent="BaseData/WikiInfo"]
+[node name="WikiTextEdit" type="TextEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/WikiInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="TooltipContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
 
-[node name="TooltipContainer" type="HBoxContainer" parent="BaseData"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/TooltipContainer"]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="BaseData/TooltipContainer"]
-layout_mode = 2
+mouse_filter = 1
 text = "Tooltip"
 
-[node name="TooltipLineEdit" type="LineEdit" parent="BaseData/TooltipContainer"]
+[node name="TooltipLineEdit" type="LineEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/TooltipContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="HeadInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Head"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HairSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Hair"
+
+[node name="HairData" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+
+[node name="HairStyleContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData/HairStyleContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hair Style:"
+
+[node name="HeadStyleFluff" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData/HairStyleContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HairTypesContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData/HairTypesContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hair Types"
+
+[node name="HeadStylesFluff" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData/HairTypesContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HairLengthContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData/HairLengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hair Length"
+
+[node name="HairLength" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/HairData/HairLengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EarsSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Ears"
+
+[node name="EarsData" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+
+[node name="EarCountContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/EarCountContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ear Count:"
+
+[node name="EarSpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/EarCountContainer"]
+layout_mode = 2
+mouse_filter = 1
+value = 2.0
+allow_greater = true
+
+[node name="EarLengthOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EarShapeOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EarSizeOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EarShadeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/EarShadeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ear Color Shades:"
+
+[node name="EarShadeOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/EarShadeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EarColorsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/EarColorsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ear Colors:"
+
+[node name="ColorsFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/EarColorsContainer"]
+layout_mode = 2
+
+[node name="EarSpeciesOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="OtherEarProps" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
+layout_mode = 2
+
+[node name="EarPiercingCheckBox" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/OtherEarProps"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ear piercings"
+
+[node name="TuftTipEar" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/OtherEarProps"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tuft on ear tip"
+
+[node name="TuftInEar" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData/OtherEarProps"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tuft inside ear"
+
+[node name="EyesSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Eyes"
+
+[node name="EyesContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+
+[node name="EyeColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyeColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Iris Color"
+
+[node name="ColorsFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyeColContainer"]
+layout_mode = 2
+
+[node name="ScleraContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/ScleraContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Sclera Color"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/ScleraContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PupilContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/PupilContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pupils Color"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/PupilContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PupilShapeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/PupilShapeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pupils Shape"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/PupilShapeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MouthSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Mouth"
+
+[node name="MouthContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+
+[node name="TongueColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer/TongueColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tongue Color"
+
+[node name="TongueColOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer/TongueColContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="TongueShapeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer/TongueShapeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tongue Shape:"
+
+[node name="TongueShapeOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer/TongueShapeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="OthersSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Others"
+
+[node name="OtherHeadContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+
+[node name="TuftsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/OtherHeadContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/OtherHeadContainer/TuftsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tufts"
+
+[node name="TuftsContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/OtherHeadContainer/TuftsContainer"]
+layout_mode = 2
+
+[node name="MarkingsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/OtherHeadContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/OtherHeadContainer/MarkingsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Markings"
+
+[node name="MarkingsContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/OtherHeadContainer/MarkingsContainer"]
+layout_mode = 2
+
+[node name="TorsoInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Torso"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BreastsSeparaotr" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Breasts"
+
+[node name="BreastContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Breast Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["flat chested"],
+"title": "Flat Chested"
+}, {
+"include": ["small breasts"],
+"title": "Small Breasts"
+}, {
+"include": ["medium breasts"],
+"title": "Medium Breasts"
+}, {
+"include": ["big breasts"],
+"title": "Big Breasts"
+}, {
+"include": ["huge breasts"],
+"title": "Huge Breasts"
+}, {
+"include": ["hyper breasts"],
+"title": "Hyper Breasts"
+}])
+
+[node name="BreastColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Breast Color"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="NipplesSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Nipples"
+
+[node name="NippleContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="CountContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/CountContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Nipple Count"
+
+[node name="SpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/CountContainer"]
+layout_mode = 2
+mouse_filter = 1
+value = 2.0
+allow_greater = true
+
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Nipple Color"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Nipple Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PropertiesContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/PropertiesContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Nipple Properties"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/PropertiesContainer"]
+layout_mode = 2
+
+[node name="AreolaSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Areola"
+
+[node name="AreolaContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Areola Color"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Areola Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BellySeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Belly"
+
+[node name="BellyContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Belly Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Belly Color"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MarkingsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/MarkingsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Belly Markings"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/MarkingsContainer"]
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["womb tattoo"])
+
+[node name="OthersSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Others"
+
+[node name="OtherContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="NavelContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer"]
+layout_mode = 2
+
+[node name="TypeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/NavelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/NavelContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Navel Type"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/NavelContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EtcContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/EtcContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Other Features"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/EtcContainer"]
+layout_mode = 2
+
+[node name="MarkingsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/MarkingsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Markings"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/MarkingsContainer"]
+layout_mode = 2
+
+[node name="LegsInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Legs"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShapeSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Shape"
+
+[node name="WalkingContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/WalkingContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Movement"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/WalkingContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["biped"],
+"title": "Biped"
+}, {
+"include": ["triped"],
+"title": "Triped"
+}, {
+"include": ["quadruped"],
+"title": "Quadruped"
+}])
+
+[node name="LegSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Legs"
+
+[node name="LegFormContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegFormContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Leg Form"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegFormContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["plantigrade"],
+"title": "Plantigrade"
+}, {
+"include": ["digitigrade"],
+"title": "Digitigrade"
+}, {
+"include": ["unguligrade"],
+"title": "Unguligrade"
+}, {
+"include": ["hooved plantigrade"],
+"title": "Hooved Plantigrade"
+}, {
+"include": ["hooved digitigrade"],
+"title": "Hooved Digitigrade"
+}])
+
+[node name="LegColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Leg Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "legs"
+
+[node name="HipsSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Hips"
+
+[node name="HipsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hip Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="WidthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hip Width"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HipsSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Thighs"
+
+[node name="ThighContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Thigh Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="WidthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Thigh Width"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HipsSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Others"
+
+[node name="OthersContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Markings"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HandFeetInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Hands / Feet"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Hands"
+
+[node name="HandTypeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HandTypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hand Shape"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HandTypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["handpaws"],
+"title": "Handpaw"
+}, {
+"include": [],
+"title": "Regular Hand"
+}, {
+"include": ["talon hands"],
+"title": "Talon Hand"
+}])
+
+[node name="HandExtras" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="WebbedFeetCheck" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HandExtras"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Webbed Hands"
+contains = Array[String](["webbed hands"])
+
+[node name="FingerContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FingerContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Finger Amount"
+
+[node name="FingerCountSpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FingerContainer"]
+layout_mode = 2
+mouse_filter = 1
+allow_greater = true
+
+[node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Feet"
+
+[node name="FeetTypeContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetTypeContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Feet Type"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetTypeContainer2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["avian feet"],
+"title": "Avian"
+}, {
+"include": ["hooves"],
+"title": "Hooves"
+}, {
+"include": ["humanoid feet"],
+"title": "Humanoid Feet"
+}, {
+"include": ["paws"],
+"title": "Paws"
+}, {
+"include": ["featureless feet"],
+"title": "Featureless"
+}])
+
+[node name="FeetExtras" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="WebbedFeetCheck" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetExtras"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Webbed Feet"
+contains = Array[String](["webbed feet"])
+
+[node name="HTitleSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Other Features"
+
+[node name="FeetSpecifics" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="PadsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics"]
+layout_mode = 2
+
+[node name="PadsCheckBox" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/PadsContainer" node_paths=PackedStringArray("conditional_nodes")]
+layout_mode = 2
+mouse_filter = 1
+text = "Pawpads"
+script = ExtResource("7_xjq8m")
+title = "Pawpads"
+contains = Array[String](["pawpads"])
+conditional_nodes = [NodePath("../../../PPColorContainer")]
+
+[node name="ClawsCheckBox" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/PadsContainer" node_paths=PackedStringArray("conditional_nodes")]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Claws"
+contains = Array[String](["claws"])
+conditional_nodes = [NodePath("../../../ClawColorContainer")]
+
+[node name="AvianSpecsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics"]
+layout_mode = 2
+
+[node name="ScutesCheckbox" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/AvianSpecsContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Scutes"
+contains = Array[String](["scutes"])
+
+[node name="TalonsCheckbox" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/AvianSpecsContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Talons"
+contains = Array[String](["talons"])
+
+[node name="UnguContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics"]
+layout_mode = 2
+
+[node name="TagCheckBoxCharacter" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/UnguContainer" node_paths=PackedStringArray("conditional_nodes")]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Hooves"
+contains = Array[String](["hooves"])
+conditional_nodes = [NodePath("../../../HoovesType")]
+
+[node name="ToeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ToeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Toe Amount"
+
+[node name="ToeCountSpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ToeContainer"]
+layout_mode = 2
+mouse_filter = 1
+allow_greater = true
+
+[node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ClawColorContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Claw Types"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Claw Types"
+
+[node name="FingerClawsCheck" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Finger Claws"
+contains = Array[String](["finger claws"])
+
+[node name="ToeClawsCheck" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Toe Claws"
+contains = Array[String](["toe claws"])
+
+[node name="HeelCheckbox" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Heel Claws"
+contains = Array[String](["heel claw"])
+
+[node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Claw Colors"
+
+[node name="ColorsContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer/ColorsContainer2"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Claws Color"
+
+[node name="ColorHFlow" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawColorContainer/ColorsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "claws"
+
+[node name="PPColorContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/PPColorContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Pawpad Colors"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/PPColorContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/PPColorContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pawpad Color"
+
+[node name="ColorHFlow" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/PPColorContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "pawpads"
+
+[node name="HoovesType" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Hoove Types"
+
+[node name="HoovesSpecsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType/HoovesSpecsContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Hooves Traits"
+
+[node name="HoovedToesCheck" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType/HoovesSpecsContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Hooved Toes"
+contains = Array[String](["hooved toes"])
+
+[node name="HoovedToesCheck2" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType/HoovesSpecsContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Hooved Fingers"
+contains = Array[String](["hooved fingers"])
+
+[node name="ClovenHoovesCheck" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType/HoovesSpecsContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Cloven Hooves"
+contains = Array[String](["cloven hooves"])
+
+[node name="HTitleSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Hoove Colors"
+
+[node name="HooveColorContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType/HooveColorContainer2"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+text = "Hooves Color"
+
+[node name="ColorHFlow" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/HoovesType/HooveColorContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "hooves"
+
+[node name="TailInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Tail"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TypeContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/TypeContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tail Type"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/TypeContainer2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["furry tail"],
+"title": "Furry Tail"
+}, {
+"include": ["fluffy tail"],
+"title": "Furry Fluffy Tail"
+}, {
+"include": ["scaly tail"],
+"title": "Scaled Tail"
+}, {
+"include": ["feathered tail"],
+"title": "Tail WITH Feathers"
+}, {
+"include": ["tail feathers"],
+"title": "Feathers tail"
+}, {
+"include": ["fish tail"],
+"title": "Fish Tail"
+}, {
+"include": ["snake tail"],
+"title": "Snake Tail"
+}])
+
+[node name="TailSpecColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/TailSpecColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tail Markings"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/TailSpecColContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dipstick tail"],
+"title": "Dipstick Tail"
+}, {
+"include": ["ringtail"],
+"title": "Tail with Rings"
+}, {
+"include": ["spotted tail"],
+"title": "Tail with Spots"
+}, {
+"include": ["stripped tail"],
+"title": "Tail with Stripes"
+}])
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tail General Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small tail"],
+"title": "Small Tail"
+}, {
+"include": ["big tail"],
+"title": "Big Tail"
+}, {
+"include": ["huge tail"],
+"title": "Huge Tail"
+}, {
+"include": ["hyper tail"],
+"title": "Hyper Tail"
+}])
+
+[node name="LengthContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/LengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tail Length"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/LengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["short tail"],
+"title": "Short Tail"
+}, {
+"include": ["long tail"],
+"title": "Long Tail"
+}])
+
+[node name="GirthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/GirthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tail Girth"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/GirthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["line tail"],
+"title": "Line Tail"
+}, {
+"include": ["thin tail"],
+"title": "Thin Tail"
+}, {
+"include": ["thick tail"],
+"title": "Thick Tail"
+}])
+
+[node name="ShapeContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/ShapeContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tail Shape"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/ShapeContainer2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["crooked tail"],
+"title": "Crooked Tail"
+}, {
+"include": ["curled tail"],
+"title": "Curled Tail"
+}, {
+"include": ["curved tail"],
+"title": "Curved Tail"
+}, {
+"include": ["wavy tail"],
+"title": "Wavy Tail"
+}, {
+"include": ["erect tail"],
+"title": "Erect Tail"
+}, {
+"include": ["forked tail"],
+"title": "Forked Tail"
+}, {
+"include": ["scut tail"],
+"title": "Scut Tail"
+}])
+
+[node name="HTitleSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Tail Color"
+
+[node name="TailColorContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/TailColorContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "tail"
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "End of Tail"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="TagCheckBoxCharacter" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "A tuft of fur or feathers at the tip of a tail."
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Tuft at Tip"
+contains = Array[String](["tail tuft"])
+
+[node name="TagCheckBoxCharacter2" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "A tail ending with a mace."
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Mace Tail Tip"
+contains = Array[String](["mace tail"])
+
+[node name="TagCheckBoxCharacter3" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "A tail ending like a ♠."
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Spade Tail Tip"
+contains = Array[String](["spade tail"])
+
+[node name="TagCheckBoxCharacter4" type="CheckBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "A tail with or made of blade, usually ending with a blade."
+mouse_filter = 1
+script = ExtResource("7_xjq8m")
+title = "Blade Tail Tip"
+contains = Array[String](["tail blade"])
+
+[node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Other Properties"
+
+[node name="OthersContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo/OthersContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["barbed tail", "tail claws", "tail ridge", "tail frill", "prehensile tail"])
+
+[node name="GenitalsInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Genitals"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="CharacterCreator/DataContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Reset"
+
+[node name="PrevButton" type="Button" parent="CharacterCreator/DataContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+text = "Previous"
+
+[node name="NextButton" type="Button" parent="CharacterCreator/DataContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
