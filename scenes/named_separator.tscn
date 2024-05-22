@@ -8,7 +8,12 @@ offset_bottom = 23.0
 size_flags_horizontal = 3
 script = ExtResource("1_h57fu")
 
-[node name="LHSeparator" type="HSeparator" parent="."]
+[node name="LeftContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="LHSeparator" type="HSeparator" parent="LeftContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -24,7 +29,12 @@ text = "Separator Title"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RHSeparator" type="HSeparator" parent="."]
+[node name="RightContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="RHSeparator" type="HSeparator" parent="RightContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1

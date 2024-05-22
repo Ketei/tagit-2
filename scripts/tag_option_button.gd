@@ -1,7 +1,7 @@
 class_name TagsOptionButton
 extends OptionButton
 
-
+@export var max_height: int = 250
 @export var elements: Array[Dictionary] = [
 	{
 		"title": "Tag Title",
@@ -9,17 +9,14 @@ extends OptionButton
 	}
 ]
 @export var add_none_option: bool = true
-@export var none_text: String = "- Unknown -"
+@export var none_text: String = "- Unknown | N/A -"
 ## Bind controls to indextes. int: node
 @export var bind_indexes: Dictionary = {}
 
 
 func _ready():
 	var _index: int = 0
-	
-	if not bind_indexes.is_empty():
-		item_selected.connect(on_selected)
-	
+	get_popup().max_size.y = max_height
 	if add_none_option:
 		add_item(none_text)
 		set_item_metadata(
@@ -35,6 +32,14 @@ func _ready():
 		_index += 1
 	if 0 < item_count:
 		select(0)
+	if not bind_indexes.is_empty():
+		item_selected.connect(on_selected)
+		for keys in bind_indexes:
+			if add_none_option:
+				get_node(bind_indexes[keys]).visible = keys + 1 == selected
+			else:
+				get_node(bind_indexes[keys]).visible = keys == selected
+
 	elements.clear()
 
 
@@ -50,6 +55,9 @@ func on_selected(selected_index: int) -> void:
 
 
 func get_tags() -> Array[String]:
+	if not visible:
+		return []
+	
 	var return_array: Array[String] = []
 	return_array.assign(get_item_metadata(selected))
 	return return_array

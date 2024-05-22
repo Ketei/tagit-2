@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cfyhxk122nic0"]
+[gd_scene load_steps=12 format=3 uid="uid://cfyhxk122nic0"]
 
 [ext_resource type="Script" path="res://scripts/genders_option_button.gd" id="1_h3cwt"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_mefd6"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://scripts/tag_option_button.gd" id="6_8b3vy"]
 [ext_resource type="Script" path="res://scripts/char_tag_checkbox.gd" id="7_xjq8m"]
 [ext_resource type="Script" path="res://scripts/char_hflow.gd" id="8_yptlf"]
+[ext_resource type="Script" path="res://scripts/char_tag_spinbox.gd" id="9_ser5u"]
+[ext_resource type="Script" path="res://scripts/toggle_visibility_check_button.gd" id="9_uy244"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nyjbn"]
 
@@ -97,11 +99,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
-current_tab = 2
 
 [node name="BaseData" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
@@ -131,6 +132,7 @@ mouse_filter = 1
 
 [node name="SpeciesContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/SpeciesContainer"]
 layout_mode = 2
@@ -141,43 +143,71 @@ text = "Species"
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
+placeholder_text = "Separate species with \",\""
 
-[node name="GenderContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="BasicsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/GenderContainer"]
+[node name="GenderContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/GenderContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Gender"
 
-[node name="GenderOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/GenderContainer"]
+[node name="GenderOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/GenderContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
 script = ExtResource("1_h3cwt")
 
-[node name="AgeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="AgeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/AgeContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/AgeContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Age"
 
-[node name="AgeOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/AgeContainer"]
+[node name="AgeOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/AgeContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
 script = ExtResource("2_6d0b0")
 
-[node name="HeightContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="BodyForm" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/HeightContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/BodyForm"]
+layout_mode = 2
+mouse_filter = 1
+text = "Form"
+
+[node name="BodTypeOptBtn" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/BodyForm" instance=ExtResource("3_mau78")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShapeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HeightContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/HeightContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Height"
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/HeightContainer"]
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/HeightContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
 elements = Array[Dictionary]([{
@@ -194,27 +224,58 @@ elements = Array[Dictionary]([{
 "title": "Macro"
 }])
 
-[node name="BodyForm" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="FigureContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/FigureContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Form"
+text = "Figure
+"
 
-[node name="BodTypeOptBtn" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm" instance=ExtResource("3_mau78")]
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/FigureContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Hourglass:  Wide hips, small waist, and sizeable bust that is comparable to the hips. (any gender)
+Pear:  Wide hips paired with a narrower upper body and shoulders. (any gender)
+Venus: Wide hips, big thighs/buttocks, small waist, big bust, usually tall with small heads. (f/g/h)
+Voluptuous: Wide hips, thick thighs, big rbeasts and big butt. (f/g/h)"
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["hourglass figure"],
+"title": "Hourglass Figure"
+}, {
+"include": ["pear-shaped figure"],
+"title": "Pear Figure"
+}, {
+"include": ["venus figure"],
+"title": "Venus Figure"
+}, {
+"include": ["voluptuous figure"],
+"title": "Voluptuous"
+}, {
+"include": [],
+"title": "Shortstack/Teapot"
+}])
 
-[node name="BodyForm2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="FatMuscleContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm2"]
+[node name="BodyFat" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/BodyFat"]
 layout_mode = 2
 mouse_filter = 1
 text = "Body Fat"
 
-[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BodyForm2"]
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/BodyFat"]
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
 elements = Array[Dictionary]([{
@@ -227,11 +288,38 @@ elements = Array[Dictionary]([{
 "include": ["overweigth"],
 "title": "Overweigth"
 }, {
-"include": ["musclegut"],
-"title": "Muscle Gut"
+"include": ["obese"],
+"title": "Obese"
+}, {
+"include": ["morbidly obese"],
+"title": "Morbidly Obese"
+}])
+
+[node name="MuscularContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/MuscularContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Muscular Definition
+"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/MuscularContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["athletic"],
+"title": "Athletic"
+}, {
+"include": ["muscular"],
+"title": "Muscular"
 }])
 
 [node name="ExtrasContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
@@ -239,37 +327,11 @@ layout_mode = 2
 mouse_filter = 1
 text = "Extra Features"
 
-[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
-layout_mode = 2
-
-[node name="WikiInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/WikiInfo"]
-layout_mode = 2
-mouse_filter = 1
-text = "Wiki"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="WikiTextEdit" type="TextEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/WikiInfo"]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 1
-
-[node name="TooltipContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/TooltipContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Tooltip"
-
-[node name="TooltipLineEdit" type="LineEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/TooltipContainer"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 1
+script = ExtResource("8_yptlf")
+mode = 1
 
 [node name="HeadInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -291,6 +353,7 @@ vertical_alignment = 1
 [node name="HairSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Hair"
+is_title = true
 
 [node name="HairData" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
 layout_mode = 2
@@ -334,6 +397,7 @@ mouse_filter = 1
 [node name="EarsSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Ears"
+is_title = true
 
 [node name="EarsData" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
 layout_mode = 2
@@ -351,6 +415,12 @@ layout_mode = 2
 mouse_filter = 1
 value = 2.0
 allow_greater = true
+script = ExtResource("9_ser5u")
+element = "ear"
+exclude = Array[int]([2])
+overwrite = {
+0: "earless"
+}
 
 [node name="EarLengthOptBtn" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EarsData"]
 layout_mode = 2
@@ -412,6 +482,7 @@ text = "Tuft inside ear"
 [node name="EyesSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Eyes"
+is_title = true
 
 [node name="EyesContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
 layout_mode = 2
@@ -466,6 +537,7 @@ mouse_filter = 1
 [node name="MouthSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Mouth"
+is_title = true
 
 [node name="MouthContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
 layout_mode = 2
@@ -497,6 +569,7 @@ mouse_filter = 1
 [node name="OthersSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Others"
+is_title = true
 
 [node name="OtherHeadContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
 layout_mode = 2
@@ -524,6 +597,7 @@ text = "Markings"
 layout_mode = 2
 
 [node name="TorsoInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
@@ -539,19 +613,313 @@ text = "Torso"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BreastsSeparaotr" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+[node name="TogglesContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/TogglesContainer2" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Breasts"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["breasts"])
+visibility_controlled = [NodePath("../../BreastsContainer")]
+
+[node name="CheckButton2" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/TogglesContainer2" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Nipples
+"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["nipples", "areola"])
+visibility_controlled = [NodePath("../../NippleContainer")]
+
+[node name="CheckButton3" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/TogglesContainer2" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Navel"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["navel"])
+visibility_controlled = [NodePath("../../NavelContainer")]
+
+[node name="BellyContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="BellySeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Belly"
+is_title = true
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Belly Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["big belly"],
+"title": "Big Belly"
+}, {
+"include": ["huge belly"],
+"title": "Huge Belly"
+}, {
+"include": ["hyper belly"],
+"title": "Hyper Belly"
+}])
+
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Belly Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/ColorContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "belly"
+count_select = {
+"1": ["monotone belly"],
+"2": ["two tone belly"],
+"3+": ["multicolored belly"]
+}
+
+[node name="FeaturesContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/FeaturesContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Belly Features"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/FeaturesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Womb Tattoo,womb tattoo", "!Stretch Marks,stretch marks", "!Muscle Gut,musclegut"])
+
+[node name="ArmsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Arms"
+is_title = true
+
+[node name="CountContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/CountContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Arms Count"
+
+[node name="SpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/CountContainer"]
+layout_mode = 2
+mouse_filter = 1
+value = 2.0
+script = ExtResource("9_ser5u")
+element = "arm"
+exclude = Array[int]([2])
+overwrite = {
+0: "armless"
+}
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Arm Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small arms"],
+"title": "Small Arms"
+}, {
+"include": ["big arms"],
+"title": "Big Arms"
+}, {
+"include": ["huge arms"],
+"title": "Huge Arms"
+}, {
+"include": ["hyper arms"],
+"title": "Hyper Arms"
+}])
+
+[node name="LengthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/LengthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Arm Length"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/LengthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["short arms"],
+"title": "Short Arms"
+}, {
+"include": ["long arms"],
+"title": "Long Arms"
+}])
+
+[node name="GirthContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/GirthContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Arm Girth"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/GirthContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["thin arms"],
+"title": "Thin Arms"
+}, {
+"include": ["thick arms"],
+"title": "Thick Arms"
+}])
+
+[node name="HSeparator3" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Arms Color"
+
+[node name="VSeparator" type="VSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "arms"
+count_select = {
+"1": ["monotone arms"],
+"2": ["two tone arms"],
+"3+": ["multicolored arms"]
+}
+
+[node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="TraitsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/TraitsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Arm Traits"
+
+[node name="VSeparator" type="VSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/TraitsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/TraitsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Winged,winged arms", "!Scuted,scuted arms", "!Muscular,muscular arms", "!Veiny,veiny arms", "!Fat,fat arms"])
+
+[node name="HSeparator2" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Markings"
+
+[node name="VSeparator" type="VSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/HBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+script = ExtResource("8_yptlf")
+
+[node name="HSeparator4" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BreastsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+
+[node name="BreastsSeparaotr" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Breasts"
+is_title = true
 
-[node name="BreastContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Breast Count"
+
+[node name="SpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+min_value = 2.0
+value = 2.0
+allow_greater = true
+script = ExtResource("9_ser5u")
+element = "breast"
+exclude = Array[int]([2])
+
+[node name="BreastSizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer/BreastSizeContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Breast Size"
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastContainer"]
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer/BreastSizeContainer"]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
@@ -575,24 +943,33 @@ elements = Array[Dictionary]([{
 "title": "Hyper Breasts"
 }])
 
-[node name="BreastColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+[node name="BreastColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastColorContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer/BreastColorContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Breast Color"
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastColorContainer"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BreastsContainer/BreastColorContainer"]
 layout_mode = 2
-mouse_filter = 1
-
-[node name="NipplesSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Nipples"
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "breasts"
+count_select = {
+"1": ["monotone breasts"],
+"2": ["two tone breasts"],
+"3+": ["multicolored breasts"]
+}
 
 [node name="NippleContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
 layout_mode = 2
+
+[node name="NipplesSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Nipples"
+is_title = true
 
 [node name="CountContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
 layout_mode = 2
@@ -605,8 +982,12 @@ text = "Nipple Count"
 [node name="SpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/CountContainer"]
 layout_mode = 2
 mouse_filter = 1
+min_value = 1.0
 value = 2.0
 allow_greater = true
+script = ExtResource("9_ser5u")
+element = "nipple"
+exclude = Array[int]([2])
 
 [node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
 layout_mode = 2
@@ -616,9 +997,16 @@ layout_mode = 2
 mouse_filter = 1
 text = "Nipple Color"
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/ColorContainer"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/ColorContainer"]
 layout_mode = 2
-mouse_filter = 1
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "nipples"
+count_select = {
+"2": ["two tone nipples"],
+"3+": ["multicolored nipples"]
+}
 
 [node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
 layout_mode = 2
@@ -631,6 +1019,20 @@ text = "Nipple Size"
 [node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/SizeContainer"]
 layout_mode = 2
 mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small nipples"],
+"title": "Small Nipples"
+}, {
+"include": ["big nipples"],
+"title": "Big Nipples"
+}, {
+"include": ["huge nipples"],
+"title": "Huge Nipples"
+}, {
+"include": ["hyper nipples"],
+"title": "Hyper Nipples"
+}])
 
 [node name="PropertiesContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
 layout_mode = 2
@@ -640,301 +1042,105 @@ layout_mode = 2
 mouse_filter = 1
 text = "Nipple Properties"
 
-[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/PropertiesContainer"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/PropertiesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Erect,erect nipples", "!Inverted,inverted nipples", "!Puffy,puffy nipples", "!Glistening,glistening nipples", "!Glowing,glowing nipples", "!Pierced,nipple piercing"])
+
+[node name="AreolaContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer"]
 layout_mode = 2
 
-[node name="AreolaSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+[node name="AreolaSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Areola"
 
-[node name="AreolaContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer"]
 layout_mode = 2
 
-[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/ColorContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer/ColorContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Areola Color"
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/ColorContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Areola Size"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/AreolaContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="BellySeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Belly"
-
-[node name="BellyContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
-layout_mode = 2
-
-[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Belly Size"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/ColorContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Belly Color"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/BellyContainer/ColorContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="MarkingsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/MarkingsContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Belly Markings"
-
-[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/MarkingsContainer"]
-layout_mode = 2
-script = ExtResource("8_yptlf")
-mode = 1
-other_items = Array[String](["womb tattoo"])
-
-[node name="OthersSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Others"
-
-[node name="OtherContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
-layout_mode = 2
-
-[node name="NavelContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer"]
-layout_mode = 2
-
-[node name="TypeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/NavelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/NavelContainer/TypeContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Navel Type"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/NavelContainer/TypeContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="EtcContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer"]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/EtcContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Other Features"
-
-[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/EtcContainer"]
-layout_mode = 2
-
-[node name="MarkingsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/MarkingsContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Markings"
-
-[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/OtherContainer/MarkingsContainer"]
-layout_mode = 2
-
-[node name="LegsInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
-layout_mode = 2
-
-[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/TitleMarginContainer"]
-layout_mode = 2
-mouse_filter = 1
-theme_override_font_sizes/font_size = 28
-text = "Legs"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ShapeSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Shape"
-
-[node name="WalkingContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/WalkingContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Movement"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/WalkingContainer"]
-layout_mode = 2
-mouse_filter = 1
-script = ExtResource("6_8b3vy")
-elements = Array[Dictionary]([{
-"include": ["biped"],
-"title": "Biped"
-}, {
-"include": ["triped"],
-"title": "Triped"
-}, {
-"include": ["quadruped"],
-"title": "Quadruped"
-}])
-
-[node name="LegSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Legs"
-
-[node name="LegFormContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegFormContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Leg Form"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegFormContainer"]
-layout_mode = 2
-mouse_filter = 1
-script = ExtResource("6_8b3vy")
-elements = Array[Dictionary]([{
-"include": ["plantigrade"],
-"title": "Plantigrade"
-}, {
-"include": ["digitigrade"],
-"title": "Digitigrade"
-}, {
-"include": ["unguligrade"],
-"title": "Unguligrade"
-}, {
-"include": ["hooved plantigrade"],
-"title": "Hooved Plantigrade"
-}, {
-"include": ["hooved digitigrade"],
-"title": "Hooved Digitigrade"
-}])
-
-[node name="LegColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Leg Color"
-
-[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer/ColorContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
-element = "legs"
+element = "areola"
+count_select = {
+"1": ["monotone areola"],
+"2": ["two tone areola"],
+"3+": ["multicolored areola"]
+}
 
-[node name="HipsSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Hips"
-
-[node name="HipsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
-layout_mode = 2
-
-[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer"]
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/SizeContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer/SizeContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Hip Size"
+text = "Areola Size"
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/SizeContainer"]
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer/SizeContainer"]
 layout_mode = 2
 mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small areola"],
+"title": "Small Areola"
+}, {
+"include": ["big areola"],
+"title": "Big Areola"
+}, {
+"include": ["huge areola"],
+"title": "Huge Areola"
+}, {
+"include": ["hyper areola"],
+"title": "Hyper Areola"
+}])
 
-[node name="WidthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer"]
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Areola Traits"
+
+[node name="ExtraContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/WidthContainer2"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer/ExtraContainer"]
 layout_mode = 2
-mouse_filter = 1
-text = "Hip Width"
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Puffy,puffy areola", "!Glowing,glowing areola", "!Glistening,glistening areola", "!Heart Shaped,heart areola", "!Star Shaped,star areola", "!Pierced,pierced areola"])
 
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/WidthContainer2"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="HipsSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Thighs"
-
-[node name="ThighContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+[node name="NavelContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
 layout_mode = 2
 
-[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer"]
+[node name="OthersSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NavelContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Navel"
+is_title = true
+
+[node name="OtherContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NavelContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Thigh Size"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="WidthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer"]
+[node name="EtcContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NavelContainer/OtherContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/WidthContainer2"]
-layout_mode = 2
-mouse_filter = 1
-text = "Thigh Width"
-
-[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/WidthContainer2"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="HipsSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
-layout_mode = 2
-separator_text = "Others"
-
-[node name="OthersContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NavelContainer/OtherContainer/EtcContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Markings"
+text = "Navel Features"
 
-[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer/HBoxContainer"]
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NavelContainer/OtherContainer/EtcContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Outie,outie navel", "!Deep Looking,deep navel", "!Pierced,navel piercing"])
 
 [node name="HandFeetInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -956,6 +1162,7 @@ vertical_alignment = 1
 [node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Hands"
+is_title = true
 
 [node name="HandTypeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
@@ -1001,11 +1208,18 @@ text = "Finger Amount"
 [node name="FingerCountSpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FingerContainer"]
 layout_mode = 2
 mouse_filter = 1
+value = 5.0
 allow_greater = true
+script = ExtResource("9_ser5u")
+element = "finger"
+overwrite = {
+0: "fingerless"
+}
 
 [node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Feet"
+is_title = true
 
 [node name="FeetTypeContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
@@ -1049,6 +1263,7 @@ contains = Array[String](["webbed feet"])
 [node name="HTitleSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Other Features"
+is_title = true
 
 [node name="FeetSpecifics" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
@@ -1112,7 +1327,13 @@ text = "Toe Amount"
 [node name="ToeCountSpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ToeContainer"]
 layout_mode = 2
 mouse_filter = 1
+value = 5.0
 allow_greater = true
+script = ExtResource("9_ser5u")
+element = "toe"
+overwrite = {
+0: "toeless"
+}
 
 [node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
@@ -1253,6 +1474,184 @@ size_flags_horizontal = 3
 script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "hooves"
+
+[node name="LegsInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Legs"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShapeSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "General"
+is_title = true
+
+[node name="WalkingContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/WalkingContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Movement"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/WalkingContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["biped"],
+"title": "Biped"
+}, {
+"include": ["triped"],
+"title": "Triped"
+}, {
+"include": ["quadruped"],
+"title": "Quadruped"
+}])
+
+[node name="LegFormContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegFormContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Leg Form"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegFormContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["plantigrade"],
+"title": "Plantigrade"
+}, {
+"include": ["digitigrade"],
+"title": "Digitigrade"
+}, {
+"include": ["unguligrade"],
+"title": "Unguligrade"
+}, {
+"include": ["hooved plantigrade"],
+"title": "Hooved Plantigrade"
+}, {
+"include": ["hooved digitigrade"],
+"title": "Hooved Digitigrade"
+}])
+
+[node name="LegColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Leg Color"
+
+[node name="VSeparator" type="VSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/LegColContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "legs"
+
+[node name="HipsSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Hips"
+is_title = true
+
+[node name="HipsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hip Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="WidthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hip Width"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/HipsContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HipsSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Thighs"
+is_title = true
+
+[node name="ThighContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Thigh Size"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="WidthContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Thigh Width"
+
+[node name="OptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/ThighContainer/WidthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HipsSeparator3" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Others"
+is_title = true
+
+[node name="OthersContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Markings"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo/OthersContainer/HBoxContainer"]
+layout_mode = 2
 
 [node name="TailInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -1523,6 +1922,769 @@ theme_override_font_sizes/font_size = 28
 text = "Genitals"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Toggles" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+
+[node name="AnusCheckButton2" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/Toggles" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Anus"
+script = ExtResource("9_uy244")
+visibility_controlled = [NodePath("../../AnusContainer")]
+
+[node name="BallsCheckButton" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/Toggles" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Balls"
+script = ExtResource("9_uy244")
+visibility_controlled = [NodePath("../../BallsContainer")]
+
+[node name="PenisCheckButton" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/Toggles" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Penis"
+script = ExtResource("9_uy244")
+visibility_controlled = [NodePath("../../PenisContainer")]
+
+[node name="VaginaCheckButton" type="CheckButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/Toggles" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Vagina"
+script = ExtResource("9_uy244")
+visibility_controlled = [NodePath("../../PussyContainer")]
+
+[node name="BallsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Balls"
+is_title = true
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ball Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small balls"],
+"title": "Small Balls"
+}, {
+"include": ["big balls"],
+"title": "Big Balls"
+}, {
+"include": [],
+"title": "Average Balls"
+}, {
+"include": ["huge balls"],
+"title": "Huge Balls"
+}, {
+"include": ["hyper balls"],
+"title": "Hyper Balls"
+}])
+
+[node name="HSeparator2" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="TraitsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/TraitsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ball Traits"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/TraitsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Fur Tuft,ball tuft", "!Hairy,hairy balls", "!Fluffy,fluffy balls", "!Saggy,saggy balls", "!Tight,tigth balls", "!Veiny,veiny balls"])
+
+[node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Ball Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/ColorContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "balls"
+count_select = {
+"1": ["monotone balls"],
+"2": ["two tone balls"],
+"3+": ["multicolored balls"]
+}
+
+[node name="PenisContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Penis"
+is_title = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/HBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Count"
+
+[node name="SpinBox" type="SpinBox" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/HBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+min_value = 1.0
+value = 1.0
+allow_greater = true
+script = ExtResource("9_ser5u")
+element = "penis"
+exclude = Array[int]([0])
+
+[node name="TypeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Type"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["animal penis"],
+"title": "Animal Penis"
+}, {
+"include": ["humanoid penis"],
+"title": "Humanoid Penis"
+}, {
+"include": ["mechanical penis"],
+"title": "Mechanical Penis"
+}, {
+"include": ["hybrid penis"],
+"title": "Hybrid Penis"
+}])
+bind_indexes = {
+0: NodePath("../AnimalTagsOptionButton"),
+1: NodePath("../HumanoidOptionButton2")
+}
+
+[node name="AnimalTagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["avian penis"],
+"title": "Avian Penis"
+}, {
+"include": ["bovine penis"],
+"title": "Bovine Penis"
+}, {
+"include": ["canine penis"],
+"title": "Canine Penis"
+}, {
+"include": ["caprine penis"],
+"title": "Caprine Penis"
+}, {
+"include": ["cervine penis"],
+"title": "Cervine Penis"
+}, {
+"include": ["cetacean penis"],
+"title": "Cetacean Penis"
+}, {
+"include": ["crocodilian penis"],
+"title": "Crocodilian Penis"
+}, {
+"include": ["echidna penis"],
+"title": "Echidna Penis"
+}, {
+"include": ["equine penis"],
+"title": "Equine Penis"
+}, {
+"include": ["knotted equine penis"],
+"title": "Knotted Equine Penis"
+}, {
+"include": ["feline penis"],
+"title": "Feline Penis"
+}, {
+"include": ["fossa penis"],
+"title": "Fossa Penis"
+}, {
+"include": ["lagomorph penis"],
+"title": "Lagomorph Penis"
+}, {
+"include": ["marsupial penis"],
+"title": "Marsupial Penis"
+}, {
+"include": ["mustelid penis"],
+"title": "Mustelid Penis"
+}, {
+"include": ["porcine penis"],
+"title": "Porcine Penis"
+}, {
+"include": ["raccoon penis"],
+"title": "Raccoon Penis"
+}, {
+"include": ["turtle penis"],
+"title": "Turtle Penis"
+}, {
+"include": ["ursine penis"],
+"title": "Ursine Penis"
+}])
+
+[node name="HumanoidOptionButton2" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["foreskin"],
+"title": "Uncut"
+}, {
+"include": ["circumcised"],
+"title": "Circumcised"
+}])
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["micropenis"],
+"title": "Micro Penis"
+}, {
+"include": ["small penis"],
+"title": "Small Penis"
+}, {
+"include": ["average penis"],
+"title": "Average Penis"
+}, {
+"include": ["big penis"],
+"title": "Big Penis"
+}, {
+"include": ["huge penis"],
+"title": "Huge Penis"
+}, {
+"include": ["hyper penis"],
+"title": "Hyper Penis"
+}])
+
+[node name="LengthContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/LengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Length"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/LengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["short penis"],
+"title": "Short Penis"
+}, {
+"include": ["long penis"],
+"title": "Long Penis"
+}])
+
+[node name="GirthContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/GirthContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Girth"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/GirthContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["thin penis"],
+"title": "Thin Penis"
+}, {
+"include": ["thick penis"],
+"title": "Thick Penis"
+}])
+
+[node name="ShadeContainer3" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/ShadeContainer3"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Shade"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/ShadeContainer3"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark Penis"],
+"title": "Dark Colored Penis"
+}, {
+"include": ["light Penis"],
+"title": "Light Colored Penis"
+}])
+
+[node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Colors"
+
+[node name="PenisContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PenisContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PenisContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "penis"
+count_select = {
+"1": ["monotone penis"],
+"2": ["two tone penis"],
+"3+": ["multicolored penis"]
+}
+
+[node name="HSeparator2" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="GlansContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/GlansContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Glans Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/GlansContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "glans"
+count_select = {
+"1": ["monotone glans"],
+"2": ["two tone glans"],
+"3+": ["multicolored glans"]
+}
+
+[node name="TraitsContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Penis Traits"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["knot", "medial ring", "!Penis Veins,veiny penis", "anatomically correct penis"])
+
+[node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer2" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Barbed Penis,penile spines", "!Penis Bumps,nubbed penis", "ribbed penis", "ridged penis", "spiked penis", "scaled penis"])
+
+[node name="HSeparator2" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer3" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Sheathed, sheath", "!Slit, genital slit", "!Cloaca, cloaca", "hemipenes", "prehensile penis", "spiral penis"])
+
+[node name="PussyContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Pussy"
+is_title = true
+
+[node name="TypeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pussy Type"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["animal pussy"],
+"title": "Animal Pussy"
+}, {
+"include": ["humanoid pussy"],
+"title": "Humanoid Pussy"
+}, {
+"include": ["mechanical pussy"],
+"title": "Mechanical Pussy"
+}, {
+"include": ["hybrid pussy"],
+"title": "Hybrid Pussy"
+}])
+bind_indexes = {
+0: NodePath("../TagsOptionButton2")
+}
+
+[node name="TagsOptionButton2" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["bovine pussy"],
+"title": "Bovine Pussy"
+}, {
+"include": ["canine pussy"],
+"title": "Canine Pussy"
+}, {
+"include": ["caprine pussy"],
+"title": "Caprine Pussy"
+}, {
+"include": ["cervine pussy"],
+"title": "Cervine Pussy"
+}, {
+"include": ["cephalopussy"],
+"title": "Cephalod Pussy"
+}, {
+"include": ["cetacean pussy"],
+"title": "Cetacean Pussy"
+}, {
+"include": ["feline pussy"],
+"title": "Feline Pussy"
+}, {
+"include": ["equine pussy"],
+"title": "Equine Pussy"
+}, {
+"include": ["lagomorph pussy"],
+"title": "Lagomorph Pussy"
+}, {
+"include": ["marsupial pussy"],
+"title": "Marsupial Pussy"
+}, {
+"include": ["mustelid pussy"],
+"title": "Mustelid Pussy"
+}, {
+"include": ["porcine pussy"],
+"title": "Porcine Pussy"
+}, {
+"include": ["raccoon pussy"],
+"title": "Raccoon Pussy"
+}, {
+"include": ["ursine pussy"],
+"title": "Ursine Pussy"
+}])
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pussy Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small pussy"],
+"title": "Small Pussy"
+}, {
+"include": ["big pussy"],
+"title": "Big Pussy"
+}, {
+"include": ["huge pussy"],
+"title": "Huge Pussy"
+}, {
+"include": ["hyper pussy"],
+"title": "Hyper Pussy"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MeowColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/MeowColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pussy Color
+"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/MeowColContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "pussy"
+count_select = {
+"1": "monotone pussy",
+"2": "two tone pussy",
+"3+": "multicolored pussy"
+}
+
+[node name="HSeparator2" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="InnerMeowColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/InnerMeowColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Inner Pussy Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/InnerMeowColContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "inner pussy"
+count_select = {
+"1": "monotone inner pussy",
+"2": "two tone inner pussy",
+"3+": "multicolored inner pussy"
+}
+
+[node name="HSeparator3" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ClitColContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/ClitColContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Clitoris"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/ClitColContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "clitoris"
+count_select = {
+"1": "monotone clitoris",
+"2": "two tone clitoris",
+"3+": "multicolored clitoris"
+}
+
+[node name="OtherContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/OtherContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Pussy Properties"
+
+[node name="ExtrasContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/OtherContainer"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer/OtherContainer/ExtrasContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Plump,plump pussy", "!Innie Pussy,innie pussy", "!Tattoo,pussy tattoo", "!Markings,pussy markings", "!Pierced,pussy piercing"])
+
+[node name="AnusContainer" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator2" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Anus"
+is_title = true
+
+[node name="SizeContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Anus Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["small anus"],
+"title": "Small Anus"
+}, {
+"include": ["big anus"],
+"title": "Big Anus"
+}, {
+"include": ["huge anus"],
+"title": "Huge Anus"
+}, {
+"include": ["hyper anus"],
+"title": "Hyper Anus"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ColorContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/ColorContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Anus Colors"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/ColorContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "anus"
+count_select = {
+"1": ["monotone anus"],
+"2": ["two tone anus"],
+"3+": ["multicolored anus"]
+}
+
+[node name="HSeparator2" type="HSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Anus Coloration"
+
+[node name="TagsOptionButton" type="OptionButton" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark anus"],
+"title": "Dark Anus"
+}, {
+"include": ["light anus"],
+"title": "Light Anus"
+}])
+
+[node name="HTitleSeparator" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Anus Traits"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Puffy,puffy anus", "!Anus at Tail Base,tail anus", "!Detailed,detailed anus", "!Anatomically Correct,anatomically correct anus", "!Glowing,glowing anus"])
+
+[node name="ExtraInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Extra Info"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WikiInfo" type="VBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/WikiInfo"]
+layout_mode = 2
+mouse_filter = 1
+text = "Wiki"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WikiTextEdit" type="TextEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/WikiInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="TooltipContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/TooltipContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Tooltip"
+
+[node name="TooltipLineEdit" type="LineEdit" parent="CharacterCreator/DataContainer/VBoxContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/TooltipContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="CharacterCreator/DataContainer/VBoxContainer"]
 layout_mode = 2
