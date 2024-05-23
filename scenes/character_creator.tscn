@@ -170,11 +170,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
-current_tab = 6
 tabs_visible = false
 
 [node name="BaseData" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
@@ -2543,6 +2541,7 @@ mode = 1
 other_items = Array[String](["barbed tail", "tail claws", "tail ridge", "tail frill", "prehensile tail"])
 
 [node name="GenitalsInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
