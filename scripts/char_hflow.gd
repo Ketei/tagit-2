@@ -13,6 +13,7 @@ const TYPES: Dictionary = {
 		"purple",
 		"red",
 		"tan",
+		"teal",
 		"white",
 		"yellow",
 		"rainbow,multicolored"]
@@ -48,30 +49,32 @@ func _ready():
 			var separate_array: Array[String] = []
 			separate_array.assign(
 					other_item.split(",", false))
-
 			var new_other := TagCheckBoxCharacter.new()
 			
 			for item in separate_array:
-				if item.begins_with("!"):
-					new_other.title = DumbUtils.title_case(item.trim_prefix("!"))
+				var format_item: String = item.strip_edges()
+				if format_item.begins_with("!"):
+					new_other.title = DumbUtils.title_case(format_item.trim_prefix("!").strip_edges())
 				else:
-					new_other.contains.append(item)
-			if new_other.title.is_empty():
+					new_other.contains.append(format_item)
+			
+			if new_other.title.is_empty() and not new_other.contains.is_empty():
 				new_other.title = DumbUtils.title_case(new_other.contains[0])
+			
 			new_other.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			add_child(new_other)
 
 
 
 func get_selected() -> Array[String]:
-	if not visible:
-		return []
-	
-	var counting_index: int = 0
 	var return_array: Array[String] = []
+	var counting_index: int = 0
+	
+	if not visible:
+		return return_array
 	
 	for tag_checkbox:TagCheckBoxCharacter in get_children():
-		if tag_checkbox.button_pressed:
+		if tag_checkbox.button_pressed and not tag_checkbox.contains.is_empty():
 			DumbUtils.append_without_repeats(return_array, tag_checkbox.contains)
 			counting_index += 1
 	
@@ -87,4 +90,11 @@ func get_selected() -> Array[String]:
 			DumbUtils.append_without_repeats(return_array, count_select[element_count])
 	
 	return return_array
+
+
+func deselect_all() -> void:
+	for item:TagCheckBoxCharacter in get_children():
+		if item.button_pressed:
+			item.button_pressed = false
+
 

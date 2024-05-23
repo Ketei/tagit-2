@@ -6,28 +6,29 @@
 extends ScrollContainer
 class_name SmoothScrollContainer
 
+@export_group("Mouse Wheel")
 ## Drag impact for one scroll input
-@export_range(0, 10, 0.01, "or_greater")
-var speed := 5.0
-## Whether the content of this container should be allowed to overshoot at the ends
-## before interpolating back to its bounds
+@export_range(0, 10, 0.01, "or_greater", "hide_slider")
+var speed := 1000.0
+## ScrollDamper for wheel scrolling
 @export
-var allow_overdragging := true
-## Softness of damping when "overdragging" with wheel button
-@export_range(0, 1)
-var damping_scroll := 0.1
-## Softness of damping when "overdragging" with dragging
-@export_range(0, 1)
-var damping_drag := 0.1
-## Allow dragging with mouse or not
+var wheel_scroll_damper: ScrollDamper = ExpoScrollDamper.new()
+
+@export_group("Dragging")
+## ScrollDamper for dragging
+@export
+var dragging_scroll_damper: ScrollDamper = ExpoScrollDamper.new()
+### Allow dragging with mouse or not
 @export
 var drag_with_mouse = true
 ## Allow dragging with touch or not
 @export
 var drag_with_touch = true
-## Scrolls to currently focused child element
+
+@export_group("Container")
+## Below this value, snap content to boundary
 @export
-var follow_focus_ := true
+var just_snap_under := 0.4
 ## Margin of the currently focused element
 @export_range(0, 50)
 var follow_focus_margin := 20
@@ -40,15 +41,15 @@ var allow_horizontal_scroll := true
 ## Makes the container only scrollable where the content has overflow
 @export
 var auto_allow_scroll := true
-## Friction when using mouse wheel
-@export_range(0, 1)
-var friction_scroll := 0.9
-## Friction when using touch
-@export_range(0, 1)
-var friction_drag := 0.9
+## Whether the content of this container should be allowed to overshoot at the ends
+## before interpolating back to its bounds
+@export
+var allow_overdragging := true
+
+@export_group("Scroll Bar")
 ## Hides scrollbar as long as not hovered or interacted with
 @export
-var hide_scrollbar_over_time:= false:
+var hide_scrollbar_over_time := false:
 	set(val): hide_scrollbar_over_time = _set_hide_scrollbar_over_time(val)
 ## Time after scrollbar starts to fade out when 'hide_scrollbar_over_time' is true
 @export
@@ -59,60 +60,54 @@ var scrollbar_fade_in_time := 0.2
 ## Fadeout time for scrollbar when 'hide_scrollbar_over_time' is true
 @export
 var scrollbar_fade_out_time := 0.5
+
+@export_group("Debug")
 ## Adds debug information
 @export
 var debug_mode := false
 
 ## Current velocity of the `content_node`
 var velocity := Vector2(0,0)
-## Below this value, velocity is set to `0`
-var just_stop_under := 0.01
-## Below this value, snap content to boundary
-var just_snap_under := 0.4
 ## Control node to move when scrolling
-var content_node : Control
+var content_node: Control
 ## Current position of `content_node`
 var pos := Vector2(0, 0)
+## Current ScrollDamper to use, recording to last input type
+var scroll_damper: ScrollDamper
 ## When true, `content_node`'s position is only set by dragging the h scroll bar
 var h_scrollbar_dragging := false
 ## When true, `content_node`'s position is only set by dragging the v scroll bar
 var v_scrollbar_dragging := false
-## Current friction
-var friction := 0.9
 ## When ture, `content_node` follows drag position
 var content_dragging := false
-## Damping to use
-var damping := 0.1
-## Distance between content_node's bottom and bottom of the scroll box 
-var bottom_distance := 0.0
-## Distance between content_node and top of the scroll box
-var top_distance := 0.0
-## Distance between content_node's right and right of the scroll box 
-var right_distance := 0.0
-## Distance between content_node and left of the scroll box
-var left_distance := 0.0
-## Content node position where dragging starts
-var drag_start_pos := Vector2.ZERO
 ## Timer for hiding scroll bar
 var scrollbar_hide_timer := Timer.new()
 ## Tween for hiding scroll bar
-var scrollbar_hide_tween : Tween
+var scrollbar_hide_tween: Tween
+## Tween for scroll x to
+var scroll_x_to_tween: Tween
+## Tween for scroll y to
+var scroll_y_to_tween: Tween
 ## [0,1] Mouse or touch's relative movement accumulation when overdrag[br]
-## [2,3,4,5] Top_distance, bottom_distance, left_distance, right_distance
+## [2,3] Position where dragging starts[br]
+## [4,5,6,7] Left_distance, right_distance, top_distance, bottom_distance
 var drag_temp_data := []
+## Whether touch point is in deadzone.
+var is_in_deadzone := false
 
 ## If content is being scrolled
 var is_scrolling := false:
 	set(val):
+		if is_scrolling != val:
+			if val:
+				emit_signal("scroll_started")
+			else:
+				emit_signal("scroll_ended")
 		is_scrolling = val
-		if is_scrolling:
-			emit_signal("scroll_started")
-		else:
-			emit_signal("scroll_ended")
 
 ## Last type of input used to scroll
 enum SCROLL_TYPE {WHEEL, BAR, DRAG}
-var last_scroll_type : SCROLL_TYPE
+var last_scroll_type: SCROLL_TYPE
 
 ####################
 ##### Virtual functions
@@ -120,11 +115,11 @@ var last_scroll_type : SCROLL_TYPE
 func _ready() -> void:
 	if debug_mode:
 		setup_debug_drawing()
-
-	get_v_scroll_bar().scrolling.connect(_on_VScrollBar_scrolling)
-	get_h_scroll_bar().scrolling.connect(_on_HScrollBar_scrolling)
-	get_v_scroll_bar().gui_input.connect(_scrollbar_input)
-	get_h_scroll_bar().gui_input.connect(_scrollbar_input)
+	# Initialize variables
+	scroll_damper = wheel_scroll_damper
+	
+	get_v_scroll_bar().gui_input.connect(_scrollbar_input.bind(true))
+	get_h_scroll_bar().gui_input.connect(_scrollbar_input.bind(false))
 	get_viewport().gui_focus_changed.connect(_on_focus_changed)
 
 	for c in get_children():
@@ -139,7 +134,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	calculate_distance()
 	scroll(true, velocity.y, pos.y, delta)
 	scroll(false, velocity.x, pos.x, delta)
 	# Update vertical scroll bar
@@ -155,7 +149,7 @@ func _process(delta: float) -> void:
 		queue_redraw()
 
 # Forwarding scroll inputs from scrollbar
-func _scrollbar_input(event: InputEvent) -> void:
+func _scrollbar_input(event: InputEvent, vertical : bool) -> void:
 	if hide_scrollbar_over_time:
 		show_scrollbars()
 		scrollbar_hide_timer.start(scrollbar_hide_time)
@@ -166,77 +160,106 @@ func _scrollbar_input(event: InputEvent) -> void:
 		or event.button_index == MOUSE_BUTTON_WHEEL_LEFT\
 		or event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
 			_gui_input(event)
+		
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				if vertical:
+					v_scrollbar_dragging = true
+					last_scroll_type = SCROLL_TYPE.BAR
+					kill_scroll_to_tweens()
+				else:
+					h_scrollbar_dragging = true
+					last_scroll_type = SCROLL_TYPE.BAR
+					kill_scroll_to_tweens()
+			else:
+				if vertical:
+					v_scrollbar_dragging = false
+				else:
+					h_scrollbar_dragging = false
+	
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if vertical:
+				v_scrollbar_dragging = true
+				last_scroll_type = SCROLL_TYPE.BAR
+				kill_scroll_to_tweens()
+			else:
+				h_scrollbar_dragging = true
+				last_scroll_type = SCROLL_TYPE.BAR
+				kill_scroll_to_tweens()
+		else:
+			if vertical:
+				v_scrollbar_dragging = false
+			else:
+				h_scrollbar_dragging = false
 
 func _gui_input(event: InputEvent) -> void:
 	if hide_scrollbar_over_time:
 		show_scrollbars()
 		scrollbar_hide_timer.start(scrollbar_hide_time)
-
-	v_scrollbar_dragging = get_v_scroll_bar().has_focus() # != pressed => TODO
-	h_scrollbar_dragging = get_h_scroll_bar().has_focus()
 	
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_DOWN:
 				if event.pressed:
 					last_scroll_type = SCROLL_TYPE.WHEEL
-					if event.shift_pressed:
+					if event.shift_pressed or not should_scroll_vertical():
 						if should_scroll_horizontal():
-							velocity.x -= speed
+							velocity.x -= speed * event.factor
 					else:
 						if should_scroll_vertical():
-							velocity.y -= speed
-					friction = friction_scroll
-					damping = damping_scroll
+							velocity.y -= speed  * event.factor
+					scroll_damper = wheel_scroll_damper
+					kill_scroll_to_tweens()
 			MOUSE_BUTTON_WHEEL_UP:
 				if event.pressed:
 					last_scroll_type = SCROLL_TYPE.WHEEL
-					if event.shift_pressed:
+					if event.shift_pressed or not should_scroll_vertical():
 						if should_scroll_horizontal():
-							velocity.x += speed
+							velocity.x += speed * event.factor
 					else:
 						if should_scroll_vertical():
-							velocity.y += speed
-					friction = friction_scroll
-					damping = damping_scroll
+							velocity.y += speed * event.factor
+					scroll_damper = wheel_scroll_damper
+					kill_scroll_to_tweens()
 			MOUSE_BUTTON_WHEEL_LEFT:
 				if event.pressed:
 					last_scroll_type = SCROLL_TYPE.WHEEL
 					if event.shift_pressed:
 						if should_scroll_vertical():
-							velocity.y -= speed
+							velocity.y -= speed * event.factor
 					else:
 						if should_scroll_horizontal():
-							velocity.x += speed
-					friction = friction_scroll
-					damping = damping_scroll
+							velocity.x += speed * event.factor
+					scroll_damper = wheel_scroll_damper
+					kill_scroll_to_tweens()
 			MOUSE_BUTTON_WHEEL_RIGHT:
 				if event.pressed:
 					last_scroll_type = SCROLL_TYPE.WHEEL
 					if event.shift_pressed:
 						if should_scroll_vertical():
-							velocity.y += speed
+							velocity.y += speed * event.factor
 					else:
 						if should_scroll_horizontal():
-							velocity.x -= speed
-					friction = friction_scroll
-					damping = damping_scroll
+							velocity.x -= speed * event.factor
+					scroll_damper = wheel_scroll_damper
+					kill_scroll_to_tweens()
 			MOUSE_BUTTON_LEFT:
 				if event.pressed:
 					if !drag_with_mouse: return
 					content_dragging = true
+					is_in_deadzone = true
+					scroll_damper = dragging_scroll_damper
 					last_scroll_type = SCROLL_TYPE.DRAG
-					drag_start_pos = content_node.position
 					init_drag_temp_data()
+					kill_scroll_to_tweens()
 				else:
 					content_dragging = false
-					friction = friction_drag
-					damping = damping_drag
+					is_in_deadzone = false
 	
 	if (event is InputEventScreenDrag and drag_with_touch) \
 			or (event is InputEventMouseMotion and drag_with_mouse):
 		if content_dragging:
-			is_scrolling = true
 			if should_scroll_horizontal():
 				drag_temp_data[0] += event.relative.x
 			if should_scroll_vertical():
@@ -247,66 +270,37 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
 		if should_scroll_horizontal():
 			velocity.x = -event.delta.x * speed
+			kill_scroll_to_tweens()
 		if should_scroll_vertical():
 			velocity.y = -event.delta.y * speed
+			kill_scroll_to_tweens()
 	
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			if !drag_with_touch: return
 			content_dragging = true
+			is_in_deadzone = true
+			scroll_damper = dragging_scroll_damper
 			last_scroll_type = SCROLL_TYPE.DRAG
-			drag_start_pos = content_node.position
 			init_drag_temp_data()
+			kill_scroll_to_tweens()
 		else:
 			content_dragging = false
-			friction = friction_drag
-			damping = damping_drag
+			is_in_deadzone = false
 	# Handle input
 	get_tree().get_root().set_input_as_handled()
 
 # Scroll to new focused element
 func _on_focus_changed(control: Control) -> void:
-	var is_child := false
-	if content_node.is_ancestor_of(control):
-		is_child = true
-	if not is_child:
-		return
-	if not follow_focus_:
-		return
-	
-	var focus_size_x = control.size.x
-	var focus_size_y = control.size.y
-	var focus_left = control.global_position.x - self.global_position.x
-	var focus_right = focus_left + focus_size_x
-	var focus_top = control.global_position.y - self.global_position.y
-	var focus_bottom = focus_top + focus_size_y
-	
-	if focus_top < 0.0:
-		scroll_y_to(content_node.position.y - focus_top + follow_focus_margin)
-	
-	if focus_bottom > self.size.y:
-		scroll_y_to(content_node.position.y - focus_bottom + self.size.y - follow_focus_margin)
-	
-	if focus_left < 0.0:
-		scroll_x_to(content_node.position.x - focus_left + follow_focus_margin)
-	
-	if focus_right > self.size.x:
-		scroll_x_to(content_node.position.x - focus_right + self.size.x - follow_focus_margin)
-
-func _on_VScrollBar_scrolling() -> void:
-	v_scrollbar_dragging = true
-	last_scroll_type = SCROLL_TYPE.BAR
-
-func _on_HScrollBar_scrolling() -> void:
-	h_scrollbar_dragging = true
-	last_scroll_type = SCROLL_TYPE.BAR
+	if follow_focus:
+		self.ensure_control_visible(control)
 
 func _draw() -> void:
 	if debug_mode:
 		draw_debug()
 
 # Sets default mouse filter for SmoothScroll children to MOUSE_FILTER_PASS
-func _on_node_added(node) -> void:
+func _on_node_added(node: Node) -> void:
 	if node is Control and Engine.is_editor_hint():
 		if is_ancestor_of(node):
 			node.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -315,7 +309,7 @@ func _scrollbar_hide_timer_timeout() -> void:
 	if !any_scroll_bar_dragged():
 		hide_scrollbars()
 
-func _set_hide_scrollbar_over_time(value) -> bool:
+func _set_hide_scrollbar_over_time(value: bool) -> bool:
 	if value == false:
 		if scrollbar_hide_timer != null:
 			scrollbar_hide_timer.stop()
@@ -327,6 +321,49 @@ func _set_hide_scrollbar_over_time(value) -> bool:
 		if scrollbar_hide_timer != null and scrollbar_hide_timer.is_inside_tree():
 			scrollbar_hide_timer.start(scrollbar_hide_time)
 	return value
+
+func _get(property) -> Variant:
+	match property:
+		"scroll_horizontal":
+			if !content_node: return 0
+			return -int(content_node.position.x)
+		"scroll_vertical":
+			if !content_node: return 0
+			return -int(content_node.position.y)
+		_:
+			return null
+
+func _set(property, value) -> bool:
+	match property:
+		"scroll_horizontal":
+			if !content_node:
+				scroll_horizontal = 0
+				return true
+			scroll_horizontal = value
+			kill_scroll_x_to_tween()
+			velocity.x = 0.0
+			pos.x = clampf(
+				-value as float,
+				-get_child_size_x_diff(content_node, true),
+				0.0
+			)
+			return true
+		"scroll_vertical":
+			if !content_node:
+				scroll_vertical = 0
+				return true
+			scroll_vertical = value
+			kill_scroll_y_to_tween()
+			velocity.y = 0.0
+			pos.y = clampf(
+				-value as float,
+				-get_child_size_y_diff(content_node, true),
+				0.0
+			)
+			return true
+		_:
+			return false
+
 ##### Virtual functions
 ####################
 
@@ -334,7 +371,7 @@ func _set_hide_scrollbar_over_time(value) -> bool:
 ####################
 ##### LOGIC
 
-func scroll(vertical : bool, axis_velocity : float, axis_pos : float, delta : float):
+func scroll(vertical: bool, axis_velocity: float, axis_pos: float, delta: float):
 	# If no scroll needed, don't apply forces
 	if vertical:
 		if not should_scroll_vertical():
@@ -342,22 +379,20 @@ func scroll(vertical : bool, axis_velocity : float, axis_pos : float, delta : fl
 	else:
 		if not should_scroll_horizontal():
 			return
-	
-	# If velocity is too low, just set it to 0
-	if abs(axis_velocity) <= just_stop_under:
-		axis_velocity = 0.0
-	
+	if !scroll_damper: return
 	# Applies counterforces when overdragging
 	if not content_dragging:
-		var result = handle_overdrag(vertical, axis_velocity, axis_pos)
-		axis_velocity = result[0]
-		axis_pos = result[1]
+		axis_velocity = handle_overdrag(vertical, axis_velocity, axis_pos, delta)
 		# Move content node by applying velocity
-		axis_pos += axis_velocity * (pow(friction, delta*100) - 1) / log(friction)
-		axis_velocity *= pow(friction, delta*100)
+		var slide_result = scroll_damper.slide(axis_velocity, delta)
+		axis_velocity = slide_result[0]
+		axis_pos += slide_result[1]
+		# Snap to boundary if close enough
+		var snap_result = snap(vertical, axis_velocity, axis_pos)
+		axis_velocity = snap_result[0]
+		axis_pos = snap_result[1]
 	else:
 		axis_velocity = 0.0
-	
 	# If using scroll bar dragging, set the content_node's
 	# position by using the scrollbar position
 	if handle_scrollbar_drag():
@@ -370,9 +405,9 @@ func scroll(vertical : bool, axis_velocity : float, axis_pos : float, delta : fl
 				axis_pos = 0.0
 				axis_velocity = 0.0
 			elif is_outside_bottom_boundary(axis_pos):
-				axis_pos = self.size.y - content_node.size.y
+				axis_pos = -get_child_size_y_diff(content_node, true)
 				axis_velocity = 0.0
-
+	
 		content_node.position.y = axis_pos 
 		pos.y = axis_pos
 		velocity.y = axis_velocity
@@ -383,81 +418,104 @@ func scroll(vertical : bool, axis_velocity : float, axis_pos : float, delta : fl
 				axis_pos = 0.0
 				axis_velocity = 0.0
 			elif is_outside_right_boundary(axis_pos):
-				axis_pos = self.size.x - content_node.size.x
+				axis_pos = -get_child_size_x_diff(content_node, true)
 				axis_velocity = 0.0
-
+		
 		content_node.position.x = axis_pos
 		pos.x = axis_pos
 		velocity.x = axis_velocity
 
-func handle_overdrag(vertical : bool, axis_velocity : float, axis_pos : float) -> Array:
-	# Left/Right or Top/Bottom depending on x or y
-	var dist1 = top_distance if vertical else left_distance
-	var dist2 = bottom_distance if vertical else right_distance
+func handle_overdrag(vertical: bool, axis_velocity: float, axis_pos: float, delta: float) -> float:
+	if !scroll_damper: return 0.0
+	# Calculate the size difference between this container and content_node
+	var size_diff = get_child_size_y_diff(content_node, true) \
+		if vertical else get_child_size_x_diff(content_node, true)
+	# Calculate distance to left and right or top and bottom
+	var dist1 = get_child_top_dist(axis_pos, size_diff) \
+		if vertical else get_child_left_dist(axis_pos, size_diff)
+	var dist2 = get_child_bottom_dist(axis_pos, size_diff) \
+		if vertical else get_child_right_dist(axis_pos, size_diff)
+	# Calculate velocity to left and right or top and bottom
+	var target_vel1 = scroll_damper._calculate_velocity_to_dest(dist1, 0.0)
+	var target_vel2 = scroll_damper._calculate_velocity_to_dest(dist2, 0.0)
+	# Bounce when out of boundary. When velocity is not fast enough to go back, 
+	# apply a opposite force and get a new velocity. If the new velocity is too fast, 
+	# apply a velocity that makes it scroll back exactly.
+	if axis_pos > 0.0:
+		if axis_velocity > target_vel1:
+			axis_velocity = scroll_damper.attract(
+				dist1,
+				0.0,
+				axis_velocity,
+				delta
+			)
+	if axis_pos < -size_diff:
+		if axis_velocity < target_vel2:
+			axis_velocity = scroll_damper.attract(
+				dist2,
+				0.0,
+				axis_velocity,
+				delta
+			)
 	
-	# Modify dist2 if content is smaller than container
-	if vertical:
-		var size_y = size.y
-		if get_h_scroll_bar().visible:
-			size_y -= get_h_scroll_bar().size.y
-		dist2 += max(size_y - content_node.size.y, 0)
-	else:
-		var size_x = content_node.size.x
-		if get_v_scroll_bar().visible:
-			size_x -= get_v_scroll_bar().size.x
-		dist2 += max(size_x - content_node.size.x, 0)
-	
-	var calculate = func(dist):
-		# Apply bounce force
-		axis_velocity = lerp(axis_velocity, -dist/8*get_process_delta_time()*100, damping)
-		# If it will be fast enough to scroll back next frame
-		# Apply a speed that will make it scroll back exactly
-		if will_stop_within(vertical, axis_velocity):
-			axis_velocity = -dist*(1-friction)/(1-pow(friction, stop_frame(axis_velocity)))
+	return axis_velocity
 
-		return axis_velocity
+# Snap to boundary if close enough in next frame
+func snap(vertical: bool, axis_velocity: float, axis_pos: float) -> Array:
+	# Calculate the size difference between this container and content_node
+	var size_diff = get_child_size_y_diff(content_node, true) \
+		if vertical else get_child_size_x_diff(content_node, true)
+	# Calculate distance to left and right or top and bottom
+	var dist1 = get_child_top_dist(axis_pos, size_diff) \
+		if vertical else get_child_left_dist(axis_pos, size_diff)
+	var dist2 = get_child_bottom_dist(axis_pos, size_diff) \
+		if vertical else get_child_right_dist(axis_pos, size_diff)
+	if (
+		dist1 > 0.0 \
+		and abs(dist1) < just_snap_under \
+		and abs(axis_velocity) < just_snap_under \
+	):
+		axis_pos -= dist1
+		axis_velocity = 0.0
+	elif (
+		dist2 < 0.0 \
+		and abs(dist2) < just_snap_under \
+		and abs(axis_velocity) < just_snap_under \
+	):
+		axis_pos -= dist2
+		axis_velocity = 0.0
 	
-	var result = [axis_velocity, axis_pos]
-	
-	if not (dist1 > 0 or dist2 < 0) or will_stop_within(vertical, axis_velocity):
-		return result
-
-	# Overdrag on top or left
-	if dist1 > 0:
-		# Snap to boundary if close enough
-		if dist1 < just_snap_under and abs(axis_velocity) < just_snap_under:
-			result[0] = 0.0
-			result[1] -= dist1
-		else: 
-			result[0] = calculate.call(dist1)
-	# Overdrag on bottom or right
-	elif dist2 < 0:
-		# Snap to boundary if close enough
-		if dist2 > -just_snap_under and abs(axis_velocity) < just_snap_under:
-			result[0] = 0.0
-			result[1] -= dist2
-		else:
-			result[0] = calculate.call(dist2)
-	
-	return result
+	return [axis_velocity, axis_pos]
 
 ## Returns true when scrollbar was dragged
 func handle_scrollbar_drag() -> bool:
 	if h_scrollbar_dragging:
 		velocity.x = 0.0
-		pos.x = content_node.position.x
+		pos.x = -get_h_scroll_bar().value
 		return true
 	
 	if v_scrollbar_dragging:
 		velocity.y = 0.0
-		pos.y = content_node.position.y
+		pos.y = -get_v_scroll_bar().value
 		return true
 	return false
 
 func handle_content_dragging() -> void:
+	if !dragging_scroll_damper: return
+	
+	if(
+		Vector2(drag_temp_data[0], drag_temp_data[1]).length() < scroll_deadzone \
+		and is_in_deadzone
+	):
+		return
+	elif is_in_deadzone == true:
+		is_in_deadzone = false
+		drag_temp_data[0] = 0.0
+		drag_temp_data[1] = 0.0
+	
 	var calculate_dest = func(delta: float, damping: float) -> float:
 		if delta >= 0.0:
-			return delta / (1 + delta * damping * 0.1)
+			return delta / (1 + delta * damping * 0.00001)
 		else:
 			return delta
 	
@@ -468,67 +526,32 @@ func handle_content_dragging() -> void:
 	) -> float:
 		if temp_relative + temp_dist1 > 0.0:
 			var delta = min(temp_relative, temp_relative + temp_dist1)
-			var dest = calculate_dest.call(delta, damping_drag)
+			var dest = calculate_dest.call(delta, dragging_scroll_damper._attract_factor)
 			return dest - min(0.0, temp_dist1)
 		elif temp_relative + temp_dist2 < 0.0:
 			var delta = max(temp_relative, temp_relative + temp_dist2)
-			var dest = -calculate_dest.call(-delta, damping_drag)
+			var dest = -calculate_dest.call(-delta, dragging_scroll_damper._attract_factor)
 			return dest - max(0.0, temp_dist2)
 		else: return temp_relative
 	
 	if should_scroll_vertical():
 		var y_pos = calculate_position.call(
-			drag_temp_data[2],	# Temp top_distance
-			drag_temp_data[3],	# Temp bottom_distance
+			drag_temp_data[6],	# Temp top_distance
+			drag_temp_data[7],	# Temp bottom_distance
 			drag_temp_data[1]	# Temp y relative accumulation
-		) + drag_start_pos.y
-		velocity.y = (y_pos - pos.y) / get_process_delta_time() / 100
+		) + drag_temp_data[3]
+		velocity.y = (y_pos - pos.y) / get_process_delta_time()
 		pos.y = y_pos
 	if should_scroll_horizontal():
 		var x_pos = calculate_position.call(
 			drag_temp_data[4],	# Temp left_distance
 			drag_temp_data[5],	# Temp right_distance
 			drag_temp_data[0]	# Temp x relative accumulation
-		) + drag_start_pos.x
-		velocity.x = (x_pos - pos.x) / get_process_delta_time() / 100
+		) + drag_temp_data[2]
+		velocity.x = (x_pos - pos.x) / get_process_delta_time()
 		pos.x = x_pos
 
-func calculate_distance() -> void:
-	bottom_distance = content_node.position.y + content_node.size.y - self.size.y
-	top_distance = content_node.position.y
-	right_distance = content_node.position.x + content_node.size.x - self.size.x
-	left_distance = content_node.position.x
-	if get_v_scroll_bar().visible:
-		right_distance += get_v_scroll_bar().size.x
-	if get_h_scroll_bar().visible:
-		bottom_distance += get_h_scroll_bar().size.y
-
-func stop_frame(vel : float) -> float:
-	# How long it will take to stop scrolling
-	# 0.001 and 0.999 is to ensure that the denominator is not 0
-	var stop_frame = log(just_stop_under/(abs(vel)+0.001))/log(friction*0.999)
-	# Clamp and floor
-	stop_frame = floor(max(stop_frame, 0.0))
-	return stop_frame
-
-func will_stop_within(vertical : bool, vel : float) -> bool:
-	# Calculate stop frame
-	var stop_frame = stop_frame(vel)
-	# Distance it takes to stop scrolling
-	var stop_distance = vel*(1-pow(friction,stop_frame))/(1-friction)
-	# Position it will stop at
-	var stop_pos
-	if vertical:
-		stop_pos = pos.y + stop_distance
-	else:
-		stop_pos = pos.x + stop_distance
-
-	var diff = self.size.y - content_node.size.y if vertical else self.size.x - content_node.size.x
-
-	# Whether content node will stop inside the container
-	return stop_pos <= 0.0 and stop_pos >= min(diff, 0.0)
-
-func remove_all_children_focus(node : Node) -> void:
+func remove_all_children_focus(node: Node) -> void:
 	if node is Control:
 		var control = node as Control
 		control.release_focus()
@@ -537,16 +560,111 @@ func remove_all_children_focus(node : Node) -> void:
 		remove_all_children_focus(child)
 
 func update_state() -> void:
-	if content_dragging\
-	or v_scrollbar_dragging\
-	or h_scrollbar_dragging\
-	or velocity != Vector2.ZERO:
+	if(
+		(content_dragging and not is_in_deadzone)
+		or any_scroll_bar_dragged()
+		or velocity != Vector2.ZERO
+	):
 		is_scrolling = true
 	else:
 		is_scrolling = false
 
 func init_drag_temp_data() -> void:
-	drag_temp_data = [0.0, 0.0, top_distance, bottom_distance, left_distance, right_distance]
+	# Calculate the size difference between this container and content_node
+	var content_node_size_diff = get_child_size_diff(content_node, true, true)
+	# Calculate distance to left, right, top and bottom
+	var content_node_boundary_dist = get_child_boundary_dist(
+		content_node.position,
+		content_node_size_diff
+	)
+	drag_temp_data = [
+		0.0, 
+		0.0, 
+		content_node.position.x,
+		content_node.position.y,
+		content_node_boundary_dist.x, 
+		content_node_boundary_dist.y, 
+		content_node_boundary_dist.z, 
+		content_node_boundary_dist.w,
+	]
+
+# Get container size x without v scroll bar 's width
+func get_spare_size_x() -> float:
+	var size_x = size.x
+	if get_v_scroll_bar().visible:
+		size_x -= get_v_scroll_bar().size.x
+	return max(size_x, 0.0)
+
+# Get container size y without h scroll bar 's height
+func get_spare_size_y() -> float:
+	var size_y = size.y
+	if get_h_scroll_bar().visible:
+		size_y -= get_h_scroll_bar().size.y
+	return max(size_y, 0.0)
+
+# Get container size without scroll bars' size
+func get_spare_size() -> Vector2:
+	return Vector2(get_spare_size_x(), get_spare_size_y())
+
+# Calculate the size x difference between this container and child node
+func get_child_size_x_diff(child: Control, clamp: bool) -> float:
+	var child_size_x = child.size.x * child.scale.x
+	# Falsify the size of the child node to avoid errors 
+	# when its size is smaller than this container 's
+	if clamp:
+		child_size_x = max(child_size_x, get_spare_size_x())
+	return child_size_x - get_spare_size_x()
+
+# Calculate the size y difference between this container and child node
+func get_child_size_y_diff(child: Control, clamp: bool) -> float:
+	var child_size_y = child.size.y * child.scale.y
+	# Falsify the size of the child node to avoid errors 
+	# when its size is smaller than this container 's
+	if clamp:
+		child_size_y = max(child_size_y, get_spare_size_y())
+	return child_size_y - get_spare_size_y()
+
+# Calculate the size difference between this container and child node
+func get_child_size_diff(child: Control, clamp_x: bool, clamp_y: bool) -> Vector2:
+	return Vector2(
+		get_child_size_x_diff(child, clamp_x),
+		get_child_size_y_diff(child, clamp_y)
+	)
+
+# Calculate distance to left
+func get_child_left_dist(child_pos_x: float, child_size_diff_x: float) -> float:
+	return child_pos_x
+
+# Calculate distance to right
+func get_child_right_dist(child_pos_x: float, child_size_diff_x: float) -> float:
+	return child_pos_x + child_size_diff_x
+
+# Calculate distance to top
+func get_child_top_dist(child_pos_y: float, child_size_diff_y: float) -> float:
+	return child_pos_y
+
+# Calculate distance to bottom
+func get_child_bottom_dist(child_pos_y: float, child_size_diff_y: float) -> float:
+	return child_pos_y + child_size_diff_y
+
+# Calculate distance to left, right, top and bottom
+func get_child_boundary_dist(child_pos: Vector2, child_size_diff: Vector2) -> Vector4:
+	return Vector4(
+		get_child_left_dist(child_pos.x, child_size_diff.x),
+		get_child_right_dist(child_pos.x, child_size_diff.x),
+		get_child_top_dist(child_pos.y, child_size_diff.y),
+		get_child_bottom_dist(child_pos.y, child_size_diff.y),
+	)
+
+func kill_scroll_x_to_tween() -> void:
+	if scroll_x_to_tween: scroll_x_to_tween.kill()
+
+func kill_scroll_y_to_tween() -> void:
+	if scroll_y_to_tween: scroll_y_to_tween.kill()
+
+func kill_scroll_to_tweens() -> void:
+	kill_scroll_x_to_tween()
+	kill_scroll_y_to_tween()
 
 ##### LOGIC
 ####################
@@ -555,13 +673,24 @@ func init_drag_temp_data() -> void:
 ####################
 ##### DEBUG DRAWING
 
-var debug_gradient = Gradient.new()
+var debug_gradient := Gradient.new()
 
 func setup_debug_drawing() -> void:
 	debug_gradient.set_color(0.0, Color.GREEN)
 	debug_gradient.set_color(1.0, Color.RED)
 
 func draw_debug() -> void:
+	# Calculate the size difference between this container and content_node
+	var size_diff = get_child_size_diff(content_node, false, false)
+	# Calculate distance to left, right, top and bottom
+	var boundary_dist = get_child_boundary_dist(
+		content_node.position,
+		size_diff
+	)
+	var bottom_distance = boundary_dist.w
+	var top_distance = boundary_dist.z
+	var right_distance = boundary_dist.y
+	var left_distance = boundary_dist.x
 	# Overdrag lines
 	# Top + Bottom
 	draw_line(Vector2(0.0, 0.0), Vector2(0.0, top_distance), debug_gradient.sample(clamp(top_distance / size.y, 0.0, 1.0)), 5.0)
@@ -569,11 +698,11 @@ func draw_debug() -> void:
 	# Left + Right
 	draw_line(Vector2(0.0, size.y), Vector2(left_distance, size.y), debug_gradient.sample(clamp(left_distance / size.y, 0.0, 1.0)), 5.0)
 	draw_line(Vector2(size.x, size.y), Vector2(size.x+right_distance, size.y), debug_gradient.sample(clamp(-right_distance / size.y, 0.0, 1.0)), 5.0)
-
+	
 	# Velocity lines
 	var origin := Vector2(5.0, size.y/2)
-	draw_line(origin, origin + Vector2(0.0, velocity.y), debug_gradient.sample(clamp(velocity.y*2 / size.y, 0.0, 1.0)), 5.0)
-	draw_line(origin, origin + Vector2(0.0, velocity.x), debug_gradient.sample(clamp(velocity.x*2 / size.x, 0.0, 1.0)), 5.0)
+	draw_line(origin, origin + Vector2(0.0, velocity.y*0.01), debug_gradient.sample(clamp(velocity.y*2 / size.y, 0.0, 1.0)), 5.0)
+	draw_line(origin, origin + Vector2(0.0, velocity.x*0.01), debug_gradient.sample(clamp(velocity.x*2 / size.x, 0.0, 1.0)), 5.0)
 
 ##### DEBUG DRAWING
 ####################
@@ -583,41 +712,47 @@ func draw_debug() -> void:
 ##### API FUNCTIONS
 
 ## Scrolls to specific x position
-func scroll_x_to(x_pos: float, duration:float=0.5) -> void:
+func scroll_x_to(x_pos: float, duration := 0.5) -> void:
 	if not should_scroll_horizontal(): return
+	if content_dragging: return
 	velocity.x = 0.0
-	x_pos = clampf(x_pos, self.size.x-content_node.size.x, 0.0)
-	var tween = create_tween()
-	var tweener = tween.tween_property(self, "pos:x", x_pos, duration)
+	var size_x_diff = get_child_size_x_diff(content_node, true)
+	x_pos = clampf(x_pos, -size_x_diff, 0.0)
+	kill_scroll_x_to_tween()
+	scroll_x_to_tween = create_tween()
+	var tweener = scroll_x_to_tween.tween_property(self, "pos:x", x_pos, duration)
 	tweener.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 
 ## Scrolls to specific y position
-func scroll_y_to(y_pos: float, duration:float=0.5) -> void:
+func scroll_y_to(y_pos: float, duration := 0.5) -> void:
 	if not should_scroll_vertical(): return
+	if content_dragging: return
 	velocity.y = 0.0
-	y_pos = clampf(y_pos, self.size.y-content_node.size.y, 0.0)
-	var tween = create_tween()
-	var tweener = tween.tween_property(self, "pos:y", y_pos, duration)
+	var size_y_diff = get_child_size_y_diff(content_node, true)
+	y_pos = clampf(y_pos, -size_y_diff, 0.0)
+	kill_scroll_y_to_tween()
+	scroll_y_to_tween = create_tween()
+	var tweener = scroll_y_to_tween.tween_property(self, "pos:y", y_pos, duration)
 	tweener.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
 
 ## Scrolls up a page
-func scroll_page_up(duration:float=0.5) -> void:
-	var destination = content_node.position.y + self.size.y
+func scroll_page_up(duration := 0.5) -> void:
+	var destination = content_node.position.y + get_spare_size_y()
 	scroll_y_to(destination, duration)
 
 ## Scrolls down a page
-func scroll_page_down(duration:float=0.5) -> void:
-	var destination = content_node.position.y - self.size.y
+func scroll_page_down(duration := 0.5) -> void:
+	var destination = content_node.position.y - get_spare_size_y()
 	scroll_y_to(destination, duration)
 
 ## Scrolls left a page
-func scroll_page_left(duration:float=0.5) -> void:
-	var destination = content_node.position.x + self.size.x
+func scroll_page_left(duration := 0.5) -> void:
+	var destination = content_node.position.x + get_spare_size_x()
 	scroll_x_to(destination, duration)
 
 ## Scrolls right a page
-func scroll_page_right(duration:float=0.5) -> void:
-	var destination = content_node.position.x - self.size.x
+func scroll_page_right(duration := 0.5) -> void:
+	var destination = content_node.position.x - get_spare_size_x()
 	scroll_x_to(destination, duration)
 
 ## Adds velocity to the vertical scroll
@@ -629,46 +764,50 @@ func scroll_horizontally(amount: float) -> void:
 	velocity.x -= amount
 
 ## Scrolls to top
-func scroll_to_top(duration:float=0.5) -> void:
+func scroll_to_top(duration := 0.5) -> void:
 	scroll_y_to(0.0, duration)
 
 ## Scrolls to bottom
-func scroll_to_bottom(duration:float=0.5) -> void:
-	scroll_y_to(self.size.y - content_node.size.y, duration)
+func scroll_to_bottom(duration := 0.5) -> void:
+	scroll_y_to(get_spare_size_y() - content_node.size.y, duration)
 
 ## Scrolls to left
-func scroll_to_left(duration:float=0.5) -> void:
+func scroll_to_left(duration := 0.5) -> void:
 	scroll_x_to(0.0, duration)
 
 ## Scrolls to right
-func scroll_to_right(duration:float=0.5) -> void:
-	scroll_x_to(self.size.x - content_node.size.x, duration)
+func scroll_to_right(duration := 0.5) -> void:
+	scroll_x_to(get_spare_size_x() - content_node.size.x, duration)
 
 func is_outside_top_boundary(y_pos: float = pos.y) -> bool:
-	return y_pos > 0.0
+	var size_y_diff = get_child_size_y_diff(content_node,true)
+	var top_dist = get_child_top_dist(y_pos, size_y_diff)
+	return top_dist > 0.0
 
 func is_outside_bottom_boundary(y_pos: float = pos.y) -> bool:
-	return y_pos < self.size.y - content_node.size.y
+	var size_y_diff = get_child_size_y_diff(content_node,true)
+	var bottom_dist = get_child_bottom_dist(y_pos, size_y_diff)
+	return bottom_dist < 0.0
 
 func is_outside_left_boundary(x_pos: float = pos.x) -> bool:
-	return x_pos > 0.0
+	var size_x_diff = get_child_size_x_diff(content_node,true)
+	var left_dist = get_child_left_dist(x_pos, size_x_diff)
+	return left_dist > 0.0
 
 func is_outside_right_boundary(x_pos: float = pos.x) -> bool:
-	return x_pos < self.size.x - content_node.size.x
+	var size_x_diff = get_child_size_x_diff(content_node,true)
+	var right_dist = get_child_right_dist(x_pos, size_x_diff)
+	return right_dist < 0.0
 
 ## Returns true if any scroll bar is being dragged
 func any_scroll_bar_dragged() -> bool:
-	if get_v_scroll_bar():
-		if get_v_scroll_bar().has_focus():
-			return true
-	if get_h_scroll_bar().has_focus():
-			return true
-	return false
+	return h_scrollbar_dragging or v_scrollbar_dragging
 
 ## Returns true if there is enough content height to scroll
 func should_scroll_vertical() -> bool:
-	var disable_scroll = content_node.size.y - self.size.y < 1 or not allow_vertical_scroll\
-			if auto_allow_scroll else not allow_vertical_scroll
+	var disable_scroll = (not allow_vertical_scroll) \
+		or (auto_allow_scroll and get_child_size_y_diff(content_node, false) <= 0) \
+		or !scroll_damper
 	if disable_scroll:
 		velocity.y = 0.0
 		return false
@@ -677,8 +816,9 @@ func should_scroll_vertical() -> bool:
 
 ## Returns true if there is enough content width to scroll
 func should_scroll_horizontal() -> bool:
-	var disable_scroll = content_node.size.x - self.size.x < 1 or not allow_horizontal_scroll\
-			if auto_allow_scroll else not allow_horizontal_scroll
+	var disable_scroll = (not allow_horizontal_scroll) \
+		or (auto_allow_scroll and get_child_size_x_diff(content_node, false) <= 0) \
+		or !scroll_damper
 	if disable_scroll:
 		velocity.x = 0.0
 		return false
@@ -705,5 +845,28 @@ func show_scrollbars(time: float = scrollbar_fade_in_time) -> void:
 	scrollbar_hide_tween.tween_property(get_v_scroll_bar(), 'modulate', Color.WHITE, time)
 	scrollbar_hide_tween.tween_property(get_h_scroll_bar(), 'modulate', Color.WHITE, time)
 
+## Scroll to position to ensure control visible
+func ensure_control_visible(control : Control) -> void:
+	if !content_node: return
+	if !content_node.is_ancestor_of(control): return
+	if !scroll_damper: return
+	
+	var size_diff = (
+		control.get_global_rect().size - get_global_rect().size
+	) / (get_global_rect().size / size)
+	var boundary_dist = get_child_boundary_dist(
+		(control.global_position - global_position) \
+				/ (get_global_rect().size / size),
+		size_diff
+	)
+	var content_node_position = content_node.position
+	if boundary_dist.x < 0 + follow_focus_margin:
+		scroll_x_to(content_node_position.x - boundary_dist.x + follow_focus_margin)
+	elif boundary_dist.y > 0 - follow_focus_margin:
+		scroll_x_to(content_node_position.x - boundary_dist.y - follow_focus_margin)
+	if boundary_dist.z < 0 + follow_focus_margin:
+		scroll_y_to(content_node_position.y - boundary_dist.z + follow_focus_margin)
+	elif boundary_dist.w > 0 - follow_focus_margin:
+		scroll_y_to(content_node_position.y - boundary_dist.w - follow_focus_margin)
 ##### API FUNCTIONS
 ########################

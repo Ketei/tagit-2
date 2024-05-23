@@ -6,12 +6,16 @@ extends CheckBox
 @export var contains: Array[String] = []
 @export var conditional_nodes: Array[Control] = []
 
+var default := false
+
+
 func _ready():
 	text = DumbUtils.title_case(title)
 	if not conditional_nodes.is_empty():
 		toggled.connect(on_toggled)
 		for node in conditional_nodes:
 			node.visible = button_pressed
+	default = button_pressed
 
 
 func on_toggled(is_toggled: bool) -> void:
@@ -20,6 +24,11 @@ func on_toggled(is_toggled: bool) -> void:
 
 
 func get_tags() -> Array[String]:
-	return contains
+	var return_array: Array[String] = []
+	for element in contains:
+		if not element.is_empty():
+			return_array.append(element)
+	
+	return return_array
 
 

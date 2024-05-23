@@ -4,8 +4,8 @@ extends OptionButton
 @export var max_height: int = 250
 @export var elements: Array[Dictionary] = [
 	{
-		"title": "Tag Title",
-		"include": []
+		"title": "",
+		"include": [""]
 	}
 ]
 @export var add_none_option: bool = true
@@ -59,6 +59,9 @@ func get_tags() -> Array[String]:
 		return []
 	
 	var return_array: Array[String] = []
-	return_array.assign(get_item_metadata(selected))
+	for item: String in get_item_metadata(selected):
+		if not item.is_empty():
+			return_array.append(item)
+	
 	return return_array
 

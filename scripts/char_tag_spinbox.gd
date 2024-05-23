@@ -6,6 +6,13 @@ extends SpinBox
 @export var exclude: Array[int] = []
 @export var overwrite: Dictionary = {}
 
+var default: float = 0
+
+
+func _ready():
+	default = value
+
+
 
 func get_tag() -> String:
 	if exclude.has(int(value)):
@@ -16,7 +23,7 @@ func get_tag() -> String:
 	
 	var construct_string: String = ""
 	
-	construct_string += str(int(value))
+	construct_string += str(int(value)) + " "
 	
 	if value == 1:
 		construct_string += element
