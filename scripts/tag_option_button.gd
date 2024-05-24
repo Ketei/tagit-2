@@ -55,10 +55,8 @@ func on_selected(selected_index: int) -> void:
 
 
 func get_tags() -> Array[String]:
-	if not visible:
-		return []
-	
 	var return_array: Array[String] = []
+
 	for item: String in get_item_metadata(selected):
 		if not item.is_empty():
 			return_array.append(item)

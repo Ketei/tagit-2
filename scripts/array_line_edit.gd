@@ -9,7 +9,7 @@ func get_string_array() -> Array[String]:
 	
 	for element in text.split(",", false):
 		var format_text: String = element.strip_edges().to_lower()
-		if not return_array.has(format_text):
+		if not return_array.has(format_text) and not format_text.is_empty():
 			return_array.append(format_text)
 	
 	return return_array

@@ -70,7 +70,7 @@ func get_tags() -> Array[String]:
 			DumbUtils.append_without_repeats(return_tags, opt_bnt.get_tags())
 		for spn_bx in character_spinboxes:
 			var tag_to_add: String = spn_bx.get_tag()
-			if not return_tags.has(tag_to_add):
+			if not return_tags.has(tag_to_add) and not tag_to_add.is_empty():
 				return_tags.append(tag_to_add)
 		for hflow in character_flows:
 			DumbUtils.append_without_repeats(return_tags, hflow.get_selected())
