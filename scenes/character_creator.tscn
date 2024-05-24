@@ -121,6 +121,7 @@ size_flags_vertical = 3
 [node name="TagItemList" type="ItemList" parent="MarginContainer/DataContainer/InfoContainer/ExtraTagsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+select_mode = 1
 script = ExtResource("2_6v7d2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/InfoContainer/ExtraTagsContainer"]
@@ -359,8 +360,8 @@ elements = Array[Dictionary]([{
 "include": ["slightly chubby"],
 "title": "Chubby"
 }, {
-"include": ["overweigth"],
-"title": "Overweigth"
+"include": ["overweight"],
+"title": "Overweight"
 }, {
 "include": ["obese"],
 "title": "Obese"
@@ -1692,6 +1693,7 @@ separator_text = "Areola"
 
 [node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/NippleContainer/AreolaContainer/SizeContainer"]
 layout_mode = 2
