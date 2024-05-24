@@ -329,6 +329,7 @@ script = ExtResource("2_b2nvx")
 
 [node name="CustomMetaLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer"]
 layout_mode = 2
+placeholder_text = "Other Formats"
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/MainContainer"]
 layout_mode = 2
