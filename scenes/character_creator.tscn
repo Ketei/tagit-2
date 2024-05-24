@@ -794,7 +794,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 8.0
 script = ExtResource("8_yptlf")
 mode = 1
-other_items = Array[String](["!Black Teeth, black teeth", "!Blue Teeth, blue teeth", "!Brown Teeth, brown teeth", "!Green Teeth, green teeth", "!Grey Teeth, grey teeth", "!Orange Teeth, orange teeth", "!Pink Teeth, pink teeth", "!Purple Teeth, purple teeth", "!Red Teeth, red teeth", "!Tan Teeth, tan teeth", "!Teal Teeth, teal teeth", "!Yellow Teeth, yellow teeth", "!Rainbow Teeth, rainbow teeth"])
+other_items = Array[String](["!Black Teeth, black teeth", "!Blue Teeth, blue teeth", "!Brown Teeth, brown teeth", "!Green Teeth, green teeth", "!Grey Teeth, grey teeth", "!Orange Teeth, orange teeth", "!Pink Teeth, pink teeth", "!Purple Teeth, purple teeth", "!Red Teeth, red teeth", "!Tan Teeth, tan teeth", "!Teal Teeth, teal teeth", "!White Teeth", "!Yellow Teeth, yellow teeth", "!Rainbow Teeth, rainbow teeth"])
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/MouthContainer"]
 layout_mode = 2
