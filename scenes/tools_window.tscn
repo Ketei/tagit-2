@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bimxfti6jy5wq"]
+[gd_scene load_steps=7 format=3 uid="uid://bimxfti6jy5wq"]
 
 [ext_resource type="Script" path="res://scripts/tools_window.gd" id="1_gjyo2"]
 [ext_resource type="PackedScene" uid="uid://cb0xy7vkvw6e1" path="res://scenes/tool_prefixes.tscn" id="1_iui6u"]
 [ext_resource type="PackedScene" uid="uid://c52fth8a6brwp" path="res://scenes/tool_templates.tscn" id="2_7rhvu"]
 [ext_resource type="PackedScene" uid="uid://bw8mx12laf44e" path="res://scenes/batch_tag_tool.tscn" id="4_hx0nf"]
+[ext_resource type="PackedScene" uid="uid://cfyhxk122nic0" path="res://scenes/character_creator.tscn" id="5_aw5cc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jdtdr"]
 bg_color = Color(0.184314, 0.254902, 0.360784, 1)
@@ -53,5 +54,9 @@ visible = false
 layout_mode = 2
 
 [node name="Batch Create Tags" parent="MarginContainer/TabContainer" instance=ExtResource("4_hx0nf")]
+visible = false
+layout_mode = 2
+
+[node name="CharacterCreator" parent="MarginContainer/TabContainer" instance=ExtResource("5_aw5cc")]
 visible = false
 layout_mode = 2

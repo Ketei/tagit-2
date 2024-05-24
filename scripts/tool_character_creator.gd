@@ -2,18 +2,51 @@ extends Control
 
 
 const TAB_INFO: Dictionary = {
-	1: "Basic Info Tab",
-	2: "Heaad Info Tab",
-	3: "Torso Info Tab",
-	4: "Hand/Feet Info Tab",
-	5: "Legs Info Tab",
-	6: "Tail info Tab",
-	7: "Genitals Info Tab",
-	8: "Extra Info Tab",
+	1: "You can manually add a tag at any moment by writing it on the line below that says [b]Extra Tags[/b]
+Not every trait/feature needs to be filled out. If you're unsure it's ok to leave it unchecked/unselected.
+[u]Species[/u], [u]Age[/u] and [u]Form[/u] will be added as parents. You can change the tag on the review window after you've finished it.
+
+Some helpful info about the section you're in will appear here.
+
+[b]Species:[/b] You can add multiple species by separating them with commas. \"canine, domestic dog\" will give you 2 tags: [u]canine[/u] and [u]domestic dog[/u]
+
+[b]Figure:[/b]
+[b]Hourglass[/b]:  Wide hips, small waist, and sizeable bust that is comparable to the hips. Any gender
+[b]Pear[/b]:  Wide hips paired with a narrower upper body and shoulders. Any gender
+[b]Venus[/b]: Wide hips, big thighs/buttocks, small waist, big bust, usually tall with small heads. Only females, gynomorph and herms.
+[b]Voluptuous[/b]: Wide hips, thick thighs, big rbeasts and big butt. Only females, gynomorph and herms.",
+	2: "[b]Ear Size & Ear Length:[/b] They are relative to the character.
+
+[b]Sclera:[/b] Usually the white part of an eyeball
+[b]Pupil:[/b] Usually the black circle of an eyeball",
+	3: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
+	4: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
+
+[b]Handpaws[/b] are hands that look more like paws than. Usually having short stubby fingers and pawpads on the palm and fingers
+
+[b]Talon hands[/b] are hands that look like talons, usually having long hooked claws and having scutes instead of feathers/fur.",
+	5: "[b]Movement:[/b]
+[indent]
+[b]Biped[/b] walks normally on two legs
+[b]Triped[/b] walks normally on three legs
+[b]Quadruped[/b] walks normally on four legs.
+[/indent]
+[b]Leg form:[/b]
+[indent]
+[b]Plantigrade[/b] walk by having the toes, soles and heel on the floor. Like humans
+[b]Digitigrade[/b] walk by having only their digits on the floor. Like dogs.
+[b]Ungligrade[/b] walk by having their hooves on the floor. Like horses.
+[b]Hooved Plantigrade[/b] have hooves but still walk like plantigrades. This is normally by having the \"toes\" be hooves.
+[b]Hooved digitigrade[/b] have hooves but walk like digitigrades. This is normally by having the \"toes\" be hooves.
+[/indent]",
+	6: "Tail Traits",
+	7: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
+	8: "[b]Wiki[/b] is to write any extra detail/lore about your character.
+[b]Tooltip[/b] is the text that will appear on the tag as you hover on it.",
+	9: "Review the tags you've added."
 }
 
-
-@onready var category_info: RichTextLabel = $MarginContainer/DataContainer/InfoContainer/PanelContainer/InfoSide/InfoSmoothScrollContainer/CategoryInfo
+@onready var category_info: RichTextLabel = $MarginContainer/DataContainer/InfoContainer/PanelContainer/InfoSide/CategoryInfo
 @onready var tag_item_list: TagItemList = $MarginContainer/DataContainer/InfoContainer/ExtraTagsContainer/TagItemList
 @onready var tab_container: TabContainer = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer
 @onready var info_smooth_scroll_container: SmoothScrollContainer = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer
@@ -21,7 +54,7 @@ const TAB_INFO: Dictionary = {
 @onready var reset_button: Button = $MarginContainer/DataContainer/TabsContainer/ButtonsContainer/ResetButton
 @onready var prev_button: Button = $MarginContainer/DataContainer/TabsContainer/ButtonsContainer/PrevButton
 @onready var next_button: Button = $MarginContainer/DataContainer/TabsContainer/ButtonsContainer/NextButton
-@onready var finish_button: Button = $MarginContainer/DataContainer/TabsContainer/ButtonsContainer/FinishtButton
+@onready var finish_button: Button = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/FinishtButton
 
 @onready var wiki_text_edit: TextEdit = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/WikiInfo/WikiTextEdit
 @onready var tooltip_line_edit: LineEdit = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/ExtraInfo/TooltipContainer/TooltipLineEdit
@@ -35,6 +68,16 @@ const TAB_INFO: Dictionary = {
 
 @onready var figure_button: TagsOptionButton = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/FigureContainer/TagsOptionButton
 
+# Review nodes ---
+@onready var review_name_label: Label = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer/NameLabel
+@onready var review_species_label: Label = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer2/SpeciesLabel
+@onready var review_gender_opt: Label = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer3/GenderLabel
+@onready var review_age_option_button: Label = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer4/AgeLabel
+@onready var review_bod_type_opt_btn: Label = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer5/FormLabel
+@onready var review_parents_item_list: ItemList = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6/VBoxContainer/ParentsItemList
+@onready var review_suggestion_item_list: ItemList = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6/VBoxContainer2/SuggestionItemList
+#-------
+@onready var extra_tags_container: VBoxContainer = $MarginContainer/DataContainer/InfoContainer/ExtraTagsContainer
 
 var skip_nodes: Array[Control] = []
 
@@ -55,6 +98,13 @@ var scroll_queued := false
 func _ready():
 	next_button.pressed.connect(on_next_pressed)
 	prev_button.pressed.connect(on_previous_pressed)
+	if Tagger.SOURCE_RUN:
+		var button_container: HBoxContainer = get_node("MarginContainer/DataContainer/TabsContainer/ButtonsContainer")
+		var new_debug_finish = Button.new()
+		new_debug_finish.text = "Finish"
+		new_debug_finish.pressed.connect(on_finish_pressed)
+		new_debug_finish.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button_container.add_child(new_debug_finish)
 	finish_button.pressed.connect(on_finish_pressed)
 	reset_button.pressed.connect(reset_fields)
 	max_tabs = tab_container.get_child_count()
@@ -80,7 +130,62 @@ func _ready():
 	skip_nodes.clear()
 
 
-func generate_characer() -> void:
+func get_parents() -> Array[String]:
+	var parents_array: Array[String] = []
+	
+	DumbUtils.append_without_repeats(parents_array, species_line_edit.get_string_array())
+	parents_array.append(gender_option_button.get_gender_tag())
+	
+	var age: String = age_option_button.get_age_tag()
+	
+	if not age.is_empty():
+		parents_array.append(age)
+	DumbUtils.append_without_repeats(parents_array, body_type_opt_btn.get_body_type())
+	
+	return parents_array
+
+
+func get_suggestions() -> Array[String]:
+	var suggestions_array: Array[String] = []
+	
+	if figure_button.selected == 5: # 4 base + unknown
+		if gender_option_button.is_female():
+			if not suggestions_array.has("shortstack"):
+				suggestions_array.append("shortstack")
+		else:
+			if not suggestions_array.has("teapot (body type)"):
+				suggestions_array.append("teapot (body type)")
+	
+	for opt_btn in tag_option_buttons:
+		DumbUtils.append_without_repeats(suggestions_array, opt_btn.get_tags())
+	
+	for char_spin in character_spinboxes:
+		var tag_to_add: String = char_spin.get_tag()
+		if not suggestions_array.has(tag_to_add) and not tag_to_add.is_empty():
+			suggestions_array.append(tag_to_add)
+	
+	for char_flow in character_flows:
+		DumbUtils.append_without_repeats(suggestions_array, char_flow.get_selected())
+	
+	for char_check in character_checkboxes:
+		if not char_check.button_pressed:
+			continue
+		DumbUtils.append_without_repeats(suggestions_array, char_check.get_tags())
+	
+	for special in conditionals:
+		if not special.is_enabled():
+			continue
+		DumbUtils.append_without_repeats(
+				suggestions_array,
+				special.get_tags()
+		)
+	
+	DumbUtils.append_without_repeats(suggestions_array, tag_item_list.get_tag_array())
+	
+	return suggestions_array
+
+
+func generate_characer() -> bool:
 	var tag_name: String = name_line_edit.text.strip_edges().to_lower()
 	
 	if Tagger.has_tag(tag_name):
@@ -100,8 +205,7 @@ func generate_characer() -> void:
 		warn_window.queue_free()
 		
 		if not replace_tag:
-			return
-	
+			return false
 	
 	var tag_res := Tag.new()
 	tag_res.tag = tag_name
@@ -111,47 +215,8 @@ func generate_characer() -> void:
 	
 	tag_res.category = Tagger.Categories.CHARACTER
 	tag_res.tag_priority = 5
-	DumbUtils.append_without_repeats(tag_res.parents, species_line_edit.get_string_array())
-	tag_res.parents.append(gender_option_button.get_gender_tag())
-	var age: String = age_option_button.get_age_tag()
-	if not age.is_empty():
-		tag_res.parents.append(age)
-	DumbUtils.append_without_repeats(tag_res.parents, body_type_opt_btn.get_body_type())
-
-	if figure_button.selected == 5: # 4 base + unknown
-		if gender_option_button.is_female():
-			if not tag_res.suggestions.has("shortstack"):
-				tag_res.suggestions.append("shortstack")
-		else:
-			if not tag_res.suggestions.has("teapot (body type)"):
-				tag_res.suggestions.append("teapot (body type)")
-	
-	for opt_btn in tag_option_buttons:
-		DumbUtils.append_without_repeats(tag_res.suggestions, opt_btn.get_tags())
-	
-	for char_spin in character_spinboxes:
-		var tag_to_add: String = char_spin.get_tag()
-		if not tag_res.suggestions.has(tag_to_add) and not tag_to_add.is_empty():
-			tag_res.suggestions.append(tag_to_add)
-	
-	for char_flow in character_flows:
-		DumbUtils.append_without_repeats(tag_res.suggestions, char_flow.get_selected())
-	
-	for char_check in character_checkboxes:
-		if not char_check.button_pressed:
-			continue
-		DumbUtils.append_without_repeats(tag_res.suggestions, char_check.get_tags())
-	
-	for special in conditionals:
-		if not special.is_enabled():
-			continue
-		DumbUtils.append_without_repeats(
-				tag_res.suggestions,
-				special.get_tags()
-		)
-	
-	DumbUtils.append_without_repeats(tag_res.suggestions, tag_item_list.get_tag_array())
-	
+	tag_res.parents = get_parents()
+	tag_res.suggestions = get_suggestions()
 	tag_res.wiki_entry = wiki_text_edit.text.strip_edges()
 	
 	if tag_res.wiki_entry.is_empty():
@@ -159,17 +224,24 @@ func generate_characer() -> void:
 	
 	tag_res.tooltip = tooltip_line_edit.text.strip_edges()
 	
-	print("Tag: " + tag_res.tag)
-	print("Parents: " + str(tag_res.parents))
-	print("Suggestions: " + str(tag_res.suggestions))
-	print("Wiki: " + tag_res.wiki_entry)
-	print("Tooltip: " + tag_res.tooltip)
+	if Tagger.SOURCE_RUN:
+		print("Tag: " + tag_res.tag)
+		print("Parents: " + str(tag_res.parents))
+		print("Suggestions: " + str(tag_res.suggestions))
+		print("Wiki: " + tag_res.wiki_entry)
+		print("Tooltip: " + tag_res.tooltip)
+	else:
+		Tagger.register_tag(
+				tag_res.tag,
+				tag_res.save()
+				)
+		Tagger.tag_updated.emit(tag_res.tag)
+		
 	
 	Tagger.queue_notification(
-			"Character created",
-			"Character \"{0}\" has been created".format([tag_name]))
-	
-	
+			"Character \"{0}\" has been created".format([tag_name]),
+			"Character created")
+	return true
 
 
 func reset_fields() -> void:
@@ -191,7 +263,6 @@ func reset_fields() -> void:
 	age_option_button.select(0)
 	body_type_opt_btn.select(0)
 	tag_item_list.clear()
-	
 
 
 func on_next_pressed() -> void:
@@ -205,11 +276,26 @@ func on_previous_pressed() -> void:
 
 
 func on_tab_changed() -> void:
-	next_button.visible = current_tab != max_tabs
-	finish_button.visible = current_tab == max_tabs
+	next_button.disabled = current_tab == max_tabs
 	prev_button.disabled = current_tab == 1
 	category_info.text = TAB_INFO[current_tab]
+	extra_tags_container.visible = current_tab != max_tabs
 	queue_scroll_to_top()
+	
+	if current_tab == max_tabs:
+		review_name_label.text = name_line_edit.text
+		review_species_label.text = species_line_edit.text
+		
+		review_gender_opt.text = gender_option_button.get_item_text(gender_option_button.selected)
+		review_age_option_button.text = age_option_button.get_item_text(age_option_button.selected)
+		review_bod_type_opt_btn.text = body_type_opt_btn.get_item_text(body_type_opt_btn.selected)
+		
+		review_parents_item_list.clear()
+		review_suggestion_item_list.clear()
+		for item in get_parents():
+			review_parents_item_list.add_item(item)
+		for item in get_suggestions():
+			review_suggestion_item_list.add_item(item)
 
 
 func queue_scroll_to_top() -> void:
@@ -258,6 +344,10 @@ func explore_for_elements(parent_node: Control) -> void:
 
 
 func on_finish_pressed() -> void:
-	generate_characer()
+	if not await generate_characer():
+		return
+	tab_container.current_tab = 0
+	current_tab = 1
+	reset_fields()
 
 

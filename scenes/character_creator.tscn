@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cfyhxk122nic0"]
+[gd_scene load_steps=19 format=3 uid="uid://cfyhxk122nic0"]
 
 [ext_resource type="Script" path="res://scripts/tool_character_creator.gd" id="1_4u3r2"]
 [ext_resource type="Script" path="res://scripts/genders_option_button.gd" id="1_h3cwt"]
@@ -15,18 +15,6 @@
 [ext_resource type="Script" path="res://scripts/char_hflow.gd" id="8_yptlf"]
 [ext_resource type="Script" path="res://scripts/char_tag_spinbox.gd" id="9_ser5u"]
 [ext_resource type="Script" path="res://scripts/toggle_visibility_check_button.gd" id="9_uy244"]
-
-[sub_resource type="Resource" id="Resource_i17wm"]
-script = ExtResource("3_s0kx2")
-friction = 4.0
-minimum_velocity = 0.4
-rebound_strength = 7.0
-
-[sub_resource type="Resource" id="Resource_8i1vi"]
-script = ExtResource("3_s0kx2")
-friction = 4.0
-minimum_velocity = 0.4
-rebound_strength = 7.0
 
 [sub_resource type="Resource" id="Resource_dg18a"]
 script = ExtResource("3_s0kx2")
@@ -87,22 +75,10 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="InfoSmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/DataContainer/InfoContainer/PanelContainer/InfoSide"]
-layout_mode = 2
-size_flags_horizontal = 3
-horizontal_scroll_mode = 0
-script = ExtResource("1_mefd6")
-wheel_scroll_damper = SubResource("Resource_i17wm")
-dragging_scroll_damper = SubResource("Resource_8i1vi")
-drag_with_mouse = false
-drag_with_touch = false
-allow_horizontal_scroll = false
-
-[node name="CategoryInfo" type="RichTextLabel" parent="MarginContainer/DataContainer/InfoContainer/PanelContainer/InfoSide/InfoSmoothScrollContainer"]
+[node name="CategoryInfo" type="RichTextLabel" parent="MarginContainer/DataContainer/InfoContainer/PanelContainer/InfoSide"]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 mouse_filter = 1
 bbcode_enabled = true
 text = "Info about the category options will appear here.
@@ -112,7 +88,6 @@ Example:
 [b]Iris:[/b] It refers to the annular structure in the eye. It is what most people define eye color with.
 
 [b]Pupil:[/b] The pupil is a hole located in the center of the iris of the eye that allows light to come into the eye. "
-scroll_active = false
 
 [node name="ExtraTagsContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/InfoContainer"]
 layout_mode = 2
@@ -171,9 +146,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
+current_tab = 8
 tabs_visible = false
 
 [node name="BaseData" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
@@ -763,6 +740,32 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Amber Pupils, amber pupils", "!Black Pupils", "!Blue Pupils, blue pupils", "!Brown Pupils, brown pupils", "!Green Pupils, green pupils", "!Grey Pupils, grey pupils", "!Orange Pupils, orange pupils", "!Pink Pupils, pink pupils", "!Purple Pupils, purple pupils", "!Red Pupils, red pupils", "!Tan Pupils, tan pupils", "!White Pupils, white pupils", "!Yellow Sclera, yellow pupils"])
 
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyesContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyesContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyesContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Other Eye
+Features"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyesContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo/EyesContainer/EyesContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Eye Gradient, gradient eyes", "heterochromia"])
+
 [node name="MouthContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
 layout_mode = 2
 
@@ -1175,6 +1178,10 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Ahoge, ahoge", "!Cowlick, cowlick", "!Highlights, hair highlights", "!Messy, messy hair"])
 
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HeadInfo"]
+layout_mode = 2
+mouse_filter = 1
+
 [node name="TorsoInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -1191,6 +1198,11 @@ theme_override_font_sizes/font_size = 28
 text = "Torso"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Torso Features"
+is_title = true
 
 [node name="TogglesContainer2" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
 layout_mode = 2
@@ -1791,6 +1803,10 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Outie,outie navel", "!Deep Looking,deep navel", "!Pierced,navel piercing"])
 
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
+layout_mode = 2
+mouse_filter = 1
+
 [node name="HandFeetInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -1881,7 +1897,7 @@ mouse_filter = 1
 script = ExtResource("6_8b3vy")
 elements = Array[Dictionary]([{
 "include": ["avian feet"],
-"title": "Avian"
+"title": "Avian/Talons"
 }, {
 "include": ["hooves"],
 "title": "Hooves"
@@ -1979,10 +1995,6 @@ script = ExtResource("7_xjq8m")
 title = "Talons"
 contains = Array[String](["talons"])
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
-layout_mode = 2
-mouse_filter = 1
-
 [node name="ClawContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
 
@@ -2066,6 +2078,10 @@ size_flags_horizontal = 3
 script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "hooves"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+mouse_filter = 1
 
 [node name="LegsInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -2297,6 +2313,10 @@ size_flags_stretch_ratio = 8.0
 script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Ankle Markings,ankle markings", "!Foot Markings,foot markings", "!Hip Markings,hip markings", "!Thigh Markings,thigh markings"])
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+layout_mode = 2
+mouse_filter = 1
 
 [node name="TailInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -2542,6 +2562,10 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["barbed tail", "tail claws", "tail ridge", "tail frill", "prehensile tail"])
 
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TailInfo"]
+layout_mode = 2
+mouse_filter = 1
+
 [node name="GenitalsInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -2558,6 +2582,11 @@ theme_override_font_sizes/font_size = 28
 text = "Genitals"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Genital Features"
+is_title = true
 
 [node name="Toggles" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
 layout_mode = 2
@@ -3335,6 +3364,10 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Puffy,puffy anus", "!Anus at Tail Base,tail anus", "!Detailed,detailed anus", "!Anatomically Correct,anatomically correct anus", "!Glowing,glowing anus", "anus markings"])
 
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+layout_mode = 2
+mouse_filter = 1
+
 [node name="ExtraInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -3381,6 +3414,144 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 
+[node name="Review" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Review"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BasicContainer7" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.603835, 0.706203, 0.866426, 1)
+text = "Name:"
+
+[node name="NameLabel" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.603922, 0.705882, 0.866667, 1)
+text = "Species:"
+
+[node name="SpeciesLabel" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="DetsContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer3"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.603922, 0.705882, 0.866667, 1)
+text = "Gender:"
+
+[node name="GenderLabel" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer3"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer4"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.603922, 0.705882, 0.866667, 1)
+text = "Age:"
+
+[node name="AgeLabel" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer4"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer5"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.603922, 0.705882, 0.866667, 1)
+text = "Form:"
+
+[node name="FormLabel" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/DetsContainer/HBoxContainer5"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Parent Tags"
+horizontal_alignment = 1
+
+[node name="ParentsItemList" type="ItemList" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6/VBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Suggestions Tags"
+horizontal_alignment = 1
+
+[node name="SuggestionItemList" type="ItemList" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/HBoxContainer6/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="FinishtButton" type="Button" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Create Character Tag"
+
 [node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer"]
 layout_mode = 2
 
@@ -3400,10 +3571,3 @@ text = "Previous"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Next"
-
-[node name="FinishtButton" type="Button" parent="MarginContainer/DataContainer/TabsContainer/ButtonsContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Finish
-"

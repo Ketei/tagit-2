@@ -56,13 +56,17 @@ class_name Tag
 
 
 ## Saves the resource to user path.
-func save() -> void:
+func save() -> String:
+	var path: String = Tagger.get_tag_filepath(tag)
+	
 	if file_name.is_empty():
 		file_name = tag.validate_filename() + ".tres"
 	
 	ResourceSaver.save(
 			self, 
-			Tagger.get_tag_filepath(tag))
+			path)
+	
+	return path
 
 
 func save_default() -> void:

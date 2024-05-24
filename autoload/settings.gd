@@ -834,7 +834,7 @@ func get_tag_filepath(tag_name: String) -> String:
 	if has_tag(tag_name):
 		return loaded_tags[tag_name.left(1)][tag_name]["path"]
 	else:
-		return database_path + TAGS_PATH + tag_name + ".tres"
+		return get_default_tag_filepath(tag_name)
 
 
 func get_default_tag_filepath(tag_name: String) -> String:
