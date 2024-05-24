@@ -3169,9 +3169,9 @@ script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "pussy"
 count_select = {
-"1": "monotone pussy",
-"2": "two tone pussy",
-"3+": "multicolored pussy"
+"1": ["monotone pussy"],
+"2": ["two tone pussy"],
+"3+": ["multicolored pussy"]
 }
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
@@ -3193,9 +3193,9 @@ script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "inner pussy"
 count_select = {
-"1": "monotone inner pussy",
-"2": "two tone inner pussy",
-"3+": "multicolored inner pussy"
+"1": ["monotone inner pussy"],
+"2": ["two tone inner pussy"],
+"3+": ["multicolored inner pussy"]
 }
 
 [node name="HSeparator3" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
@@ -3217,9 +3217,9 @@ script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "clitoris"
 count_select = {
-"1": "monotone clitoris",
-"2": "two tone clitoris",
-"3+": "multicolored clitoris"
+"1": ["monotone clitoris"],
+"2": ["two tone clitoris"],
+"3+": ["multicolored clitoris"]
 }
 
 [node name="OtherContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer"]
