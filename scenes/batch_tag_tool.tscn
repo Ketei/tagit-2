@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bw8mx12laf44e"]
+[gd_scene load_steps=9 format=3 uid="uid://bw8mx12laf44e"]
 
 [ext_resource type="Script" path="res://scripts/tool_color_tag_generation.gd" id="1_drtv6"]
 [ext_resource type="PackedScene" uid="uid://b0pf1366qxb7y" path="res://scenes/category_option_button.tscn" id="2_2d87s"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="2_b2nvx"]
 [ext_resource type="Script" path="res://scripts/tool_color_checkbox.gd" id="3_msb44"]
+[ext_resource type="Script" path="res://scripts/tag_itemlist_line_edit.gd" id="4_4cu1q"]
 
 [sub_resource type="GDScript" id="GDScript_xvd5j"]
 resource_name = "parents_connect"
@@ -199,6 +200,26 @@ script = ExtResource("2_b2nvx")
 
 [node name="SuggestionLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer"]
 layout_mode = 2
+
+[node name="AliasesContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer"]
+layout_mode = 2
+text = "Aliases"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AliasTagItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_b2nvx")
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer" node_paths=PackedStringArray("tag_item_list")]
+layout_mode = 2
+script = ExtResource("4_4cu1q")
+tag_item_list = NodePath("../AliasTagItemList")
 
 [node name="MetaContainer" type="VBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer"]
 layout_mode = 2
