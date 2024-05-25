@@ -146,9 +146,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
+current_tab = 5
 tabs_visible = false
 
 [node name="BaseData" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
@@ -2625,7 +2627,6 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="LegsInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
@@ -2854,6 +2855,18 @@ size_flags_stretch_ratio = 8.0
 script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Ankle Markings,ankle markings", "!Foot Markings,foot markings", "!Hip Markings,hip markings", "!Thigh Markings,thigh markings"])
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Legs Traits"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+alignment = 1
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["thigh gap"])
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
 layout_mode = 2
@@ -3168,6 +3181,7 @@ includes_tags = Array[String](["pussy"])
 visibility_controlled = [NodePath("../../PussyContainer")]
 
 [node name="BallsContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+visible = false
 layout_mode = 2
 
 [node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer" instance=ExtResource("5_6vekm")]
@@ -3177,6 +3191,7 @@ is_title = true
 
 [node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/BallsContainer/SizeContainer"]
 layout_mode = 2
@@ -3261,6 +3276,7 @@ layout_mode = 2
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/HBoxContainer2"]
 layout_mode = 2
@@ -3277,16 +3293,51 @@ script = ExtResource("9_ser5u")
 element = "penis"
 exclude = Array[int]([0, 1])
 
-[node name="TypeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer"]
+[node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/TypeContainer"]
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Penis Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["micropenis"],
+"title": "Micro Penis"
+}, {
+"include": ["small penis"],
+"title": "Small Penis"
+}, {
+"include": ["average penis"],
+"title": "Average Penis"
+}, {
+"include": ["big penis"],
+"title": "Big Penis"
+}, {
+"include": ["huge penis"],
+"title": "Huge Penis"
+}, {
+"include": ["hyper penis"],
+"title": "Hyper Penis"
+}])
+
+[node name="TypeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Penis Type"
 
-[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/TypeContainer"]
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
@@ -3300,6 +3351,9 @@ elements = Array[Dictionary]([{
 "include": ["mechanical penis"],
 "title": "Mechanical Penis"
 }, {
+"include": ["tapering penis"],
+"title": "Tapering Penis"
+}, {
 "include": ["hybrid penis"],
 "title": "Hybrid Penis"
 }])
@@ -3308,7 +3362,7 @@ bind_indexes = {
 1: NodePath("../HumanoidOptionButton2")
 }
 
-[node name="AnimalTagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/TypeContainer"]
+[node name="AnimalTagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
@@ -3371,7 +3425,7 @@ elements = Array[Dictionary]([{
 "title": "Ursine Penis"
 }])
 
-[node name="HumanoidOptionButton2" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PeenBasicsContainer/TypeContainer"]
+[node name="HumanoidOptionButton2" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TypeContainer"]
 layout_mode = 2
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
@@ -3381,39 +3435,6 @@ elements = Array[Dictionary]([{
 }, {
 "include": ["circumcised"],
 "title": "Circumcised"
-}])
-
-[node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Penis Size"
-
-[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/SizeContainer"]
-layout_mode = 2
-mouse_filter = 1
-script = ExtResource("6_8b3vy")
-elements = Array[Dictionary]([{
-"include": ["micropenis"],
-"title": "Micro Penis"
-}, {
-"include": ["small penis"],
-"title": "Small Penis"
-}, {
-"include": ["average penis"],
-"title": "Average Penis"
-}, {
-"include": ["big penis"],
-"title": "Big Penis"
-}, {
-"include": ["huge penis"],
-"title": "Huge Penis"
-}, {
-"include": ["hyper penis"],
-"title": "Hyper Penis"
 }])
 
 [node name="SpecSizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
@@ -3464,12 +3485,49 @@ elements = Array[Dictionary]([{
 "title": "Thick Penis"
 }])
 
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PenisHolderContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="ConditionalVisibilityCheckButton" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PenisHolderContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Sheathed"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["sheath"])
+visibility_controlled = [NodePath("../../TraitsContainer/SheathContainer")]
+
+[node name="ConditionalVisibilityCheckButton2" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PenisHolderContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Genital Slit"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["genital slit"])
+visibility_controlled = [NodePath("../../TraitsContainer/SlitContainer")]
+
+[node name="ConditionalVisibilityCheckButton3" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/PenisHolderContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+text = "Cloaca"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["cloaca"])
+visibility_controlled = [NodePath("../../TraitsContainer/CloacaContainer")]
+
 [node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer" instance=ExtResource("5_6vekm")]
 layout_mode = 2
 separator_text = "Colors"
 
 [node name="ShadeContainer3" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/ShadeContainer3"]
 layout_mode = 2
@@ -3481,10 +3539,10 @@ layout_mode = 2
 mouse_filter = 1
 script = ExtResource("6_8b3vy")
 elements = Array[Dictionary]([{
-"include": ["dark Penis"],
+"include": ["dark penis"],
 "title": "Dark Colored Penis"
 }, {
-"include": ["light Penis"],
+"include": ["light penis"],
 "title": "Light Colored Penis"
 }])
 
@@ -3574,17 +3632,6 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Barbed Penis,penile spines", "!Penis Bumps,nubbed penis", "ribbed penis", "ridged penis", "spiked penis", "scaled penis"])
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="CharHflowContainer3" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-script = ExtResource("8_yptlf")
-mode = 1
-other_items = Array[String](["!Sheathed, sheath", "!Slit, genital slit", "!Cloaca, cloaca"])
-
 [node name="HSeparator4" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
 layout_mode = 2
 mouse_filter = 1
@@ -3608,7 +3655,213 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["penis markings", "sheath markings", "slit markings"])
 
+[node name="SheathContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Sheath"
+is_title = true
+
+[node name="SLContainer3" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/SLContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/SLContainer3/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Sheath Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/SLContainer3/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Small, small sheath", "!Average", "!Big, big sheath", "!Huge, huge sheath", "!Hyper, hyper sheath"])
+
+[node name="LengthContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/SLContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/SLContainer3/LengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Sheath Length"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/SLContainer3/LengthContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Short, short sheath", "!Average", "!Long, long sheath"])
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Sheath Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "sheath"
+count_select = {
+"2": ["two tone sheath"],
+"3+": ["multicolored sheath"]
+}
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Sheath Traits"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SheathContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Pierced, sheath piercing", "!Thick, thick sheath", "!Countershade, countershade sheath", "!Spotted, spotted sheath", "!Striped, striped sheath"])
+
+[node name="SlitContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Genital Slit"
+is_title = true
+
+[node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Slit Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Small, small genital slit", "!Big, big genital slit", "!Average", "!Huge, huge genital slit", "!Hyper, hyper genital slit"])
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Slit Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "slit"
+count_select = {
+"2": ["two tone genital slit"],
+"3+": ["multicolored genital slit"]
+}
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Slit Traits"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/SlitContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Puffy, puffy genital slit"])
+
+[node name="CloacaContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Cloaca"
+is_title = true
+
+[node name="TypeSize" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer"]
+layout_mode = 2
+
+[node name="TypeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/TypeSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/TypeSize/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Cloaca Type"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/TypeSize/TypeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Vertical, vertical cloaca", "!Horizontal, horizontal cloaca", "!Triangular, triangular cloaca", "!Round, round cloaca"])
+
+[node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/TypeSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/TypeSize/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Cloaca Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/TypeSize/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Small, small cloaca", "!Big, big cloaca", "!Average", "!Huge, huge cloaca", "!Hyper, hyper cloaca"])
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Cloaca Color"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "cloaca"
+count_select = {
+"2": ["two tone cloaca"],
+"3+": ["multicolored cloaca"]
+}
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Slit Traits"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer"]
+layout_mode = 2
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer/CloacaContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Puffy, puffy cloaca"])
+
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PenisContainer/TraitsContainer"]
+layout_mode = 2
+mouse_filter = 1
+
 [node name="PussyContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+visible = false
 layout_mode = 2
 
 [node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/PussyContainer" instance=ExtResource("5_6vekm")]
@@ -3810,6 +4063,7 @@ mode = 1
 other_items = Array[String](["!Plump,plump pussy", "!Innie Pussy,innie pussy", "!Tattoo,pussy tattoo", "!Markings,pussy markings", "!Pierced,pussy piercing"])
 
 [node name="AnusContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo"]
+visible = false
 layout_mode = 2
 
 [node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer" instance=ExtResource("5_6vekm")]
@@ -3819,6 +4073,7 @@ is_title = true
 
 [node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/SizeContainer"]
 layout_mode = 2
@@ -3873,6 +4128,7 @@ mouse_filter = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenitalsInfo/AnusContainer/HBoxContainer"]
 layout_mode = 2

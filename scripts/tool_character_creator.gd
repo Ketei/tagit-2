@@ -20,7 +20,8 @@ Some helpful info about the section you're in will appear here.
 
 [b]Sclera:[/b] Usually the white part of an eyeball
 [b]Pupil:[/b] Usually the black circle of an eyeball",
-	4: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
+	4: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
+	[b]Glans[/b] is the acorn-shaped bulb at the end of the primate penis.",
 	5: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
 
 [b]Handpaws[/b] are hands that look more like paws than. Usually having short stubby fingers and pawpads on the palm and fingers
@@ -107,7 +108,7 @@ func _ready():
 		new_debug_finish.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button_container.add_child(new_debug_finish)
 	finish_button.pressed.connect(on_finish_pressed)
-	reset_button.pressed.connect(reset_fields)
+	reset_button.pressed.connect(on_reset_pressed)
 	max_tabs = tab_container.get_child_count()
 	
 	if tab_container.current_tab != 0:
@@ -243,6 +244,12 @@ func generate_characer() -> bool:
 			"Character \"{0}\" has been created".format([tag_name]),
 			"Character created")
 	return true
+
+
+func on_reset_pressed() -> void:
+	tab_container.current_tab = 0
+	current_tab = 1
+	reset_fields()
 
 
 func reset_fields() -> void:
