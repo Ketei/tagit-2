@@ -18,6 +18,7 @@ var standard_color_nodes: Array[ColorCheckBox] = []
 @onready var parents_tag_item_list: TagItemList = $MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/ParentsContainer/ParentsTagItemList
 @onready var suggestions_tag_item_list: TagItemList = $MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer/SuggestionsTagItemList
 @onready var meta_item_list: TagItemList = $MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer/MetaItemList
+@onready var alias_tag_item_list: TagItemList = $MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer/AliasTagItemList
 
 @onready var standard_col_container: VBoxContainer = $MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer
 
@@ -66,7 +67,7 @@ func on_generate_clicked() -> void:
 		new_tag.suggestions.assign(tag_data["suggestions"])
 		new_tag.tooltip = tag_data["tooltip"]
 		new_tag.wiki_entry = tag_data["wiki"]
-		#new_tag.save_default()
+		new_tag.aliases.assign(tag_data["aliases"])
 		Tagger.register_tag(
 				new_tag.tag,
 				new_tag.save())
@@ -87,18 +88,22 @@ func generate_tag_data(tag_meta: String) -> Dictionary:
 		"tooltip": "",
 		"parents": [],
 		"suggestions": [],
+		"aliases": [],
 		"category": category_option_button.get_category()
 	}
 	
-	return_dict["tag"] = name_line_edit.text.strip_edges().to_lower().format([tag_meta])
-	return_dict["wiki"] = wiki_text_edit.text.strip_edges().format([tag_meta])
-	return_dict["tooltip"] = tooltip_line_edit.text.strip_edges().format([tag_meta])
+	return_dict["tag"] = name_line_edit.text.strip_edges().to_lower().replace(Tagger.WILDCARD_CHAR, tag_meta)
+	return_dict["wiki"] = wiki_text_edit.text.strip_edges().replace(Tagger.WILDCARD_CHAR, tag_meta)
+	return_dict["tooltip"] = tooltip_line_edit.text.strip_edges().replace(Tagger.WILDCARD_CHAR, tag_meta)
 	for parent_item in parents_tag_item_list.get_tag_array():
-		return_dict["parents"].append(parent_item.format([tag_meta]))
+		return_dict["parents"].append(parent_item.replace(Tagger.WILDCARD_CHAR, tag_meta))
 	for suggestion_item in suggestions_tag_item_list.get_tag_array():
 		return_dict["suggestions"].append(
-				suggestion_item.format([tag_meta]))
-	
+				suggestion_item.replace(Tagger.WILDCARD_CHAR, tag_meta))
+	for alias_item in alias_tag_item_list.get_tag_array():
+		return_dict["aliases"].append(
+				alias_item.replace(Tagger.WILDCARD_CHAR, tag_meta)
+		)
 	return return_dict
 
 
