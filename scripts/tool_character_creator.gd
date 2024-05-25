@@ -21,7 +21,7 @@ Some helpful info about the section you're in will appear here.
 [b]Sclera:[/b] Usually the white part of an eyeball
 [b]Pupil:[/b] Usually the black circle of an eyeball",
 	4: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
-	[b]Glans[/b] is the acorn-shaped bulb at the end of the primate penis.",
+[b]Glans[/b] is the acorn-shaped bulb at the end of the primate penis.",
 	5: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
 
 [b]Handpaws[/b] are hands that look more like paws than. Usually having short stubby fingers and pawpads on the palm and fingers
