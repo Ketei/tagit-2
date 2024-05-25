@@ -8,24 +8,25 @@ Not every trait/feature needs to be filled out. If you're unsure it's ok to leav
 
 Some helpful info about the section you're in will appear here.
 
-[b]Species:[/b] You can add multiple species by separating them with commas. \"canine, domestic dog\" will give you 2 tags: [u]canine[/u] and [u]domestic dog[/u]
-
-[b]Figure:[/b]
+[b]Species:[/b] You can add multiple species by separating them with commas. \"canine, domestic dog\" will give you 2 tags: [u]canine[/u] and [u]domestic dog[/u]",
+	
+	2: "[b]Figure:[/b][ul]
 [b]Hourglass[/b]:  Wide hips, small waist, and sizeable bust that is comparable to the hips. Any gender
 [b]Pear[/b]:  Wide hips paired with a narrower upper body and shoulders. Any gender
 [b]Venus[/b]: Wide hips, big thighs/buttocks, small waist, big bust, usually tall with small heads. Only females, gynomorph and herms.
-[b]Voluptuous[/b]: Wide hips, thick thighs, big rbeasts and big butt. Only females, gynomorph and herms.",
-	2: "[b]Ear Size & Ear Length:[/b] They are relative to the character.
+[b]Voluptuous[/b]: Wide hips, thick thighs, big breasts and big butt. Only females, gynomorph and herms.[/ul]",
+	
+	3: "[b]Ear Size & Ear Length:[/b] They are relative to the character.
 
 [b]Sclera:[/b] Usually the white part of an eyeball
 [b]Pupil:[/b] Usually the black circle of an eyeball",
-	3: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
-	4: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
+	4: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
+	5: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.
 
 [b]Handpaws[/b] are hands that look more like paws than. Usually having short stubby fingers and pawpads on the palm and fingers
 
 [b]Talon hands[/b] are hands that look like talons, usually having long hooked claws and having scutes instead of feathers/fur.",
-	5: "[b]Movement:[/b]
+	6: "[b]Movement:[/b]
 [indent]
 [b]Biped[/b] walks normally on two legs
 [b]Triped[/b] walks normally on three legs
@@ -39,11 +40,11 @@ Some helpful info about the section you're in will appear here.
 [b]Hooved Plantigrade[/b] have hooves but still walk like plantigrades. This is normally by having the \"toes\" be hooves.
 [b]Hooved digitigrade[/b] have hooves but walk like digitigrades. This is normally by having the \"toes\" be hooves.
 [/indent]",
-	6: "Tail Traits",
-	7: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
-	8: "[b]Wiki[/b] is to write any extra detail/lore about your character.
+	7: "Tail Traits",
+	8: "[b]About toggles:[/b] Enabling one of them will give extra options and it means your character has these traits.",
+	9: "[b]Wiki[/b] is to write any extra detail/lore about your character.
 [b]Tooltip[/b] is the text that will appear on the tag as you hover on it.",
-	9: "Review the tags you've added."
+	10: "Review the tags you've added."
 }
 
 @onready var category_info: RichTextLabel = $MarginContainer/DataContainer/InfoContainer/PanelContainer/InfoSide/CategoryInfo
@@ -66,7 +67,7 @@ Some helpful info about the section you're in will appear here.
 @onready var age_option_button: AgeOptionButton = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/AgeContainer/AgeOptionButton
 @onready var body_type_opt_btn: BodyOptionButton = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/BodyForm/BodTypeOptBtn
 
-@onready var figure_button: TagsOptionButton = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/FigureContainer/TagsOptionButton
+@onready var figure_button: TagsOptionButton = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer/FigureContainer/TagsOptionButton
 
 # Review nodes ---
 @onready var review_name_label: Label = $MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/Review/BasicContainer7/HBoxContainer/NameLabel

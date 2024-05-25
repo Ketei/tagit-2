@@ -146,11 +146,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
-current_tab = 8
 tabs_visible = false
 
 [node name="BaseData" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
@@ -244,20 +242,104 @@ text = "Form"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ShapeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="GenBodyContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TitleMarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 28
+text = "Body"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Body Features"
+is_title = true
+
+[node name="TogglesContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 10
+alignment = 1
+
+[node name="ConditionalVisibilityCheckButton" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Fur on Body"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["fur"])
+visibility_controlled = [NodePath("../../FurContainer")]
+
+[node name="ConditionalVisibilityCheckButton2" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Scales on Body"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["scales"])
+visibility_controlled = [NodePath("../../ScalesContainer")]
+
+[node name="ConditionalVisibilityCheckButton3" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Feathers on Body"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["feathers"])
+visibility_controlled = [NodePath("../../FeatherContainer")]
+
+[node name="ConditionalVisibilityCheckButton4" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Scutes on Body"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["scutes"])
+visibility_controlled = [NodePath("../../ScutesContainer")]
+
+[node name="ConditionalVisibilityCheckButton5" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Skin on Body"
+script = ExtResource("9_uy244")
+visibility_controlled = [NodePath("../../SkinContainer")]
+
+[node name="ConditionalVisibilityCheckButton6" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Wool on Body"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["wool (fur)"])
+visibility_controlled = [NodePath("../../WoolContainer")]
+
+[node name="ConditionalVisibilityCheckButton7" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/TogglesContainer" node_paths=PackedStringArray("visibility_controlled")]
+layout_mode = 2
+mouse_filter = 1
+text = "Exoskeleton"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["exoskeleton"])
+visibility_controlled = [NodePath("../../ExoskeletonContainer")]
+
+[node name="ShapeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="HeightContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer"]
+[node name="HeightContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/HeightContainer"]
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer/HeightContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Height"
 
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/HeightContainer"]
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer/HeightContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -276,17 +358,17 @@ elements = Array[Dictionary]([{
 "title": "Macro"
 }])
 
-[node name="FigureContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer"]
+[node name="FigureContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/FigureContainer"]
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer/FigureContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Figure
 "
 
-[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ShapeContainer/FigureContainer"]
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ShapeContainer/FigureContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Hourglass:  Wide hips, small waist, and sizeable bust that is comparable to the hips. (any gender)
@@ -312,20 +394,20 @@ elements = Array[Dictionary]([{
 "title": "Shortstack/Teapot"
 }])
 
-[node name="FatMuscleContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="FatMuscleContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="BodyFat" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer"]
+[node name="BodyFat" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FatMuscleContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/BodyFat"]
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FatMuscleContainer/BodyFat"]
 layout_mode = 2
 mouse_filter = 1
 text = "Body Fat"
 
-[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/BodyFat"]
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FatMuscleContainer/BodyFat"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -347,17 +429,17 @@ elements = Array[Dictionary]([{
 "title": "Morbidly Obese"
 }])
 
-[node name="MuscularContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer"]
+[node name="MuscularContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FatMuscleContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/MuscularContainer"]
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FatMuscleContainer/MuscularContainer"]
 layout_mode = 2
 mouse_filter = 1
 text = "Muscular Definition
 "
 
-[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/FatMuscleContainer/MuscularContainer"]
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FatMuscleContainer/MuscularContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -370,20 +452,479 @@ elements = Array[Dictionary]([{
 "title": "Muscular"
 }])
 
-[node name="ExtrasContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData"]
+[node name="FurContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer" instance=ExtResource("5_6vekm")]
 layout_mode = 2
-mouse_filter = 1
-text = "Extra Features"
+separator_text = "Fur"
+is_title = true
 
-[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/ExtrasContainer"]
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Fur Color"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer"]
+layout_mode = 2
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer/HBoxContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Fur Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer/HBoxContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark fur"],
+"title": "Dark Fur"
+}, {
+"include": ["light fur"],
+"title": "Light Fur"
+}])
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Fur Length"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["short fur"],
+"title": "Short Fur"
+}, {
+"include": ["long fur"],
+"title": "Long Fur"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "fur"
+count_select = {
+"1": ["monotone fur"],
+"2": ["two tone fur"],
+"3+": ["multicolored fur"]
+}
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Fur Traits"
+
+[node name="CharHflowContainer2" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FurContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 script = ExtResource("8_yptlf")
 mode = 1
+other_items = Array[String](["countershade fur", "gradient fur", "!Spotted, spotted fur", "!Striped, striped fur", "!Other Markings, fur markings"])
+
+[node name="ScalesContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Scales"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Scale Color"
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Scales Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark scales"],
+"title": "Dark Scales"
+}, {
+"include": ["light scales"],
+"title": "Light Scales"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "scales"
+count_select = {
+"1": ["monotone scales"],
+"2": ["two tone scales"],
+"3+": ["multicolored scales"]
+}
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Scale Traits"
+
+[node name="CharHflowContainer2" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["countershade scales", "!Glistening, glistening scales", "!Glowing, glowing scales", "!Spotted, spotted scales", "!Striped, striped scales", "!Other Markings, scale markings"])
+
+[node name="HTitleSeparator4" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Specific Scale Locations"
+
+[node name="CharHflowContainer3" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScalesContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Belly, belly scales", "!Facial, facial scales", "!Eyebrows, scale eyebrows", "scale hair", "!Balls, scaled balls", "!Forearms, scaled forearms", "!Legs, scaled legs", "!Nose, scaled nose", "!Penis, scaled penis"])
+
+[node name="FeatherContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Feathers"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Feather Color"
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Feather Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark feathers"],
+"title": "Dark Feathers"
+}, {
+"include": ["light feathers"],
+"title": "Light Feathers"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "feathers"
+count_select = {
+"1": ["monotone scales"],
+"2": ["two tone scales"],
+"3+": ["multicolored scales"]
+}
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Feather Traits"
+
+[node name="CharHflowContainer2" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["countershade feathers", "!Glistening, glistening feathers", "!Glowing, glowing feathers", "!Spotted, spotted feathers", "!Striped, striped feathers", "!Other Markings, feather markings"])
+
+[node name="HTitleSeparator4" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Specific Feather Locations"
+
+[node name="CharHflowContainer3" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/FeatherContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Arms, feathered arms", "!Crest, feathered crest", "!Ears, feathered ears", "!Penis, feathered penis", "!Tail, feathered tail", "!Wings, feathered wings"])
+
+[node name="ScutesContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Scutes"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Scute Color"
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Scute Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark scutes"],
+"title": "Dark Scutes"
+}, {
+"include": ["light scutes"],
+"title": "Light Scutes"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "scutes"
+count_select = {
+"1": ["monotone scutes"],
+"2": ["two tone scutes"],
+"3+": ["multicolored scutes"]
+}
+
+[node name="HTitleSeparator4" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Specific Scute Locations"
+
+[node name="CharHflowContainer3" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ScutesContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Arms, scuted arms", "!Legs, scuted legs", "!Hands, scuted hands", "!Feet, scuted feet"])
+
+[node name="SkinContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Skin"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Skin Color"
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Skin Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark feathers"],
+"title": "Dark Skin"
+}, {
+"include": ["light feathers"],
+"title": "Light Skin"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "skin"
+count_select = {
+"1": ["monotone skin"],
+"2": ["two tone skin"],
+"3+": ["multicolored skin"]
+}
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Skin Traits"
+
+[node name="CharHflowContainer2" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/SkinContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Spotted, spotted skin", "!Striped, striped skin"])
+
+[node name="WoolContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Wool"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Wool Color"
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Wool Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark wool"],
+"title": "Dark Wool"
+}, {
+"include": ["light wool"],
+"title": "Light Wool"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/WoolContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "wool"
+count_select = {
+"1": ["monotone wool"],
+"2": ["two tone wool"],
+"3+": ["multicolored wool"]
+}
+
+[node name="ExoskeletonContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Exoskeleton"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Exoskeleton Color"
+
+[node name="ToneContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Exoskeleton Tone"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer/ToneContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+elements = Array[Dictionary]([{
+"include": ["dark exoskeleton"],
+"title": "Dark Exoskeleton"
+}, {
+"include": ["light exoskeleton"],
+"title": "Light Exoskeleton"
+}])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+formatting = "{0} {1}"
+element = "exoskeleton"
+count_select = {
+"1": ["monotone exoskeleton"],
+"2": ["two tone exoskeleton"],
+"3+": ["multicolored exoskeleton"]
+}
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Exoskeleton Traits"
+
+[node name="CharHflowContainer2" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer/ExoskeletonContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["countershade exoskeleton", "gradient exoskeleton", "!Spotted, spotted exoskeleton", "!Striped, striped exoskeleton"])
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/GenBodyContainer"]
+layout_mode = 2
+mouse_filter = 1
 
 [node name="HeadInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -3415,6 +3956,7 @@ size_flags_horizontal = 3
 mouse_filter = 1
 
 [node name="Review" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 12
 
