@@ -62,16 +62,22 @@ func on_generate_clicked() -> void:
 		var new_tag := Tag.new()
 		new_tag.tag = tag_data["tag"]
 		new_tag.category = tag_data["category"]
-		new_tag.parents = tag_data["parents"].duplicate()
-		new_tag.suggestions = tag_data["suggestions"].duplicate()
+		new_tag.parents.assign(tag_data["parents"])
+		new_tag.suggestions.assign(tag_data["suggestions"])
 		new_tag.tooltip = tag_data["tooltip"]
-		new_tag.save_default()
+		new_tag.wiki_entry = tag_data["wiki"]
+		#new_tag.save_default()
 		Tagger.register_tag(
 				new_tag.tag,
-				Tagger.get_default_tag_filepath(new_tag.tag))
+				new_tag.save())
 		Tagger.tag_updated.emit(new_tag.tag)
 	
 	replace_confirmation.queue_free()
+	Tagger.queue_notification(
+			"All tags successfully created.",
+			"Tags Created"
+	)
+	clear_fields()
 
 
 func generate_tag_data(tag_meta: String) -> Dictionary:
@@ -103,4 +109,18 @@ func explore_for_colors(parent_node: Node) -> void:
 		else:
 			explore_for_colors(child)
 
+
+func clear_fields() -> void:
+	name_line_edit.clear()
+	category_option_button.select(0)
+	wiki_text_edit.clear()
+	tooltip_line_edit.clear()
+	parents_tag_item_list.clear()
+	suggestions_tag_item_list.clear()
+	parent_line_edit.clear()
+	suggestion_line_edit.clear()
+	for checkbox in standard_color_nodes:
+		checkbox.button_pressed = false
+	meta_item_list.clear()
+	custom_meta_line_edit.clear()
 

@@ -143,6 +143,8 @@ horizontal_alignment = 1
 [node name="TextEdit" type="TextEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/WikiInfo"]
 layout_mode = 2
 size_flags_vertical = 3
+wrap_mode = 1
+scroll_smooth = true
 
 [node name="TooltipContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer"]
 layout_mode = 2
