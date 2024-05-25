@@ -2,16 +2,13 @@ class_name TagsOptionButton
 extends OptionButton
 
 @export var max_height: int = 250
-@export var elements: Array[Dictionary] = [
-	{
-		"title": "",
-		"include": [""]
-	}
-]
+@export var elements: Array[Dictionary] = []
 @export var add_none_option: bool = true
 @export var none_text: String = "- Unknown | N/A -"
 ## Bind controls to indextes. int: node
 @export var bind_indexes: Dictionary = {}
+## Faster to add than regular elements
+@export var better_elements: Array[String] = []
 
 
 func _ready():
@@ -39,8 +36,28 @@ func _ready():
 				get_node(bind_indexes[keys]).visible = keys + 1 == selected
 			else:
 				get_node(bind_indexes[keys]).visible = keys == selected
-
+	
+	for option in better_elements:
+		var title: String = ""
+		var elements_array: Array[String] = []
+		for split_element in option.split(",", false):
+			var clean_element = split_element.strip_edges()
+			var lower_element = clean_element.to_lower()
+			if clean_element.begins_with("!"):
+				title = clean_element.trim_prefix("!")
+			elif not elements_array.has(lower_element):
+				elements_array.append(lower_element)
+		if title.is_empty() and not elements_array.is_empty():
+			title = DumbUtils.title_case(elements_array[0])
+		add_item(title)
+		set_item_metadata(
+				_index,
+				elements_array.duplicate()
+		)
+		_index += 1
+	
 	elements.clear()
+	better_elements.clear()
 
 
 func on_selected(selected_index: int) -> void:
