@@ -1,7 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvv8htfeg3k53"]
+[gd_scene load_steps=6 format=3 uid="uid://cvv8htfeg3k53"]
 
 [ext_resource type="Script" path="res://scripts/save_window.gd" id="1_wmvmf"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_no3w2"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_sua3e"]
+
+[sub_resource type="Resource" id="Resource_qumlb"]
+script = ExtResource("3_sua3e")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_nliwe"]
+script = ExtResource("3_sua3e")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="SaveWindow" type="Control"]
 top_level = true
@@ -79,6 +92,9 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("2_no3w2")
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_qumlb")
+dragging_scroll_damper = SubResource("Resource_nliwe")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false

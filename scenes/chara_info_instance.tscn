@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://ds167yujtqrif"]
+[gd_scene load_steps=21 format=3 uid="uid://ds167yujtqrif"]
 
 [ext_resource type="Script" path="res://scripts/char_info_instance.gd" id="1_rfmjg"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_ylrwt"]
 [ext_resource type="PackedScene" uid="uid://clofybwcoamm6" path="res://scenes/color_type_container.tscn" id="3_3u1bb"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_6fg1l"]
 [ext_resource type="PackedScene" uid="uid://ukl5t5mc7rq2" path="res://scenes/bod_type_opt_btn.tscn" id="3_717r1"]
 [ext_resource type="PackedScene" uid="uid://dhadnetnefl7t" path="res://scenes/genders_option_button.tscn" id="3_y53kr"]
 [ext_resource type="Script" path="res://scripts/body_props_contianer.gd" id="4_y4l5k"]
@@ -12,6 +13,18 @@
 [ext_resource type="Script" path="res://scripts/pose_checkbox.gd" id="6_g0q6c"]
 [ext_resource type="Script" path="res://scripts/poses_container.gd" id="7_n8f0o"]
 [ext_resource type="ButtonGroup" uid="uid://um8nk8qg1p5q" path="res://button_groups/wizard_pose_group.tres" id="11_kbrpc"]
+
+[sub_resource type="Resource" id="Resource_ybxb8"]
+script = ExtResource("3_6fg1l")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_k003x"]
+script = ExtResource("3_6fg1l")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [sub_resource type="GDScript" id="GDScript_o6xm3"]
 resource_name = "gender_contain"
@@ -74,11 +87,13 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
 script = ExtResource("1_ylrwt")
-speed = 7.0
-allow_overdragging = false
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_ybxb8")
+dragging_scroll_damper = SubResource("Resource_k003x")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="MarginContainer" type="MarginContainer" parent="SmoothScrollContainer"]
 layout_mode = 2
@@ -105,7 +120,6 @@ text = "Body type:"
 
 [node name="BodTypeOptBtn" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/BodyTContainer" instance=ExtResource("3_717r1")]
 layout_mode = 2
-selected = -1
 
 [node name="SpeciesContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer"]
 layout_mode = 2

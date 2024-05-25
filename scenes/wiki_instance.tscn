@@ -1,9 +1,34 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgpp0mr5o1al3"]
+[gd_scene load_steps=10 format=3 uid="uid://bgpp0mr5o1al3"]
 
 [ext_resource type="Script" path="res://scripts/wiki_instance.gd" id="1_qfsgr"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_oo4wn"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="3_cy5fh"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_gptxi"]
 [ext_resource type="Texture2D" uid="uid://cosrtsibrj13r" path="res://textures/icons/e6_logo.svg" id="4_vsnv8"]
+
+[sub_resource type="Resource" id="Resource_avbip"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_8fnih"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_fql46"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_3lqvq"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="WikiInstance" type="Control"]
 layout_mode = 3
@@ -77,12 +102,13 @@ theme_override_constants/margin_bottom = 8
 [node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("2_oo4wn")
-speed = 6.0
-allow_overdragging = false
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_avbip")
+dragging_scroll_damper = SubResource("Resource_8fnih")
 drag_with_mouse = false
 drag_with_touch = false
-follow_focus_ = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="WikiDesc" type="RichTextLabel" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer/SmoothScrollContainer"]
 layout_mode = 2
@@ -125,11 +151,15 @@ size_flags_stretch_ratio = 2.0
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("2_oo4wn")
-speed = 10.0
-allow_overdragging = false
+speed = 500.0
+wheel_scroll_damper = SubResource("Resource_fql46")
+dragging_scroll_damper = SubResource("Resource_3lqvq")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
+hide_scrollbar_over_time = true
+scrollbar_hide_time = 0.5
 
 [node name="ThumbnailContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer"]
 layout_mode = 2

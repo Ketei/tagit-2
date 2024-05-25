@@ -1,7 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb0xy7vkvw6e1"]
+[gd_scene load_steps=6 format=3 uid="uid://cb0xy7vkvw6e1"]
 
 [ext_resource type="Script" path="res://scripts/tool_prefixes.gd" id="1_i6clu"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_nbqmg"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_wqou2"]
+
+[sub_resource type="Resource" id="Resource_mk5c0"]
+script = ExtResource("3_wqou2")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_qj2xc"]
+script = ExtResource("3_wqou2")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="ToolPrefixes" type="Control"]
 layout_mode = 3
@@ -35,6 +48,11 @@ size_flags_vertical = 3
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("1_nbqmg")
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_mk5c0")
+dragging_scroll_damper = SubResource("Resource_qj2xc")
+drag_with_mouse = false
+drag_with_touch = false
 allow_horizontal_scroll = false
 
 [node name="NodeContainer" type="VBoxContainer" parent="ToolContainer/ListContainer/PanelContainer/SmoothScrollContainer"]
