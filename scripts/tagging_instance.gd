@@ -132,6 +132,8 @@ func on_map_selected(tag_to_add: String) -> void:
 
 
 func summon_wizard() -> void:
+	if wizard_button.has_focus():
+		wizard_button.release_focus()
 	tag_wizard = WIZARD_INSTANCE.instantiate()
 	tag_wizard.wizard_finished.connect(on_wizard_orgasm)
 	add_child(tag_wizard)
@@ -325,7 +327,8 @@ func on_load_pressed(load_data: Dictionary) -> void:
 func open_save_window() -> void:
 	if save_window != null:
 		return
-	
+	if save_list_button.has_focus():
+		save_list_button.release_focus()
 	save_window = SAVE_WINDOW.instantiate()
 	save_window.mode = 0
 	save_window.file_saved.connect(on_file_saved)
