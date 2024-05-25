@@ -145,7 +145,9 @@ func on_search_filter_cleared() -> void:
 func on_search_submitted(text_sumbit: String) -> void:
 	var search_text: String = text_sumbit.strip_edges().to_lower()
 	search_line_edit.clear()
+	
 	search_alias(search_text)
+	
 	if text_sumbit.is_empty():
 		searching_label.hide()
 		clear_search_button.hide()
