@@ -151,10 +151,3 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.tres ; Text Resource")
 use_native_dialog = true
-
-[node name="PackInstalled" type="AcceptDialog" parent="."]
-title = "Pack Installed"
-initial_position = 1
-size = Vector2i(251, 100)
-ok_button_text = "Done"
-dialog_text = "Tag pack successfully installed"
