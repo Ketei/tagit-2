@@ -120,10 +120,10 @@ func convert_from_wiki(text_from_wiki: String) -> String:
 func on_timer_timeout() -> void:
 	if not jobs.is_empty():
 		var req_url: Dictionary = jobs.pop_front()
-		print("Making a request to:\n" + req_url["url"])
+		Tagger.log_message("Making a request to:\n" + req_url["url"])
 		requester.request(req_url["url"], Tagger.get_headers())
 		var response: Array = await request_get
-		print("- Response received -")
+		Tagger.log_message("Response received")
 		if is_instance_valid(req_url["node"]) and req_url["node"].is_inside_tree():
 			req_url["node"].process_response(response, req_url["type"])
 		job_timer.start()
@@ -135,8 +135,9 @@ func on_timer_timeout() -> void:
 func on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var response: Array = []
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-		print("An error was encountered with the request.")
-		print("Result code: {0}, Response code: {1}".format([result, response_code]))
+		Tagger.log_message(
+			"An error was encountered with the request.\nResult code: " + str(result) + "\nResponse code: " + str(response_code),
+			Tagger.LoggingLevel.WARNING)
 	
 	var json = JSON.new()
 	var error = json.parse(body.get_string_from_utf8())
@@ -146,7 +147,10 @@ func on_request_completed(result: int, response_code: int, _headers: PackedStrin
 		if pre_json is Array:
 			response = pre_json # Should be Array[Dictionary]
 	else:
-		print("Error parsing response data: " + json.get_error_message())
+		Tagger.log_message(
+			"Error parsing response data: " + json.get_error_message(),
+			Tagger.LoggingLevel.ERROR
+		)
 	
 	request_get.emit(response)
 
@@ -158,8 +162,9 @@ func request_prio(url: String) -> void:
 func on_prio_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var response: Array = []
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-		print("An error was encountered with the request.")
-		print("Result code: {0}, Response code: {1}".format([result, response_code]))
+		Tagger.log_message(
+			"An error was encountered with the request.\nResult code: " + str(result) + "\nResponse code: " + str(response_code),
+			Tagger.LoggingLevel.WARNING)
 	
 	var json = JSON.new()
 	var error = json.parse(body.get_string_from_utf8())
@@ -169,7 +174,10 @@ func on_prio_request_completed(result: int, response_code: int, _headers: Packed
 		if pre_json is Array:
 			response = pre_json # Should be Array[Dictionary]
 	else:
-		print("Error parsing response data: " + json.get_error_message())
+		Tagger.log_message(
+			"Error parsing response data: " + json.get_error_message(),
+			Tagger.LoggingLevel.ERROR
+		)
 	
 	prio_get.emit(response)
 

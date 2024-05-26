@@ -243,6 +243,7 @@ func generate_characer() -> bool:
 	Tagger.queue_notification(
 			"Character \"{0}\" has been created".format([tag_name]),
 			"Character created")
+	Tagger.log_message("Character \"" + tag_name + "\" has been created.")
 	return true
 
 

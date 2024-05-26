@@ -9,7 +9,14 @@ signal tag_deleted(tag_name)
 signal invalid_added(tag_name)
 signal websites_updated
 signal disabled_shortcuts(is_disabled: bool)
+signal message_logged(message: String, level: LoggingLevel)
 
+
+enum LoggingLevel {
+	NORMAL,
+	WARNING,
+	ERROR,
+}
 
 enum Categories {
 	GENERAL,
@@ -237,6 +244,11 @@ var disable_shortcuts_count: int = 0:
 			shortcuts_disabled = false
 		elif 0 < disable_shortcuts_count and not shortcuts_disabled:
 			shortcuts_disabled = true
+var queued_logs: Dictionary = {
+	"INFO": [],
+	"WARNING": [],
+	"ERROR": []
+}
 
 
 func _ready():
@@ -247,7 +259,6 @@ func _ready():
 	
 	var _load_settings = SettingsResource.get_settings()
 	var _save_data := SaveSlots.get_save_data()
-	print("Is user first run: " + str(_load_settings.first_run))
 	
 	if _load_settings.first_run:
 		if SOURCE_RUN:
@@ -271,16 +282,23 @@ func _ready():
 		var _err = DirAccess.make_dir_recursive_absolute(database_path)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created. Using default.".format(
-					[database_path]))
+			log_message(
+					"Directory \"{0}\" couldn't be created. Using default.".format(
+						[database_path]),
+						LoggingLevel.ERROR,
+						true
+			)
 			database_path = ProjectSettings.globalize_path("user://")
 	
 	if not DirAccess.dir_exists_absolute(database_path + TAGS_PATH):
 		var _err = DirAccess.make_dir_absolute(database_path + TAGS_PATH)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created.".format(
-					[database_path + TAGS_PATH]))
+			log_message(
+					"Directory \"{0}\" couldn't be created.".format(
+						[database_path + TAGS_PATH]),
+						LoggingLevel.ERROR,
+						true)
 	
 	search_online_suggestions = _load_settings.search_online_suggestions
 	loaded_sites.merge(_load_settings.custom_sites, true)
@@ -314,13 +332,21 @@ func _ready():
 
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
 		if file.get_extension() != "tres":
-			print("File " + file +  " is not a resource file. Skipping -")
+			log_message(
+					"File " + file +  " is not a resource file. Skipping -",
+					LoggingLevel.WARNING,
+					true
+			)
 			continue
 		
 		var tag: Resource = load(database_path + TAGS_PATH + file)
 		
 		if not tag is Tag:
-			print("File " + file +  " is not a Tag file. Skipping -")
+			log_message(
+					"File " + file +  " is not a Tag file. Skipping -",
+					LoggingLevel.WARNING,
+					true
+			)
 			continue
 		
 		if tag.file_name != file:
@@ -329,18 +355,26 @@ func _ready():
 			if not alias_list.has(alias.left(1)):
 				alias_list[alias.left(1)] = {}
 			alias_list[alias.left(1)][alias] = tag.tag
-		register_tag(tag.tag, database_path + TAGS_PATH + file)
+		register_tag(tag.tag, database_path + TAGS_PATH + file, true)
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
 			if tag_file.get_extension() != "tres":
-				print("- File " + tag_file +  " is not a resource file. Skipping -")
+				log_message(
+						"File \"" + tag_file +  "\" is not a resource file. Skipping",
+						LoggingLevel.WARNING,
+						true
+				)
 				continue
 			
 			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
 			
 			if not tag is Tag:
-				print("- File " + tag_file +  " is not a Tag file. Skipping -")
+				log_message(
+						"File \"" + tag_file +  "\" is not a Tag file. Skipping",
+						LoggingLevel.WARNING,
+						true
+				)
 				continue
 			
 			if tag.file_name != tag_file:
@@ -350,7 +384,7 @@ func _ready():
 				if not alias_list.has(alias.left(1)):
 					alias_list[alias.left(1)] = {}
 				alias_list[alias.left(1)][alias] = tag.tag
-			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file)
+			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file, true)
 	
 	_loaded_aliases = alias_list.duplicate(true)
 	
@@ -609,7 +643,7 @@ func get_category_name(category: Categories) -> String:
 
 
 func reload_tags() -> void:
-	print("Clearing tag database and reloading")
+	log_message("Clearing tag database and reloading", LoggingLevel.NORMAL)
 	
 	loaded_tags.clear()
 	alias_list.clear()
@@ -645,22 +679,30 @@ func reload_tags() -> void:
 
 
 func database_changed() -> void:
+	log_message("Database change queued.")
 	if not DirAccess.dir_exists_absolute(database_path):
 		var _err = DirAccess.make_dir_recursive_absolute(database_path)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created. Using default.".format(
-					[database_path]))
+			log_message(
+				"Directory \"{0}\" couldn't be created. Using default.".format(
+					[database_path]),
+					LoggingLevel.WARNING
+			)
 			database_path = ProjectSettings.globalize_path("user://")
 	
 	if not DirAccess.dir_exists_absolute(database_path + TAGS_PATH):
 		var _err = DirAccess.make_dir_absolute(database_path + TAGS_PATH)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created.".format(
-					[database_path + TAGS_PATH]))
+			log_message(
+				"Directory \"{0}\" couldn't be created.".format(
+					[database_path + TAGS_PATH]),
+					LoggingLevel.WARNING
+			)
 	
 	reload_tags()
+	log_message("Database change finished.")
 
 
 func get_wiki_request_url(tag_name: String) -> String:
@@ -717,23 +759,26 @@ func get_online_wiki_url(tag_name: String) -> String:
 	return E6_SEARCH_URL + tag_name.replace(" ", "_")
 
 
-func register_tag(tag_string: String, path: String):
+func register_tag(tag_string: String, path: String, log_msg := false):
 	if not loaded_tags.has(tag_string.left(1)):
 		loaded_tags[tag_string.left(1)] = {}
 	
 	var tag: Tag = load(path)
 	
 	if loaded_tags[tag_string.left(1)].has(tag_string):
-		print("Tag {0} is duplicate, tag file from {1} will be used".format(
+		log_message(
+			"Tag \"{0}\" is duplicate, tag file from {1} will be used".format(
 				[
 					tag_string, path
-				]))
+				]),
+				LoggingLevel.NORMAL,
+				log_msg
+		)
 	
 	loaded_tags[tag_string.left(1)][tag_string] = {
 		"path": path,
 		"category": tag.category
 	}
-	#print(loaded_tags)
 	for alias in tag.aliases: # Regsiter/update new aliases
 		if custom_aliases.has(alias.left(1)) and custom_aliases[alias.left(1)].has(alias):
 			continue # Only if they are not custom
@@ -773,9 +818,11 @@ func get_alias(tag_string: String, _starting_alias: String = "") -> String:
 		return tag_string
 	else:
 		if to_tag == _starting_alias:
-			print(
+			log_message(
 				"Cyclic aliasing detected. From\"{0}\" to \"{1}\"".format(
-						[_starting_alias, tag_string]))
+						[_starting_alias, tag_string]),
+				LoggingLevel.WARNING
+			)
 			return tag_string
 		elif has_alias(to_tag):
 			if _starting_alias.is_empty():
@@ -879,12 +926,10 @@ func get_parents(tag_name: String) -> Array[String]:
 	
 	var tag_file: Tag = get_tag(tag_name)
 	unexplored_parents.append_array(tag_file.parents)
-	
-	#print("Starting while loop.")
-	
+
 	while not unexplored_parents.is_empty():
 		var tag: String = unexplored_parents.pop_front()
-		print("Exploring parents of: " + tag)
+		#print("Exploring parents of: " + tag)
 		explored_parents.append(tag) # Add the current to explored
 		
 		if not return_parents.has(tag): # And to the return ones if it wasn't
@@ -918,7 +963,7 @@ func get_prioritized_parents(tag_name: String) -> Dictionary:
 	
 	while not unexplored_parents.is_empty():
 		var tag: String = unexplored_parents.pop_front()
-		print("Exploring parents of: " + tag)
+		#print("Exploring parents of: " + tag)
 		
 		explored_parents.append(tag) # Add the current to explored
 
@@ -1081,4 +1126,42 @@ func save_settings() -> void:
 		new_settings.save()
 	else:
 		print("Running from source: Skipping saving settings.")
+
+
+func log_message(message_to_log: String, message_class := LoggingLevel.NORMAL, queue := false) -> void:
+	if message_class == LoggingLevel.NORMAL:
+		print("INFO: " + message_to_log)
+		message_logged.emit("INFO: " + message_to_log, LoggingLevel)
+		if queue:
+			queued_logs["INFO"].append("INFO: " + message_to_log)
+	elif message_class == LoggingLevel.WARNING:
+		push_warning(message_to_log)
+		message_logged.emit("WARNING: " + message_to_log, LoggingLevel)
+		if queue:
+			queued_logs["WARNING"].append("WARNING: " + message_to_log)
+	elif message_class == LoggingLevel.ERROR:
+		push_error(message_to_log)
+		message_logged.emit("ERROR: " + message_to_log, LoggingLevel)
+		if queue:
+			queued_logs["ERROR"].append("ERROR: " + message_to_log)
+
+
+func get_queued_logs(log_level: LoggingLevel) -> Array[String]:
+	var return_log: Array[String] = []
+	
+	if queued_logs.is_empty():
+		return return_log
+	
+	if log_level == LoggingLevel.NORMAL:
+		return_log.assign(queued_logs["INFO"])
+	elif log_level == LoggingLevel.WARNING:
+		return_log.assign(queued_logs["WARNING"])
+	elif log_level == LoggingLevel.ERROR:
+		return_log.assign(queued_logs["ERROR"])
+	
+	return return_log
+
+
+func clear_queued_logs() -> void:
+	queued_logs.clear()
 

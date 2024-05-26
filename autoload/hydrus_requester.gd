@@ -53,7 +53,7 @@ func connect_to_hydrus(port := api_port, key := api_key) -> void:
 	var headers = parse_headers(response[2])
 
 	if response[0] != OK:
-		print("\nHydrus API responded with: " + str(response[0]))
+		Tagger.log_message("Hydrus request response: " + str(response[0]), Tagger.LoggingLevel.ERROR)
 	else:
 		if headers.server.begins_with("client api"):
 			var json = JSON.new()
@@ -63,10 +63,17 @@ func connect_to_hydrus(port := api_port, key := api_key) -> void:
 			if response[1] == 200:
 				if parsed["basic_permissions"].has(3.0):
 					connected = true
+					Tagger.log_message("Successfully connected to Hydrus")
 				else:
-					print_debug("\nKey doesn't have Search/Fetch permission(3)")
+					Tagger.log_message(
+						"Key doesn't have Search/Fetch permissions (3)",
+						Tagger.LoggingLevel.WARNING
+					)
 			else:
-				print_debug("\n{0}\n{1}".format([parsed["error"], parsed["exception_type"]]))
+				Tagger.log_message(
+					"Hydrus Exception: " + str(parsed["error"]) + "\n, " + str(parsed["exception_type"]),
+					Tagger.LoggingLevel.WARNING
+				)
 	
 	hydrus_connected.emit(connected)
 
@@ -170,7 +177,10 @@ func search(tags_array: Array[String], tag_count: int) -> Array:
 	var response = await requester.request_completed
 	
 	if response[0] != OK or response[1] != 200:
-		print_debug("\nAPI response was not 0/200\nResponse: {0}/{1}".format([response[0], response[1]]))
+		Tagger.log_message(
+			"API response was not 0, 200\nResponse: " + str(response[0]) + ", " + str(response[1]),
+			Tagger.LoggingLevel.WARNING
+		)
 		return[]
 	
 	var json = JSON.new()
@@ -216,14 +226,14 @@ func request_permissions(port: int) -> void:
 	var request_url: String = LOCAL_ADDRESS.format([str(port)]) + "request_new_permissions?name=TagIt%20-%20Tag%20List%20Assistant&basic_permissions=[3]"
 	requester.request(request_url)
 	var client_response: Array = await requester.request_completed
-	print(client_response[0])
-	print(client_response[1])
+	
+	Tagger.log_message("Hydrus HTTP response: " + str(client_response[0]) + "\nHydrus response: " + str(client_response[1]))
+	
 	if client_response[0] != OK or client_response[1] != 200:
 		permissions_received.emit("")
 		return
 	var json: JSON = JSON.new()
 	json.parse(client_response[3].get_string_from_utf8())
-	print(json.data)
 	permissions_received.emit(json.data["access_key"])
 
 

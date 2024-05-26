@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cyodg6s04nvct"]
+[gd_scene load_steps=20 format=3 uid="uid://cyodg6s04nvct"]
 
 [ext_resource type="Script" path="res://scripts/settings_window.gd" id="1_7cc65"]
 [ext_resource type="PackedScene" uid="uid://dp0dtvv4h81x0" path="res://scenes/sites_option_menu.tscn" id="1_uwl5o"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="5_i3xrb"]
 [ext_resource type="Texture2D" uid="uid://l8koq2vw24nt" path="res://textures/icons/install_pack_icon.svg" id="5_mmh48"]
 [ext_resource type="Script" path="res://scripts/settings_suggestion_blacklist.gd" id="6_43nla"]
+[ext_resource type="PackedScene" uid="uid://cr5hfv1dqg7u8" path="res://scenes/logging_control.tscn" id="6_fstxc"]
 [ext_resource type="Texture2D" uid="uid://r2hu7nn01jqa" path="res://textures/icons/web_icon.svg" id="6_i0iyc"]
 [ext_resource type="Script" path="res://scripts/settings_constant_tags.gd" id="7_mfs0k"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="15_080di"]
@@ -334,6 +335,10 @@ text = "Request to Hydrus"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Connect to Hydrus"
+
+[node name="Logs" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer" instance=ExtResource("6_fstxc")]
+visible = false
+layout_mode = 2
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox"]
 layout_mode = 2

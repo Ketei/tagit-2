@@ -72,6 +72,7 @@ func on_generate_clicked() -> void:
 				new_tag.tag,
 				new_tag.save())
 		Tagger.tag_updated.emit(new_tag.tag)
+		Tagger.log_message("Tag \"" + new_tag.tag + "\" created.")
 	
 	replace_confirmation.queue_free()
 	Tagger.queue_notification(
