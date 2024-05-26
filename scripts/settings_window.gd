@@ -61,6 +61,9 @@ func _ready():
 	online_check_button.button_pressed = Tagger.search_online_suggestions
 	include_invalid_check.button_pressed = Tagger.include_invalid
 	
+	if not Hydrus.api_key.is_empty():
+		on_hydrus_connect_pressed()
+	
 	folder_dialog.dir_selected.connect(on_folder_selected)
 	browse_path_button.pressed.connect(on_browse_folder_pressed)
 	hydrus_connect_button.pressed.connect(on_hydrus_connect_pressed)

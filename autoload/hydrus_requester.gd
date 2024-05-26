@@ -34,8 +34,6 @@ func _ready():
 	requester = HTTPRequest.new()
 	requester.timeout = 10
 	add_child(requester)
-	if not api_key.is_empty():
-		connect_to_hydrus()
 	
 	#await connect_to_hydrus()
 	#var ids = await search(["male/male"], 2)
@@ -53,7 +51,7 @@ func connect_to_hydrus(port := api_port, key := api_key) -> void:
 	var headers = parse_headers(response[2])
 
 	if response[0] != OK:
-		Tagger.log_message("Hydrus request response: " + str(response[0]), Tagger.LoggingLevel.ERROR)
+		Tagger.log_message("HTTP response (Hydrus): " + str(response[0]), Tagger.LoggingLevel.ERROR)
 	else:
 		if headers.server.begins_with("client api"):
 			var json = JSON.new()
@@ -227,7 +225,7 @@ func request_permissions(port: int) -> void:
 	requester.request(request_url)
 	var client_response: Array = await requester.request_completed
 	
-	Tagger.log_message("Hydrus HTTP response: " + str(client_response[0]) + "\nHydrus response: " + str(client_response[1]))
+	Tagger.log_message("HTTP response (Hydrus): " + str(client_response[0]) + "\nHydrus response: " + str(client_response[1]))
 	
 	if client_response[0] != OK or client_response[1] != 200:
 		permissions_received.emit("")
