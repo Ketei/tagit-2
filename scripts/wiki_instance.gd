@@ -13,7 +13,7 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 [/color]
 {5}"
 
-@onready var full_image: TextureRect = $PanelContainer/FullScreenView
+@onready var full_image: TextureRect = $PanelContainer/SmoothScrollContainer/FullScreenView
 
 @onready var full_screen_view: PanelContainer = $PanelContainer
 @onready var thumbnail_container: HFlowContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer/ThumbnailContainer
