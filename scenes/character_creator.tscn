@@ -146,7 +146,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
-current_tab = 5
+current_tab = 4
 tabs_visible = false
 
 [node name="BaseData" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
@@ -243,6 +243,7 @@ text = "Form"
 [node name="BodTypeOptBtn" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/BaseData/BasicsContainer/BodyForm" instance=ExtResource("3_mau78")]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 0
 
 [node name="GenBodyContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
 visible = false
@@ -2041,10 +2042,6 @@ script = ExtResource("8_yptlf")
 mode = 1
 other_items = Array[String](["!Wrist Markings, wrist markings", "!Shoulder Markings, shoulder markings", "!Hand Markings, hand markings", "!Arm Markings, arm markings"])
 
-[node name="HSeparator4" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo/ArmsContainer"]
-layout_mode = 2
-mouse_filter = 1
-
 [node name="BreastsContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/TorsoInfo"]
 layout_mode = 2
 
@@ -2351,7 +2348,6 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="HandFeetInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
@@ -2415,6 +2411,7 @@ layout_mode = 2
 mouse_filter = 1
 value = 5.0
 allow_greater = true
+alignment = 1
 script = ExtResource("9_ser5u")
 element = "finger"
 overwrite = {
@@ -2484,6 +2481,7 @@ layout_mode = 2
 mouse_filter = 1
 value = 5.0
 allow_greater = true
+alignment = 1
 script = ExtResource("9_ser5u")
 element = "toe"
 overwrite = {
@@ -2521,25 +2519,57 @@ script = ExtResource("9_uy244")
 includes_tags = Array[String](["hooves"])
 visibility_controlled = [NodePath("../../../HoovesType")]
 
-[node name="AvianSpecsContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics"]
+[node name="ConditionalVisibilityCheckButton4" type="CheckButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/PadsContainer" node_paths=PackedStringArray("visibility_controlled")]
 layout_mode = 2
-
-[node name="ScutesCheckbox" type="CheckBox" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/AvianSpecsContainer"]
-layout_mode = 2
+size_flags_horizontal = 6
 mouse_filter = 1
-script = ExtResource("7_xjq8m")
-title = "Scutes"
-contains = Array[String](["scutes"])
-
-[node name="TalonsCheckbox" type="CheckBox" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/FeetSpecifics/AvianSpecsContainer"]
-layout_mode = 2
-mouse_filter = 1
-script = ExtResource("7_xjq8m")
-title = "Talons"
-contains = Array[String](["talons"])
+text = "Talons"
+script = ExtResource("9_uy244")
+includes_tags = Array[String](["talons"])
+visibility_controlled = [NodePath("../../../TalonsContainer")]
 
 [node name="ClawContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
+
+[node name="HTitleSeparator3" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Claws"
+is_title = true
+
+[node name="SizeLenContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer"]
+layout_mode = 2
+
+[node name="SizeContainer" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer/SizeLenContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer/SizeLenContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Claw Size"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer/SizeLenContainer/SizeContainer"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Small Claws, small claws", "!Average Claws", "!Big Claws, big claws"])
+
+[node name="LengthContainer2" type="HBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer/SizeLenContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer/SizeLenContainer/LengthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+text = "Claw Length"
+
+[node name="TagsOptionButton" type="OptionButton" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer/SizeLenContainer/LengthContainer2"]
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("6_8b3vy")
+better_elements = Array[String](["!Short Claws, short claws", "!Average Claws", "!Long Claws, long claws"])
 
 [node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer" instance=ExtResource("5_6vekm")]
 layout_mode = 2
@@ -2570,6 +2600,17 @@ size_flags_horizontal = 3
 script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "claws"
+
+[node name="HTitleSeparator4" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Claw Properties"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/ClawContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+script = ExtResource("8_yptlf")
+mode = 1
+other_items = Array[String](["!Curved, curved claws", "!Retractable, retractable claws", "!Sharp, sharp claws"])
 
 [node name="PPColorContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
@@ -2622,11 +2663,29 @@ script = ExtResource("8_yptlf")
 formatting = "{0} {1}"
 element = "hooves"
 
+[node name="TalonsContainer" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/TalonsContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Talons"
+is_title = true
+
+[node name="HTitleSeparator2" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/TalonsContainer" instance=ExtResource("5_6vekm")]
+layout_mode = 2
+separator_text = "Talon features"
+
+[node name="CharHflowContainer" type="HFlowContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo/TalonsContainer"]
+layout_mode = 2
+script = ExtResource("8_yptlf")
+other_items = Array[String](["!Scuted Arms, scuted arms", "!Scuted Hands, scuted hands", "!Scuted Legs, scuted legs", "!Scuted Feet, scuted feet"])
+
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
 layout_mode = 2
 mouse_filter = 1
 
 [node name="LegsInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/LegsInfo"]
