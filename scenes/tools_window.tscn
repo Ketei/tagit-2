@@ -57,6 +57,6 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="CharacterCreator" parent="MarginContainer/TabContainer" instance=ExtResource("5_aw5cc")]
+[node name="Character Creator" parent="MarginContainer/TabContainer" instance=ExtResource("5_aw5cc")]
 visible = false
 layout_mode = 2
