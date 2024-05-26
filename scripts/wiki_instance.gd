@@ -26,10 +26,9 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 @onready var e_six_search: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/ESixSearch
 
 @onready var thumbnail_scroll_container: SmoothScrollContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer
+@onready var wiki_smooth_scroll_container: SmoothScrollContainer = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer/SmoothScrollContainer
 
 @onready var pictures_panel: PanelContainer = $MarginContainer/VBoxContainer/WikiContainer/PanelContainer
-
-#@onready var auto_fill: ItemList = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/WikiSearch/VBoxContainer/AutoFill
 
 
 func _ready():
@@ -115,7 +114,7 @@ func on_wiki_search_submit(tag_search: String) -> void:
 				str(tag_to_load.tag_priority),
 				tag_to_load.wiki_entry
 			])
-
+	wiki_smooth_scroll_container.scroll_y_to(0, 0)
 	if not aliases_string.is_empty():
 		wiki_desc.text += "\n\n[color=8eef97]Aliases: [color=d2f9d6]{0}[/color][/color]".format([aliases_string])
 	
@@ -128,6 +127,10 @@ func on_wiki_search_submit(tag_search: String) -> void:
 	
 	wiki_search.editable = true
 	search_button.disabled = false
+	
+	if 0 < thumbnail_container.get_child_count():
+		await get_tree().process_frame
+		thumbnail_scroll_container.scroll_y_to(0, 0)
 
 
 func on_exit_pressed() -> void:
