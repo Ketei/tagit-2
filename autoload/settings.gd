@@ -1131,17 +1131,17 @@ func save_settings() -> void:
 func log_message(message_to_log: String, message_class := LoggingLevel.NORMAL, queue := false) -> void:
 	if message_class == LoggingLevel.NORMAL:
 		print("INFO: " + message_to_log)
-		message_logged.emit("INFO: " + message_to_log, LoggingLevel)
+		message_logged.emit("INFO: " + message_to_log, message_class)
 		if queue:
 			queued_logs["INFO"].append("INFO: " + message_to_log)
 	elif message_class == LoggingLevel.WARNING:
 		push_warning(message_to_log)
-		message_logged.emit("WARNING: " + message_to_log, LoggingLevel)
+		message_logged.emit("WARNING: " + message_to_log, message_class)
 		if queue:
 			queued_logs["WARNING"].append("WARNING: " + message_to_log)
 	elif message_class == LoggingLevel.ERROR:
 		push_error(message_to_log)
-		message_logged.emit("ERROR: " + message_to_log, LoggingLevel)
+		message_logged.emit("ERROR: " + message_to_log, message_class)
 		if queue:
 			queued_logs["ERROR"].append("ERROR: " + message_to_log)
 
