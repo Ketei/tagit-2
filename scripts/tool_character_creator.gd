@@ -269,7 +269,7 @@ func reset_fields() -> void:
 	name_line_edit.clear()
 	species_line_edit.clear()
 	gender_option_button.select(0)
-	age_option_button.select(0)
+	age_option_button.reset_to_default()
 	body_type_opt_btn.select(0)
 	tag_item_list.clear()
 
