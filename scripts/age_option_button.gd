@@ -2,45 +2,39 @@ class_name AgeOptionButton
 extends OptionButton
 
 var default_age: String = "adult"
-
-enum AgeRange{
-	YOUNG,
-	ADULT,
-	MATURE,
-	OLD
-}
-
-const AGES: Dictionary = {
-	"old": {"name": "Elderly", "tag": "old", "cat": AgeRange.OLD},
-	"mature": {"name": "Mature", "tag": "", "cat": AgeRange.MATURE},
-	"adult": {"name": "Adult", "tag": "", "cat": AgeRange.ADULT},
-	"young_adult": {"name": "Young Adult", "tag": "young adult", "cat": AgeRange.ADULT},
-	"teen": {"name": "Adolescent", "tag": "adolescent", "cat": AgeRange.YOUNG},
-	"child": {"name": "Child", "tag": "child", "cat": AgeRange.YOUNG},
-	"todd": {"name": "Toddler", "tag": "toddler", "cat": AgeRange.YOUNG},
-	"bab": {"name": "Baby", "tag": "baby", "cat": AgeRange.YOUNG}}
+var default_index: int = 0
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var index_counter: int = 0
 	var default_select: int = 0
-	for age in AGES:
-		add_item(AGES[age]["name"])
+	for age in Tagger.AGES:
+		add_item(Tagger.AGES[age]["name"])
 		set_item_metadata(
 				index_counter,
-				{"tag": AGES[age]["tag"], "range": AGES[age]["cat"]})
+				age)
 		if age == default_age:
 			default_select = index_counter
+			default_index = index_counter
 		index_counter += 1
 	select(default_select)
 
 
 func get_age_tag() -> String:
-	return get_item_metadata(selected)["tag"]
+	return Tagger.AGES[get_item_metadata(selected)]["tag"]
 
 
-func get_age_category() -> AgeRange:
-	return get_item_metadata(selected)["range"]
+func get_age_category() -> Tagger.AgeRange:
+	return Tagger.AGES[get_item_metadata(selected)]["range"]
 
 
+func reset_to_default() -> void:
+	select(default_index)
+
+
+func set_age_by_id(age_id: String) -> void:
+	for index in range(item_count):
+		if get_item_metadata(index) == age_id:
+			select(index)
+			return
