@@ -146,11 +146,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nyjbn")
-current_tab = 4
 tabs_visible = false
 
 [node name="BaseData" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
@@ -2348,6 +2346,7 @@ layout_mode = 2
 mouse_filter = 1
 
 [node name="HandFeetInfo" type="VBoxContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="TitleMarginContainer" type="MarginContainer" parent="MarginContainer/DataContainer/TabsContainer/InteractSide/SmoothScrollContainer/TabContainer/HandFeetInfo"]
