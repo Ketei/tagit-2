@@ -3,7 +3,6 @@ extends Control
 
 var known_character: bool = true
 
-
 @onready var focus_check_box: CheckBox = $SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags/FocusCheckBox
 
 @onready var top_check: CheckBox = $SmoothScrollContainer/MarginContainer/VBoxContainer/ExtraTags/PositionContainer/TopCheck
@@ -26,6 +25,14 @@ var known_character: bool = true
 @onready var clothing_scoring: ClothingScoring = $SmoothScrollContainer/MarginContainer/VBoxContainer/ClothingHFlow
 
 @onready var pose_container: PoseContainer = $SmoothScrollContainer/MarginContainer/VBoxContainer/PanelContainer/PoseContainer
+
+@onready var name_separator = $SmoothScrollContainer/MarginContainer/VBoxContainer/HTitleSeparator
+
+
+func _ready():
+	name_separator.set_title_name(
+		DumbUtils.title_case(name)
+	)
 
 
 func get_genders() -> Array[String]:
@@ -68,20 +75,20 @@ func get_ages() -> Array[String]:
 	var age_array: Array[String] = []
 	
 	var age_tag: String = age_option_button.get_age_tag()
-	var lore_age_group: AgeOptionButton.AgeRange = lore_age_option_button.get_age_category()
+	var lore_age_group: Tagger.AgeRange = lore_age_option_button.get_age_category()
 	
 	if not age_tag.is_empty():
 		age_array.append(age_tag)
 	
 	if not lore_age_option_button.disabled:
-		if lore_age_group == AgeOptionButton.AgeRange.YOUNG:
+		if lore_age_group == Tagger.AgeRange.YOUNG:
 			age_array.append("young (lore)")
 		else:
 			age_array.append("adult (lore)")
 		
 		# Mature doesn't have a tag, same as "adult". But that's handled
 		# up there ^
-		if  lore_age_group == AgeOptionButton.AgeRange.MATURE:
+		if  lore_age_group == Tagger.AgeRange.MATURE:
 			age_array.append("mature (lore)")
 		elif not age_tag.is_empty(): # "mature" and "adult" = false
 			age_array.append(
@@ -100,7 +107,7 @@ func get_tag_dict() -> Dictionary:
 
 	var body_tags: Array = bod_type_opt_btn.get_body_type()
 	
-	var age_group: AgeOptionButton.AgeRange = age_option_button.get_age_category()
+	var age_group: Tagger.AgeRange = age_option_button.get_age_category()
 	
 	if gender == "ambiguous gender":
 		gender = "ambiguous"
@@ -124,15 +131,15 @@ func get_tag_dict() -> Dictionary:
 	main_tags.append_array(pose_container.get_tags())
 	suggestion_array.append_array(clothing_dict["suggestions"])
 	
-	if age_group == AgeOptionButton.AgeRange.YOUNG:
+	if age_group == Tagger.AgeRange.YOUNG:
 		main_tags.append("young " + gender)
 		for form in body_tags:
 			main_tags.append("young " + form)
-	elif age_group == AgeOptionButton.AgeRange.MATURE:
+	elif age_group == Tagger.AgeRange.MATURE:
 		main_tags.append("mature " + gender)
 		for form in body_tags:
 			main_tags.append("mature " + form)
-	elif age_group == AgeOptionButton.AgeRange.OLD:
+	elif age_group == Tagger.AgeRange.OLD:
 		main_tags.append("old " + gender)
 		for form in body_tags:
 			main_tags.append("old " + form)
@@ -160,6 +167,18 @@ func get_tag_dict() -> Dictionary:
 			main_tags.append(body + " on top")
 
 	return {"tags": main_tags, "suggestions": suggestion_array}
+
+
+func set_gender_id(gender_id: String):
+	gender_opt.set_gender_by_id(gender_id)
+
+
+func set_body_id(body_id: String) -> void:
+	bod_type_opt_btn.select_body(body_id)
+
+
+func set_age_id(age_id: String) -> void:
+	age_option_button.set_age_by_id(age_id)
 
 
 

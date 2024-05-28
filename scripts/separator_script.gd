@@ -23,4 +23,7 @@ func _ready():
 		right_container.add_child(HSeparator.new())
 		left_container.add_child(HSeparator.new())
 	
-	
+
+func set_title_name(new_name: String) -> void:
+	label.text = new_name
+

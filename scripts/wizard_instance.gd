@@ -99,13 +99,32 @@ func create_character(character_name: String, set_unknown := false) -> void:
 	character_namer.clear()
 	if character_name.is_empty() or has_character(character_name):
 		return
-
+	
 	var new_character: WizardCharacterInstance = CHARA_INFO_INSTANCE.instantiate()
 	new_character.name = character_name
 	if set_unknown:
 		new_character.known_character = false
+	
 	character_info_tab.add_child(new_character)
-	character_info_tab.current_tab = character_info_tab.get_index()
+	
+	character_info_tab.current_tab = new_character.get_index()
+					
+	if Tagger.has_tag(character_name):
+		var tag_data: Tag = Tagger.get_tag(character_name)
+		if tag_data.category == Tagger.Categories.CHARACTER:
+			var body_types: Array[String] = []
+			for parent_tag in tag_data.parents:
+				if Tagger.is_valid_gender(parent_tag):
+					new_character.set_gender_id(
+							Tagger.get_gender_id(parent_tag)
+					)
+				elif Tagger.is_valid_body_tag(parent_tag):
+					body_types.append(parent_tag)
+				elif Tagger.is_valid_age_tag(parent_tag):
+					new_character.set_age_id(
+							Tagger.get_age_id(parent_tag)
+					)
+			new_character.set_body_id(Tagger.get_body_id(body_types))
 
 
 func has_character(character_name: String) -> bool:
