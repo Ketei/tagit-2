@@ -326,6 +326,13 @@ alignment = 1
 script = ExtResource("3_msb44")
 color_name = "tan"
 
+[node name="ColorCheckBox5" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "teal"
+
 [node name="ColorCheckBox3" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -333,22 +340,15 @@ alignment = 1
 script = ExtResource("3_msb44")
 color_name = "white"
 
-[node name="ColorCheckBox4" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/ColorContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer"]
+layout_mode = 2
+
+[node name="ColorCheckBox4" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource("3_msb44")
 color_name = "yellow"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer"]
-layout_mode = 2
-
-[node name="ColorCheckBox5" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-alignment = 1
-script = ExtResource("3_msb44")
-color_name = "teal"
 
 [node name="ColorCheckBox6" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
 layout_mode = 2
