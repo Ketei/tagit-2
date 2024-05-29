@@ -177,6 +177,7 @@ vertical_alignment = 1
 [node name="ParentsTagItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/ParentsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+select_mode = 1
 script = ExtResource("2_b2nvx")
 
 [node name="ParentLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/ParentsContainer"]
@@ -196,6 +197,7 @@ vertical_alignment = 1
 [node name="SuggestionsTagItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+select_mode = 1
 script = ExtResource("2_b2nvx")
 
 [node name="SuggestionLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer"]
@@ -214,9 +216,10 @@ vertical_alignment = 1
 [node name="AliasTagItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+select_mode = 1
 script = ExtResource("2_b2nvx")
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer" node_paths=PackedStringArray("tag_item_list")]
+[node name="AliasLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer" node_paths=PackedStringArray("tag_item_list")]
 layout_mode = 2
 script = ExtResource("4_4cu1q")
 tag_item_list = NodePath("../AliasTagItemList")
@@ -337,6 +340,37 @@ alignment = 1
 script = ExtResource("3_msb44")
 color_name = "yellow"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer"]
+layout_mode = 2
+
+[node name="ColorCheckBox5" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "teal"
+
+[node name="ColorCheckBox6" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "rainbow"
+
+[node name="ColorCheckBox7" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "light"
+
+[node name="ColorCheckBox8" type="CheckBox" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/StandardColContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("3_msb44")
+color_name = "dark"
+
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer"]
 layout_mode = 2
 
@@ -348,6 +382,7 @@ script = SubResource("GDScript_njf5f")
 [node name="MetaItemList" type="ItemList" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+select_mode = 1
 script = ExtResource("2_b2nvx")
 
 [node name="CustomMetaLineEdit" type="LineEdit" parent="MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer"]

@@ -9,6 +9,7 @@ var standard_color_nodes: Array[ColorCheckBox] = []
 @onready var suggestion_line_edit: LineEdit = $MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/SuggestionContainer/SuggestionLineEdit
 @onready var custom_meta_line_edit: LineEdit = $MarginContainer/MainContainer/FieldsContainer/MetaContainer/CustomMetaContainer/CustomMetaLineEdit
 @onready var tooltip_line_edit: LineEdit = $MarginContainer/MainContainer/FieldsContainer/DataContainer/TooltipContainer/TooltipLineEdit
+@onready var alias_line_edit:LineEdit = $MarginContainer/MainContainer/FieldsContainer/DataContainer/TagsContainer/AliasesContainer/AliasLineEdit
 
 @onready var category_option_button: CategoryOptionButton = $MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/CatContainer/CategoryOptionButton
 
@@ -129,4 +130,6 @@ func clear_fields() -> void:
 		checkbox.button_pressed = false
 	meta_item_list.clear()
 	custom_meta_line_edit.clear()
+	alias_tag_item_list.clear()
+	alias_line_edit.clear()
 
