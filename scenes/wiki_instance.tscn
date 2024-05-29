@@ -1,7 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://bgpp0mr5o1al3"]
+[gd_scene load_steps=15 format=3 uid="uid://bgpp0mr5o1al3"]
 
 [ext_resource type="Script" path="res://scripts/wiki_instance.gd" id="1_qfsgr"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_oo4wn"]
+[ext_resource type="Shortcut" uid="uid://dunhypatgeynx" path="res://resources/shortcuts/list_actions/shortcut_refresh.tres" id="2_u4b7t"]
+[ext_resource type="Texture2D" uid="uid://lyerxfm4634q" path="res://textures/icons/refresh.svg" id="3_bvmml"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="3_cy5fh"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_gptxi"]
 [ext_resource type="Texture2D" uid="uid://cosrtsibrj13r" path="res://textures/icons/e6_logo.svg" id="4_vsnv8"]
@@ -107,18 +109,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Empty" type="Control" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
+[node name="Empty" type="HBoxContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
 custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
 mouse_filter = 2
+alignment = 2
 
-[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
-visible = false
-custom_minimum_size = Vector2(70, 0)
+[node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/Empty"]
 layout_mode = 2
-size_flags_horizontal = 0
 tooltip_text = "Close Wiki"
-text = "Close"
+shortcut = ExtResource("2_u4b7t")
+icon = ExtResource("3_bvmml")
+icon_alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
 layout_mode = 2

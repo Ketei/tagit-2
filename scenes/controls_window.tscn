@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://l1qox0iw3js0"]
+[gd_scene load_steps=9 format=3 uid="uid://l1qox0iw3js0"]
 
 [ext_resource type="Script" path="res://scripts/controls_window.gd" id="1_5cabl"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_ow2g4"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_k261i"]
+[ext_resource type="PackedScene" uid="uid://bspxqadlbq7s5" path="res://scenes/named_separator.tscn" id="4_dnnvq"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_08ibh"]
 device = -1
@@ -9,6 +11,18 @@ keycode = 4194305
 
 [sub_resource type="Shortcut" id="Shortcut_a8a81"]
 events = [SubResource("InputEventKey_08ibh")]
+
+[sub_resource type="Resource" id="Resource_khej4"]
+script = ExtResource("3_k261i")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_c87wu"]
+script = ExtResource("3_k261i")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="ControlsWindow" type="Control"]
 layout_mode = 3
@@ -59,9 +73,11 @@ text = "Close"
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("1_ow2g4")
-allow_overdragging = false
+wheel_scroll_damper = SubResource("Resource_khej4")
+dragging_scroll_damper = SubResource("Resource_c87wu")
 drag_with_mouse = false
 drag_with_touch = false
+allow_overdragging = false
 
 [node name="MarginContainer" type="MarginContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer"]
 layout_mode = 2
@@ -73,23 +89,10 @@ theme_override_constants/margin_right = 8
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SysCont" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
+[node name="HTitleSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/SysCont"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
-
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/SysCont"]
-layout_mode = 2
-mouse_filter = 1
-text = "Window Controls"
-
-[node name="HSeparator2" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/SysCont"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
+separator_text = "Window Controls"
+is_title = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
 layout_mode = 2
@@ -210,23 +213,10 @@ mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + Q"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
+[node name="HTitleSeparator3" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
-
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/HBoxContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "List Controls"
-
-[node name="HSeparator2" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
+separator_text = "List Controls"
+is_title = true
 
 [node name="TagList" type="VBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
 layout_mode = 2
@@ -313,106 +303,129 @@ mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + R"
 
-[node name="HSeparator3" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="HTitleSeparator2" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
-mouse_filter = 1
+separator_text = "Tagger Controls"
+is_title = true
 
-[node name="RemoveTag2" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag2"]
+[node name="RemoveTag2" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag2"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "New List"
 
-[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag2"]
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag2"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + N"
 
-[node name="HSeparator4" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="HSeparator4" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="RemoveTag3" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="RemoveTag3" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag3"]
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag3"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Load List"
 
-[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag3"]
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag3"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + O"
 
-[node name="HSeparator5" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="HSeparator5" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="RemoveTag4" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="RemoveTag4" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag4"]
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag4"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Save List"
 
-[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag4"]
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag4"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + S"
 
-[node name="HSeparator6" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="HSeparator6" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="RemoveTag5" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="RemoveTag5" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag5"]
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag5"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Load from Text"
 
-[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag5"]
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag5"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + Shift + O"
 
-[node name="HSeparator7" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="HSeparator7" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="RemoveTag6" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="RemoveTag6" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag6"]
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag6"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Load Template"
 
-[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/RemoveTag6"]
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag6"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + T"
 
-[node name="HSeparator8" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+[node name="HTitleSeparator4" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
+separator_text = "Wiki"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
+layout_mode = 2
+
+[node name="WikiRefresh" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer3/WikiRefresh"]
+layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
+text = "Refresh Wiki"
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer3/WikiRefresh"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "F5"

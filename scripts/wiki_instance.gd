@@ -13,6 +13,8 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 [/color]
 {5}"
 
+var current_search: String = ""
+
 @onready var full_image: TextureRect = $PanelContainer/SmoothScrollContainer/FullScreenView
 
 @onready var full_screen_view: PanelContainer = $PanelContainer
@@ -21,7 +23,7 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 
 @onready var wiki_search: LineEdit = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/AutoSearch
 
-@onready var close_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/CloseButton
+@onready var refresh_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/Empty/RefreshButton
 @onready var search_button: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/SearchButton
 @onready var e_six_search: Button = $MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus/ESixSearch
 
@@ -33,13 +35,13 @@ Priority: [color=d2f9d6]{4}[/color][/ul]
 
 func _ready():
 	pictures_panel.visible = Tagger.load_images
-	close_button.pressed.connect(on_exit_pressed)
 	search_button.pressed.connect(on_local_search_pressed)
 	wiki_search.text_submitted.connect(on_wiki_search_submit)
 	e_six_search.pressed.connect(on_online_search_pressed)
 	Tagger.image_view_toggled.connect(on_view_toggled)
 	wiki_desc.meta_clicked.connect(on_meta_clicked)
 	#auto_fill.item_submited.connect(on_wiki_search_submit)
+	refresh_button.pressed.connect(on_refresh_pressed)
 
 
 func _unhandled_key_input(_event):
@@ -70,8 +72,11 @@ func on_wiki_search_submit(tag_search: String) -> void:
 		wiki_search.release_focus()
 	if search_button.has_focus():
 		search_button.release_focus()
+	
 	var tag_to_search: String = Tagger.get_alias(
 			tag_search.strip_edges().to_lower())
+	
+	current_search = tag_to_search
 	
 	if not Tagger.has_tag(tag_to_search):
 		wiki_search.editable = true
@@ -133,8 +138,10 @@ func on_wiki_search_submit(tag_search: String) -> void:
 		thumbnail_scroll_container.scroll_y_to(0, 0)
 
 
-func on_exit_pressed() -> void:
-	hide()
+func on_refresh_pressed() -> void:
+	if full_screen_view.visible:
+		return
+	on_wiki_search_submit(current_search)
 
 
 func on_thumbnail_pressed(thumb_id: int) -> void:
@@ -171,5 +178,4 @@ func on_meta_clicked(meta) -> void:
 			on_wiki_search_submit(meta_string)
 	elif Tagger.open_e6_on_wiki_link:
 		OS.shell_open(Tagger.E6_SEARCH_URL + meta_string)
-	
 
