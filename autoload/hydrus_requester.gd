@@ -51,7 +51,7 @@ func connect_to_hydrus(port := api_port, key := api_key) -> void:
 	var headers = parse_headers(response[2])
 
 	if response[0] != OK:
-		Tagger.log_message("HTTP response (Hydrus): " + str(response[0]), Tagger.LoggingLevel.ERROR)
+		Tagger.log_message("HTTP response (Hydrus): " + str(response[0]), Tagger.LoggingLevel.WARNING)
 	else:
 		if headers.server.begins_with("client api"):
 			var json = JSON.new()
