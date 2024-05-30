@@ -38,6 +38,8 @@ layout_mode = 2
 layout_mode = 2
 editable = false
 wrap_mode = 1
+scroll_smooth = true
+scroll_v_scroll_speed = 25.0
 
 [node name="Info" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 visible = false
@@ -47,6 +49,8 @@ layout_mode = 2
 layout_mode = 2
 editable = false
 wrap_mode = 1
+scroll_smooth = true
+scroll_v_scroll_speed = 25.0
 
 [node name="Warnings" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 visible = false
@@ -56,6 +60,8 @@ layout_mode = 2
 layout_mode = 2
 editable = false
 wrap_mode = 1
+scroll_smooth = true
+scroll_v_scroll_speed = 25.0
 
 [node name="Errors" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 visible = false
@@ -65,3 +71,5 @@ layout_mode = 2
 layout_mode = 2
 editable = false
 wrap_mode = 1
+scroll_smooth = true
+scroll_v_scroll_speed = 25.0

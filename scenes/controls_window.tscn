@@ -410,6 +410,7 @@ text = "Ctrl + T"
 [node name="HTitleSeparator4" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
 separator_text = "Wiki"
+is_title = true
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList"]
 layout_mode = 2
