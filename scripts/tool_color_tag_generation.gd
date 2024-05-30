@@ -25,6 +25,8 @@ var standard_color_nodes: Array[ColorCheckBox] = []
 
 @onready var generate_button: Button = $MarginContainer/MainContainer/ButtonsContainer/GenerateButton
 
+@onready var prio_spin_box: SpinBox = $MarginContainer/MainContainer/FieldsContainer/DataContainer/BasicsContainer/PriorityContainer/PrioSpinBox
+
 
 
 func _ready():
@@ -69,6 +71,7 @@ func on_generate_clicked() -> void:
 		new_tag.tooltip = tag_data["tooltip"]
 		new_tag.wiki_entry = tag_data["wiki"]
 		new_tag.aliases.assign(tag_data["aliases"])
+		new_tag.tag_priority = tag_data["priority"]
 		Tagger.register_tag(
 				new_tag.tag,
 				new_tag.save())
@@ -91,7 +94,8 @@ func generate_tag_data(tag_meta: String) -> Dictionary:
 		"parents": [],
 		"suggestions": [],
 		"aliases": [],
-		"category": category_option_button.get_category()
+		"category": category_option_button.get_category(),
+		"priority": int(prio_spin_box.value)
 	}
 	
 	return_dict["tag"] = name_line_edit.text.strip_edges().to_lower().replace(Tagger.WILDCARD_CHAR, tag_meta)
