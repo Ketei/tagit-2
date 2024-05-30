@@ -29,6 +29,8 @@ func _ready():
 	help_menu.get_popup().index_pressed.connect(on_help_menu_selected)
 	tagger_menu.sort_alphabetical_pressed.connect(sort_tags_aphabetically)
 	tagger_menu.sort_high_index_pressed.connect(sort_by_priority)
+	Tagger.menus_disabled.connect(disable_menus)
+	Tagger.menus_enabled.connect(enable_menus)
 
 
 func sort_by_priority() -> void:
@@ -45,6 +47,18 @@ func show_controls_window() -> void:
 	main_menu.hide()
 	hide_all_windows()
 	add_child(controls_window)
+
+
+func disable_menus() -> void:
+	main_menu.disabled = true
+	tagger_menu.disabled = true
+	help_menu.disabled = true
+
+
+func enable_menus() -> void:
+	main_menu.disabled = false
+	tagger_menu.disabled = false
+	help_menu.disabled = false
 
 
 func on_controls_closed() -> void:
