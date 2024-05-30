@@ -147,6 +147,8 @@ func on_refresh_pressed() -> void:
 func on_thumbnail_pressed(thumb_id: int) -> void:
 	if not Hydrus.connected:
 		return
+	if full_image.expand_mode == TextureRect.EXPAND_KEEP_SIZE:
+		full_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	full_screen_view.show()
 	full_image.texture = await Hydrus.get_file(thumb_id)
 	full_image.show()
