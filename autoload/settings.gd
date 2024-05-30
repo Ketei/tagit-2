@@ -10,6 +10,8 @@ signal invalid_added(tag_name)
 signal websites_updated
 signal disabled_shortcuts(is_disabled: bool)
 signal message_logged(message: String, level: LoggingLevel)
+signal menus_disabled
+signal menus_enabled
 
 
 enum LoggingLevel {
@@ -443,6 +445,14 @@ func disable_shortcuts() -> void:
 	disable_shortcuts_count += 1
 
 
+func disable_menus() -> void:
+	menus_disabled.emit()
+
+
+func enable_menus() -> void:
+	menus_enabled.emit()
+
+
 func enable_shortcuts() -> void:
 	disable_shortcuts_count -= 1
 	
@@ -690,7 +700,23 @@ func reload_tags() -> void:
 	var directories := DirAccess.get_directories_at(database_path + TAGS_PATH)
 	
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
-		var tag: Tag = load(database_path + TAGS_PATH + file)
+		
+		if file.get_extension() != "tres":
+			log_message(
+					"File " + file +  " is not a resource file. Skipping -",
+					LoggingLevel.WARNING
+			)
+			continue
+		
+		var tag: Resource = load(database_path + TAGS_PATH + file)
+		
+		if not tag is Tag:
+			log_message(
+					"File " + file +  " is not a Tag file. Skipping -",
+					LoggingLevel.WARNING
+			)
+			continue
+
 		if tag.file_name != file:
 			tag.file_name = file
 		
@@ -698,7 +724,23 @@ func reload_tags() -> void:
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
-			var tag: Tag = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			
+			if tag_file.get_extension() != "tres":
+				log_message(
+						"File \"" + tag_file +  "\" is not a resource file. Skipping",
+						LoggingLevel.WARNING
+				)
+				continue
+			
+			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			
+			if not tag is Tag:
+				log_message(
+						"File \"" + tag_file +  "\" is not a Tag file. Skipping",
+						LoggingLevel.WARNING
+				)
+				continue
+			
 			if tag.file_name != tag_file:
 				tag.file_name = tag_file
 			

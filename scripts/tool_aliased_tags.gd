@@ -45,7 +45,10 @@ func _ready():
 
 
 func reload_aliases() -> void:
-	print("reloading aliases")
+	Tagger.log_message(
+			"Reloading aliases",
+			Tagger.LoggingLevel.NORMAL
+	)
 	for child:TagAliasInstance in alias_container.get_children():
 		child.queue_free()
 	

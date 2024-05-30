@@ -26,7 +26,7 @@ func get_age_tag() -> String:
 
 
 func get_age_category() -> Tagger.AgeRange:
-	return Tagger.AGES[get_item_metadata(selected)]["range"]
+	return Tagger.AGES[get_item_metadata(selected)]["cat"]
 
 
 func reset_to_default() -> void:
