@@ -51,6 +51,8 @@ resource_name = "custom_cols_connect"
 script/source = "extends VBoxContainer
 
 
+var scroll_called: bool = false
+
 @onready var meta_item_list: TagItemList = $MetaItemList
 @onready var meta_line_edit: LineEdit = $CustomMetaLineEdit
 
@@ -64,6 +66,12 @@ func submit_tag(tag_to_submit: String) -> void:
 	var clean_tag: String = tag_to_submit.strip_edges().to_lower()
 	if not meta_item_list.has_item(clean_tag):
 		meta_item_list.add_item(clean_tag)
+	if not scroll_called:
+		scroll_called = true
+		await get_tree().process_frame
+		meta_item_list.get_v_scroll_bar().value = meta_item_list.get_v_scroll_bar().max_value
+		scroll_called = false
+
 "
 
 [node name="BatchTagTool" type="Control"]
