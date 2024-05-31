@@ -6,7 +6,6 @@ signal dialog_confirmed(confirmed_status: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Tagger.shortcuts_disabled = true
 	get_label().horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	get_label().vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	DumbUtils.signal_disconnect_all(get_cancel_button().pressed)

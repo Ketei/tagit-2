@@ -243,7 +243,6 @@ func clear_main_list() -> void:
 	if confirm:
 		tag_items.clear()
 	warning_window.queue_free()
-	Tagger.enable_shortcuts()
 
 
 func open_session_blacklist() -> void:
