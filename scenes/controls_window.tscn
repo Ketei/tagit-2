@@ -407,6 +407,46 @@ mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + T"
 
+[node name="HSeparator9" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="RemoveTag8" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag8"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Edit tag data"
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag8"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Double-click"
+
+[node name="HSeparator8" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="RemoveTag7" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag7"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Open tag wiki (if available)"
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/VBoxContainer2/RemoveTag7"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Shift + Double-click"
+
 [node name="HTitleSeparator4" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
 separator_text = "Wiki"

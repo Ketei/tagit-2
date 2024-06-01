@@ -77,8 +77,9 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 	
 	hide_all_windows()
 	if target_window == 0: # Wiki
-		tagger.show()
-		tagger_menu.show()
+		wiki.show()
+		tagger_menu.visible = false
+		wiki.on_wiki_search_submit(args["tag"])
 	elif target_window == 1: # Review Tag
 		reviewer.show()
 		reviewer.clear_all()

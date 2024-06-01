@@ -165,8 +165,13 @@ func on_wizard_orgasm(tag_data: Dictionary) -> void:
 
 
 func on_item_activated(item_index: int) -> void:
+	if Input.is_action_pressed("shift_key") and Tagger.has_tag(tag_items.get_item_text(item_index)):
+		window_switch_signaled.emit(0, {"tag": tag_items.get_item_text(item_index)})
+		return
+	
 	if in_tag_editor != null:
 		return
+	
 	Tagger.disable_shortcuts()
 	in_tag_editor = IN_TAG_EDITOR.instantiate()
 	in_tag_editor.done_editing.connect(on_tag_edited)
