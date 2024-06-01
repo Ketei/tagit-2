@@ -100,7 +100,13 @@ func generate_tag_data(tag_meta: String) -> Dictionary:
 	
 	return_dict["tag"] = name_line_edit.text.strip_edges().to_lower().replace(Tagger.WILDCARD_CHAR, tag_meta)
 	return_dict["wiki"] = wiki_text_edit.text.strip_edges().replace(Tagger.WILDCARD_CHAR, tag_meta)
-	return_dict["tooltip"] = tooltip_line_edit.text.strip_edges().replace(Tagger.WILDCARD_CHAR, tag_meta)
+	
+	var tag_tooltip_text: String = tooltip_line_edit.text.strip_edges()
+	if tag_tooltip_text.begins_with("*"):
+		return_dict["tooltip"] = DumbUtils.capitalize(tag_tooltip_text.replace(Tagger.WILDCARD_CHAR, tag_meta))
+	else:
+		return_dict["tooltip"] = tag_tooltip_text.replace(Tagger.WILDCARD_CHAR, tag_meta)
+	
 	for parent_item in parents_tag_item_list.get_tag_array():
 		return_dict["parents"].append(parent_item.replace(Tagger.WILDCARD_CHAR, tag_meta))
 	for suggestion_item in suggestions_tag_item_list.get_tag_array():
