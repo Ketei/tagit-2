@@ -9,7 +9,16 @@ signal tag_deleted(tag_name)
 signal invalid_added(tag_name)
 signal websites_updated
 signal disabled_shortcuts(is_disabled: bool)
+signal message_logged(message: String, level: LoggingLevel)
+signal menus_disabled
+signal menus_enabled
 
+
+enum LoggingLevel {
+	NORMAL,
+	WARNING,
+	ERROR,
+}
 
 enum Categories {
 	GENERAL,
@@ -37,6 +46,25 @@ enum Categories {
 	FURNITURE,
 	LORE,
 }
+
+enum AgeRange{
+	YOUNG,
+	ADULT,
+	MATURE,
+	OLD
+}
+
+enum E621_CATEGORY {
+	ALL = -1,
+	GENERAL = 0,
+	ARTIST = 1,
+	COPYRIHGT = 3,
+	CHARACTER = 4,
+	SPECIES = 5,
+	INVALID = 6,
+	META = 7,
+	LORE = 8,
+	}
 
 const NOTIFICATION_DIALOG = preload("res://scenes/notification_dialog.tscn")
 const CONFIRMATION_DIALOG = preload("res://scenes/confirmation_dialog.tscn")
@@ -110,25 +138,39 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.1.3"
+const VERSION: String = "2.2.0"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
-
-enum E621_CATEGORY {
-	ALL = -1,
-	GENERAL = 0,
-	ARTIST = 1,
-	COPYRIHGT = 3,
-	CHARACTER = 4,
-	SPECIES = 5,
-	INVALID = 6,
-	META = 7,
-	LORE = 8,
-	}
+const GENDERS: Dictionary = {
+	"male": {"name": "Male", "tag": "male", "is_female": false},
+	"female": {"name": "Female", "tag": "female", "is_female": true},
+	"amb": {"name": "Ambiguous", "tag": "ambiguous gender", "is_female": false},
+	"andro": {"name": "Andromorph", "tag": "andromorph", "is_female": false},
+	"gyno": {"name": "Gynomorph", "tag": "gynomorph", "is_female": true},
+	"herm": {"name": "Hermaphrodite", "tag": "herm", "is_female": true},
+	"maleherm": {"name": "Male Hermaphrodite", "tag": "maleherm", "is_female": false}
+}
+const BODY_TYPES: Dictionary = {
+	"anthro": {"name": "Anthro", "tags": ["anthro"]},
+	"semian": {"name": "Semi-anthro", "tags": ["anthro", "semi-anthro"]},
+	"semife": {"name": "Semi-feral", "tags": ["feral", "semi-anthro"]},
+	"stud": {"name": "Feral", "tags": ["feral"]},
+	"hooman": {"name": "Human", "tags": ["human"]},
+	"humanoid": {"name": "Humanoid", "tags": ["humanoid"]},
+	"tahuff": {"name": "Taur", "tags": ["taur"]},
+}
+const AGES: Dictionary = {
+	"old": {"name": "Elderly", "tag": "old", "cat": AgeRange.OLD},
+	"mature": {"name": "Mature", "tag": "", "cat": AgeRange.MATURE},
+	"adult": {"name": "Adult", "tag": "", "cat": AgeRange.ADULT},
+	"young_adult": {"name": "Young Adult", "tag": "young adult", "cat": AgeRange.ADULT},
+	"teen": {"name": "Adolescent", "tag": "adolescent", "cat": AgeRange.YOUNG},
+	"child": {"name": "Child", "tag": "child", "cat": AgeRange.YOUNG},
+	"todd": {"name": "Toddler", "tag": "toddler", "cat": AgeRange.YOUNG},
+	"bab": {"name": "Baby", "tag": "baby", "cat": AgeRange.YOUNG}}
 
 # Nodes
 var notification_window: TaggerMainNotification
-
 
 # Data
 var header_data: Dictionary = {}
@@ -237,6 +279,11 @@ var disable_shortcuts_count: int = 0:
 			shortcuts_disabled = false
 		elif 0 < disable_shortcuts_count and not shortcuts_disabled:
 			shortcuts_disabled = true
+var queued_logs: Dictionary = {
+	"INFO": [],
+	"WARNING": [],
+	"ERROR": []
+}
 
 
 func _ready():
@@ -247,7 +294,6 @@ func _ready():
 	
 	var _load_settings = SettingsResource.get_settings()
 	var _save_data := SaveSlots.get_save_data()
-	print("Is user first run: " + str(_load_settings.first_run))
 	
 	if _load_settings.first_run:
 		if SOURCE_RUN:
@@ -271,16 +317,23 @@ func _ready():
 		var _err = DirAccess.make_dir_recursive_absolute(database_path)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created. Using default.".format(
-					[database_path]))
+			log_message(
+					"Directory \"{0}\" couldn't be created. Using default.".format(
+						[database_path]),
+						LoggingLevel.ERROR,
+						true
+			)
 			database_path = ProjectSettings.globalize_path("user://")
 	
 	if not DirAccess.dir_exists_absolute(database_path + TAGS_PATH):
 		var _err = DirAccess.make_dir_absolute(database_path + TAGS_PATH)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created.".format(
-					[database_path + TAGS_PATH]))
+			log_message(
+					"Directory \"{0}\" couldn't be created.".format(
+						[database_path + TAGS_PATH]),
+						LoggingLevel.ERROR,
+						true)
 	
 	search_online_suggestions = _load_settings.search_online_suggestions
 	loaded_sites.merge(_load_settings.custom_sites, true)
@@ -314,13 +367,21 @@ func _ready():
 
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
 		if file.get_extension() != "tres":
-			print("File " + file +  " is not a resource file. Skipping -")
+			log_message(
+					"File " + file +  " is not a resource file. Skipping -",
+					LoggingLevel.WARNING,
+					true
+			)
 			continue
 		
 		var tag: Resource = load(database_path + TAGS_PATH + file)
 		
 		if not tag is Tag:
-			print("File " + file +  " is not a Tag file. Skipping -")
+			log_message(
+					"File " + file +  " is not a Tag file. Skipping -",
+					LoggingLevel.WARNING,
+					true
+			)
 			continue
 		
 		if tag.file_name != file:
@@ -329,18 +390,26 @@ func _ready():
 			if not alias_list.has(alias.left(1)):
 				alias_list[alias.left(1)] = {}
 			alias_list[alias.left(1)][alias] = tag.tag
-		register_tag(tag.tag, database_path + TAGS_PATH + file)
+		register_tag(tag.tag, database_path + TAGS_PATH + file, true)
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
 			if tag_file.get_extension() != "tres":
-				print("- File " + tag_file +  " is not a resource file. Skipping -")
+				log_message(
+						"File \"" + tag_file +  "\" is not a resource file. Skipping",
+						LoggingLevel.WARNING,
+						true
+				)
 				continue
 			
 			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
 			
 			if not tag is Tag:
-				print("- File " + tag_file +  " is not a Tag file. Skipping -")
+				log_message(
+						"File \"" + tag_file +  "\" is not a Tag file. Skipping",
+						LoggingLevel.WARNING,
+						true
+				)
 				continue
 			
 			if tag.file_name != tag_file:
@@ -350,7 +419,7 @@ func _ready():
 				if not alias_list.has(alias.left(1)):
 					alias_list[alias.left(1)] = {}
 				alias_list[alias.left(1)][alias] = tag.tag
-			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file)
+			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file, true)
 	
 	_loaded_aliases = alias_list.duplicate(true)
 	
@@ -374,6 +443,14 @@ func _ready():
 
 func disable_shortcuts() -> void:
 	disable_shortcuts_count += 1
+
+
+func disable_menus() -> void:
+	menus_disabled.emit()
+
+
+func enable_menus() -> void:
+	menus_enabled.emit()
 
 
 func enable_shortcuts() -> void:
@@ -609,7 +686,7 @@ func get_category_name(category: Categories) -> String:
 
 
 func reload_tags() -> void:
-	print("Clearing tag database and reloading")
+	log_message("Clearing tag database and reloading", LoggingLevel.NORMAL)
 	
 	loaded_tags.clear()
 	alias_list.clear()
@@ -623,7 +700,23 @@ func reload_tags() -> void:
 	var directories := DirAccess.get_directories_at(database_path + TAGS_PATH)
 	
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
-		var tag: Tag = load(database_path + TAGS_PATH + file)
+		
+		if file.get_extension() != "tres":
+			log_message(
+					"File " + file +  " is not a resource file. Skipping -",
+					LoggingLevel.WARNING
+			)
+			continue
+		
+		var tag: Resource = load(database_path + TAGS_PATH + file)
+		
+		if not tag is Tag:
+			log_message(
+					"File " + file +  " is not a Tag file. Skipping -",
+					LoggingLevel.WARNING
+			)
+			continue
+
 		if tag.file_name != file:
 			tag.file_name = file
 		
@@ -631,7 +724,23 @@ func reload_tags() -> void:
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
-			var tag: Tag = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			
+			if tag_file.get_extension() != "tres":
+				log_message(
+						"File \"" + tag_file +  "\" is not a resource file. Skipping",
+						LoggingLevel.WARNING
+				)
+				continue
+			
+			var tag: Resource = load(database_path + TAGS_PATH + directory + "/" + tag_file)
+			
+			if not tag is Tag:
+				log_message(
+						"File \"" + tag_file +  "\" is not a Tag file. Skipping",
+						LoggingLevel.WARNING
+				)
+				continue
+			
 			if tag.file_name != tag_file:
 				tag.file_name = tag_file
 			
@@ -645,22 +754,30 @@ func reload_tags() -> void:
 
 
 func database_changed() -> void:
+	log_message("Database change queued.")
 	if not DirAccess.dir_exists_absolute(database_path):
 		var _err = DirAccess.make_dir_recursive_absolute(database_path)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created. Using default.".format(
-					[database_path]))
+			log_message(
+				"Directory \"{0}\" couldn't be created. Using default.".format(
+					[database_path]),
+					LoggingLevel.WARNING
+			)
 			database_path = ProjectSettings.globalize_path("user://")
 	
 	if not DirAccess.dir_exists_absolute(database_path + TAGS_PATH):
 		var _err = DirAccess.make_dir_absolute(database_path + TAGS_PATH)
 		
 		if _err != OK:
-			print("Directory \"{0}\" couldn't be created.".format(
-					[database_path + TAGS_PATH]))
+			log_message(
+				"Directory \"{0}\" couldn't be created.".format(
+					[database_path + TAGS_PATH]),
+					LoggingLevel.WARNING
+			)
 	
 	reload_tags()
+	log_message("Database change finished.")
 
 
 func get_wiki_request_url(tag_name: String) -> String:
@@ -717,23 +834,26 @@ func get_online_wiki_url(tag_name: String) -> String:
 	return E6_SEARCH_URL + tag_name.replace(" ", "_")
 
 
-func register_tag(tag_string: String, path: String):
+func register_tag(tag_string: String, path: String, log_msg := false):
 	if not loaded_tags.has(tag_string.left(1)):
 		loaded_tags[tag_string.left(1)] = {}
 	
 	var tag: Tag = load(path)
 	
-	if loaded_tags[tag_string.left(1)].has(tag_string):
-		print("Tag {0} is duplicate, tag file from {1} will be used".format(
+	if loaded_tags[tag_string.left(1)].has(tag_string) and loaded_tags[tag_string.left(1)][tag_string]["path"] != path:
+		log_message(
+			"Tag \"{0}\" is duplicate, tag file from {1} will be used".format(
 				[
 					tag_string, path
-				]))
+				]),
+				LoggingLevel.NORMAL,
+				log_msg
+		)
 	
 	loaded_tags[tag_string.left(1)][tag_string] = {
 		"path": path,
 		"category": tag.category
 	}
-	#print(loaded_tags)
 	for alias in tag.aliases: # Regsiter/update new aliases
 		if custom_aliases.has(alias.left(1)) and custom_aliases[alias.left(1)].has(alias):
 			continue # Only if they are not custom
@@ -773,9 +893,11 @@ func get_alias(tag_string: String, _starting_alias: String = "") -> String:
 		return tag_string
 	else:
 		if to_tag == _starting_alias:
-			print(
+			log_message(
 				"Cyclic aliasing detected. From\"{0}\" to \"{1}\"".format(
-						[_starting_alias, tag_string]))
+						[_starting_alias, tag_string]),
+				LoggingLevel.WARNING
+			)
 			return tag_string
 		elif has_alias(to_tag):
 			if _starting_alias.is_empty():
@@ -834,7 +956,11 @@ func get_tag_filepath(tag_name: String) -> String:
 	if has_tag(tag_name):
 		return loaded_tags[tag_name.left(1)][tag_name]["path"]
 	else:
-		return database_path + TAGS_PATH + tag_name + ".tres"
+		return get_default_tag_filepath(tag_name)
+
+
+func get_default_tag_filepath(tag_name: String) -> String:
+	return database_path + TAGS_PATH + tag_name + ".tres"
 
 
 func remove_tag(tag_name: String) -> void:
@@ -875,12 +1001,10 @@ func get_parents(tag_name: String) -> Array[String]:
 	
 	var tag_file: Tag = get_tag(tag_name)
 	unexplored_parents.append_array(tag_file.parents)
-	
-	#print("Starting while loop.")
-	
+
 	while not unexplored_parents.is_empty():
 		var tag: String = unexplored_parents.pop_front()
-		print("Exploring parents of: " + tag)
+		#print("Exploring parents of: " + tag)
 		explored_parents.append(tag) # Add the current to explored
 		
 		if not return_parents.has(tag): # And to the return ones if it wasn't
@@ -914,7 +1038,7 @@ func get_prioritized_parents(tag_name: String) -> Dictionary:
 	
 	while not unexplored_parents.is_empty():
 		var tag: String = unexplored_parents.pop_front()
-		print("Exploring parents of: " + tag)
+		#print("Exploring parents of: " + tag)
 		
 		explored_parents.append(tag) # Add the current to explored
 
@@ -1077,4 +1201,93 @@ func save_settings() -> void:
 		new_settings.save()
 	else:
 		print("Running from source: Skipping saving settings.")
+
+
+func log_message(message_to_log: String, message_class := LoggingLevel.NORMAL, queue := false) -> void:
+	if message_class == LoggingLevel.NORMAL:
+		print("INFO: " + message_to_log)
+		message_logged.emit("INFO: " + message_to_log, message_class)
+		if queue:
+			queued_logs["INFO"].append("INFO: " + message_to_log)
+	elif message_class == LoggingLevel.WARNING:
+		push_warning(message_to_log)
+		message_logged.emit("WARNING: " + message_to_log, message_class)
+		if queue:
+			queued_logs["WARNING"].append("WARNING: " + message_to_log)
+	elif message_class == LoggingLevel.ERROR:
+		push_error(message_to_log)
+		message_logged.emit("ERROR: " + message_to_log, message_class)
+		if queue:
+			queued_logs["ERROR"].append("ERROR: " + message_to_log)
+
+
+func get_queued_logs(log_level: LoggingLevel) -> Array[String]:
+	var return_log: Array[String] = []
+	
+	if queued_logs.is_empty():
+		return return_log
+	
+	if log_level == LoggingLevel.NORMAL:
+		return_log.assign(queued_logs["INFO"])
+	elif log_level == LoggingLevel.WARNING:
+		return_log.assign(queued_logs["WARNING"])
+	elif log_level == LoggingLevel.ERROR:
+		return_log.assign(queued_logs["ERROR"])
+	
+	return return_log
+
+
+func clear_queued_logs() -> void:
+	queued_logs.clear()
+
+
+
+func is_valid_age_id(age_id: String) -> bool:
+	return AGES.has(age_id)
+
+
+func is_valid_age_tag(age_tag: String) -> bool:
+	for age_id in AGES:
+		if AGES[age_id]["tag"] == age_tag:
+			return true
+	return false
+
+
+func get_age_id(age_tag: String) -> String:
+	for age_id in AGES:
+		if AGES[age_id]["tag"] == age_tag:
+			return age_id
+	return "adult"
+
+
+func get_body_id(body_tags: Array[String]) -> String:
+	for body_id in BODY_TYPES:
+		if BODY_TYPES[body_id]["tags"] == body_tags:
+			return body_id
+	return "anthro"
+
+
+func is_valid_gender_id(gender_id: String) -> bool:
+	return GENDERS.has(gender_id)
+
+
+func is_valid_gender(gender_tag: String) -> bool:
+	for gender_id in GENDERS:
+		if GENDERS[gender_id]["tag"] == gender_tag:
+			return true
+	return false
+
+
+func is_valid_body_tag(body_tag: String) -> bool:
+	for body_id in BODY_TYPES:
+		if BODY_TYPES[body_id]["tags"].has(body_tag):
+			return true
+	return false
+
+
+func get_gender_id(gender_tag: String) -> String:
+	for gender_id in GENDERS:
+		if GENDERS[gender_id]["tag"] == gender_tag:
+			return gender_id
+	return "male"
 

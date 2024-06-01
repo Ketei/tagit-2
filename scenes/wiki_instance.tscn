@@ -1,9 +1,69 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgpp0mr5o1al3"]
+[gd_scene load_steps=15 format=3 uid="uid://bgpp0mr5o1al3"]
 
 [ext_resource type="Script" path="res://scripts/wiki_instance.gd" id="1_qfsgr"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_oo4wn"]
+[ext_resource type="Shortcut" uid="uid://dunhypatgeynx" path="res://resources/shortcuts/list_actions/shortcut_refresh.tres" id="2_u4b7t"]
+[ext_resource type="Texture2D" uid="uid://lyerxfm4634q" path="res://textures/icons/refresh.svg" id="3_bvmml"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="3_cy5fh"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_gptxi"]
 [ext_resource type="Texture2D" uid="uid://cosrtsibrj13r" path="res://textures/icons/e6_logo.svg" id="4_vsnv8"]
+
+[sub_resource type="Resource" id="Resource_avbip"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_8fnih"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_fql46"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_3lqvq"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_ot01d"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_edrv3"]
+script = ExtResource("3_gptxi")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="GDScript" id="GDScript_kgi85"]
+resource_name = "zoomer"
+script/source = "extends TextureRect
+
+
+@onready var button: Button = $Button
+@onready var smooth_scroll_container: SmoothScrollContainer = $\"..\"
+
+
+func _ready():
+	button.pressed.connect(on_button_pressed)
+
+
+func on_button_pressed() -> void:
+	if expand_mode == EXPAND_IGNORE_SIZE:
+		expand_mode = TextureRect.EXPAND_KEEP_SIZE
+	else:
+		expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+
+"
 
 [node name="WikiInstance" type="Control"]
 layout_mode = 3
@@ -49,18 +109,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Empty" type="Control" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
+[node name="Empty" type="HBoxContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
 custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
 mouse_filter = 2
+alignment = 2
 
-[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
-visible = false
-custom_minimum_size = Vector2(70, 0)
+[node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/Empty"]
 layout_mode = 2
-size_flags_horizontal = 0
 tooltip_text = "Close Wiki"
-text = "Close"
+shortcut = ExtResource("2_u4b7t")
+icon = ExtResource("3_bvmml")
+icon_alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide"]
 layout_mode = 2
@@ -77,12 +137,13 @@ theme_override_constants/margin_bottom = 8
 [node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("2_oo4wn")
-speed = 6.0
-allow_overdragging = false
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_avbip")
+dragging_scroll_damper = SubResource("Resource_8fnih")
 drag_with_mouse = false
 drag_with_touch = false
-follow_focus_ = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="WikiDesc" type="RichTextLabel" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer/SmoothScrollContainer"]
 layout_mode = 2
@@ -125,11 +186,15 @@ size_flags_stretch_ratio = 2.0
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("2_oo4wn")
-speed = 10.0
-allow_overdragging = false
+speed = 500.0
+wheel_scroll_damper = SubResource("Resource_fql46")
+dragging_scroll_damper = SubResource("Resource_3lqvq")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
+hide_scrollbar_over_time = true
+scrollbar_hide_time = 0.5
 
 [node name="ThumbnailContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer/WikiContainer/PanelContainer/SmoothScrollContainer"]
 layout_mode = 2
@@ -148,8 +213,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FullScreenView" type="TextureRect" parent="PanelContainer"]
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+layout_mode = 2
+script = ExtResource("2_oo4wn")
+wheel_scroll_damper = SubResource("Resource_ot01d")
+dragging_scroll_damper = SubResource("Resource_edrv3")
+drag_with_touch = false
+hide_scrollbar_over_time = true
+scrollbar_hide_time = 1.0
+
+[node name="FullScreenView" type="TextureRect" parent="PanelContainer/SmoothScrollContainer"]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 5
+script = SubResource("GDScript_kgi85")
+
+[node name="Button" type="Button" parent="PanelContainer/SmoothScrollContainer/FullScreenView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+flat = true

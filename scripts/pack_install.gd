@@ -15,8 +15,6 @@ extends PanelContainer
 @onready var cancel_button: Button = $CenterContainer/PakInstaller/MarginContainer/VBoxContainer/ButtonContainer/CancelButton
 @onready var install_button: Button = $CenterContainer/PakInstaller/MarginContainer/VBoxContainer/ButtonContainer/InstallButton
 
-@onready var pack_installed: AcceptDialog = $PackInstalled
-
 var tagger_load: TagPak = null
 
 
@@ -102,10 +100,11 @@ func on_install_pressed() -> void:
 				new_tag.file_name)
 
 	clear_all()
+	Tagger.log_message("Tag pack\"" + tagger_load.pack_name + "\" installed.")
+	Tagger.queue_notification("Tag pack\"" + tagger_load.pack_name + "\" installed.", "Pack Installed", "Done")
 	tagger_load = null
 	install_button.disabled = true
 	Tagger.reload_tags() # <- Moved the updated signals here.
-	pack_installed.show()
 
 
 func clear_all() -> void:

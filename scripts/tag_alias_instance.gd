@@ -47,6 +47,7 @@ func has_alias(alias_name: String) -> bool:
 			if child.contains(alias_name):
 				return true
 		return false
+	
 	elif prefix_wildcard:
 		if parent_alias.ends_with(alias_name):
 			return true
@@ -54,11 +55,20 @@ func has_alias(alias_name: String) -> bool:
 			if child.ends_with(alias_name):
 				return true
 		return false
-	else:
+	
+	elif suffix_wildcard:
 		if parent_alias.begins_with(alias_name):
 			return true
 		for child in tag_array:
 			if child.begins_with(alias_name):
+				return true
+		return false
+		
+	else:
+		if parent_alias == alias_name:
+			return true
+		for child in tag_array:
+			if child == alias_name:
 				return true
 		return false
 

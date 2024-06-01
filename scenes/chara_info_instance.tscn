@@ -1,17 +1,30 @@
-[gd_scene load_steps=18 format=3 uid="uid://ds167yujtqrif"]
+[gd_scene load_steps=21 format=3 uid="uid://ds167yujtqrif"]
 
 [ext_resource type="Script" path="res://scripts/char_info_instance.gd" id="1_rfmjg"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_ylrwt"]
 [ext_resource type="PackedScene" uid="uid://clofybwcoamm6" path="res://scenes/color_type_container.tscn" id="3_3u1bb"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_6fg1l"]
 [ext_resource type="PackedScene" uid="uid://ukl5t5mc7rq2" path="res://scenes/bod_type_opt_btn.tscn" id="3_717r1"]
 [ext_resource type="PackedScene" uid="uid://dhadnetnefl7t" path="res://scenes/genders_option_button.tscn" id="3_y53kr"]
+[ext_resource type="PackedScene" uid="uid://bspxqadlbq7s5" path="res://scenes/named_separator.tscn" id="4_avrif"]
 [ext_resource type="Script" path="res://scripts/body_props_contianer.gd" id="4_y4l5k"]
 [ext_resource type="Script" path="res://scripts/clothing_checkbox.gd" id="5_8otdj"]
 [ext_resource type="Script" path="res://scripts/clothing_scoring.gd" id="5_nkm8e"]
 [ext_resource type="PackedScene" uid="uid://b0l8681t7um42" path="res://scenes/age_option_button.tscn" id="5_qjqov"]
 [ext_resource type="Script" path="res://scripts/pose_checkbox.gd" id="6_g0q6c"]
 [ext_resource type="Script" path="res://scripts/poses_container.gd" id="7_n8f0o"]
-[ext_resource type="ButtonGroup" uid="uid://um8nk8qg1p5q" path="res://button_groups/wizard_pose_group.tres" id="11_kbrpc"]
+
+[sub_resource type="Resource" id="Resource_ybxb8"]
+script = ExtResource("3_6fg1l")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_k003x"]
+script = ExtResource("3_6fg1l")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [sub_resource type="GDScript" id="GDScript_o6xm3"]
 resource_name = "gender_contain"
@@ -74,11 +87,13 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
 script = ExtResource("1_ylrwt")
-speed = 7.0
-allow_overdragging = false
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_ybxb8")
+dragging_scroll_damper = SubResource("Resource_k003x")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="MarginContainer" type="MarginContainer" parent="SmoothScrollContainer"]
 layout_mode = 2
@@ -91,6 +106,10 @@ theme_override_constants/margin_bottom = 8
 [node name="VBoxContainer" type="VBoxContainer" parent="SmoothScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="HTitleSeparator" parent="SmoothScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_avrif")]
+layout_mode = 2
+is_title = true
 
 [node name="TopContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -105,7 +124,6 @@ text = "Body type:"
 
 [node name="BodTypeOptBtn" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer/BodyTContainer" instance=ExtResource("3_717r1")]
 layout_mode = 2
-selected = -1
 
 [node name="SpeciesContainer" type="HBoxContainer" parent="SmoothScrollContainer/MarginContainer/VBoxContainer/TopContainer"]
 layout_mode = 2
@@ -553,7 +571,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Standing"
 script = ExtResource("6_g0q6c")
 pose_name = "Standing"
@@ -598,7 +615,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Leaning"
 script = ExtResource("6_g0q6c")
 pose_name = "Leaning"
@@ -697,7 +713,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Bending
 Over"
 script = ExtResource("6_g0q6c")
@@ -770,7 +785,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Kneeling"
 script = ExtResource("6_g0q6c")
 pose_name = "Kneeling"
@@ -824,7 +838,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Lying"
 script = ExtResource("6_g0q6c")
 pose_name = "Lying"
@@ -878,7 +891,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Sitting"
 script = ExtResource("6_g0q6c")
 pose_name = "Sitting"
@@ -933,7 +945,6 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Crouching"
 script = ExtResource("6_g0q6c")
 pose_name = "Crouching"
@@ -943,7 +954,6 @@ pose_tag = "crouching"
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Floating"
 script = ExtResource("6_g0q6c")
 pose_name = "Floating"
@@ -953,7 +963,6 @@ pose_tag = "floating"
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Flying"
 script = ExtResource("6_g0q6c")
 pose_name = "Flying"
@@ -963,7 +972,6 @@ pose_tag = "flying"
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Jumping"
 script = ExtResource("6_g0q6c")
 pose_name = "Jumping"
@@ -973,7 +981,6 @@ pose_tag = "jumping"
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-button_group = ExtResource("11_kbrpc")
 text = "Swimming"
 script = ExtResource("6_g0q6c")
 pose_name = "Swimming"

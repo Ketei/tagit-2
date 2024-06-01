@@ -13,7 +13,6 @@ var web_load: WebsiteResource = null
 @onready var pack_info: TextEdit = $CenterContainer/PakInstaller/MarginContainer/VBoxContainer/PackContainer/PackData/PackInfo
 
 @onready var file_dialog: FileDialog = $FileDialog
-@onready var pack_installed: AcceptDialog = $PackInstalled
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -54,10 +53,11 @@ func on_install_pressed() -> void:
 	}
 	
 	clear_all()
+	Tagger.queue_notification("Website \"" +  web_load.website_name + "\" added.", "Website added")
+	Tagger.log_message("Website \"" +  web_load.website_name + "\" added.")
 	web_load = null
 	install_button.disabled = true
 	Tagger.websites_updated.emit()
-	pack_installed.show()
 
 
 func clear_all() -> void:

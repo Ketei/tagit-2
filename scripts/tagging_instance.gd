@@ -132,6 +132,8 @@ func on_map_selected(tag_to_add: String) -> void:
 
 
 func summon_wizard() -> void:
+	if wizard_button.has_focus():
+		wizard_button.release_focus()
 	tag_wizard = WIZARD_INSTANCE.instantiate()
 	tag_wizard.wizard_finished.connect(on_wizard_orgasm)
 	add_child(tag_wizard)
@@ -163,8 +165,13 @@ func on_wizard_orgasm(tag_data: Dictionary) -> void:
 
 
 func on_item_activated(item_index: int) -> void:
+	if Input.is_action_pressed("shift_key") and Tagger.has_tag(tag_items.get_item_text(item_index)):
+		window_switch_signaled.emit(0, {"tag": tag_items.get_item_text(item_index)})
+		return
+	
 	if in_tag_editor != null:
 		return
+	
 	Tagger.disable_shortcuts()
 	in_tag_editor = IN_TAG_EDITOR.instantiate()
 	in_tag_editor.done_editing.connect(on_tag_edited)
@@ -241,7 +248,6 @@ func clear_main_list() -> void:
 	if confirm:
 		tag_items.clear()
 	warning_window.queue_free()
-	Tagger.enable_shortcuts()
 
 
 func open_session_blacklist() -> void:
@@ -325,7 +331,8 @@ func on_load_pressed(load_data: Dictionary) -> void:
 func open_save_window() -> void:
 	if save_window != null:
 		return
-	
+	if save_list_button.has_focus():
+		save_list_button.release_focus()
 	save_window = SAVE_WINDOW.instantiate()
 	save_window.mode = 0
 	save_window.file_saved.connect(on_file_saved)

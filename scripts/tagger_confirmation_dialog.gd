@@ -6,11 +6,12 @@ signal dialog_confirmed(confirmed_status: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Tagger.shortcuts_disabled = true
 	get_label().horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	get_label().vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	canceled.connect(on_canceled)
-	confirmed.connect(on_confirmed)
+	DumbUtils.signal_disconnect_all(get_cancel_button().pressed)
+	DumbUtils.signal_disconnect_all(get_ok_button().pressed)
+	get_ok_button().pressed.connect(on_confirmed)
+	get_cancel_button().pressed.connect(on_canceled)
 
 
 ## Sets title, dialog AND buttons text in a single method call
@@ -23,9 +24,11 @@ func set_data(dialog_title := "Please Confirm...", dialog_info := "Confirm Actio
 
 func on_canceled() -> void:
 	dialog_confirmed.emit(false)
+	canceled.emit()
 
 
 func on_confirmed() -> void:
 	dialog_confirmed.emit(true)
+	confirmed.emit()
 
 

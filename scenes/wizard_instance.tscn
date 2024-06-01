@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dnmpmltog3uqx"]
+[gd_scene load_steps=26 format=3 uid="uid://dnmpmltog3uqx"]
 
 [ext_resource type="ButtonGroup" uid="uid://dui1fch8p2y5n" path="res://button_groups/wizard_completion.tres" id="1_e4fqs"]
 [ext_resource type="Script" path="res://scripts/wizard_instance.gd" id="1_ou3hq"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_visn8"]
 [ext_resource type="Theme" uid="uid://c8ad5ntep5ucc" path="res://theme/default.tres" id="3_k2k5r"]
 [ext_resource type="ButtonGroup" uid="uid://xk5teh2lwp2t" path="res://button_groups/wizard_cover_type.tres" id="3_pa5s4"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_uw6y6"]
 [ext_resource type="Script" path="res://scripts/backgrounds_container.gd" id="3_vrlyd"]
 [ext_resource type="Script" path="res://scripts/wiz_completion_container.gd" id="4_f0qec"]
 [ext_resource type="PackedScene" uid="uid://dhadnetnefl7t" path="res://scenes/genders_option_button.tscn" id="5_ub8m7"]
@@ -22,6 +23,18 @@
 [ext_resource type="Theme" uid="uid://ddak63y6lwxsp" path="res://theme/auto_fill.tres" id="19_wkkq5"]
 [ext_resource type="Script" path="res://scripts/auto_list_container.gd" id="20_fwfld"]
 [ext_resource type="Script" path="res://scripts/autofill_itemlist.gd" id="21_wwg2k"]
+
+[sub_resource type="Resource" id="Resource_0er4v"]
+script = ExtResource("3_uw6y6")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_n24b1"]
+script = ExtResource("3_uw6y6")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="WizardInstance" type="Control"]
 top_level = true
@@ -64,11 +77,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 script = ExtResource("2_visn8")
-speed = 8.0
-allow_overdragging = false
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_0er4v")
+dragging_scroll_damper = SubResource("Resource_n24b1")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="ImageInfo" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SmoothScrollContainer"]
 layout_mode = 2

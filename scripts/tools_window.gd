@@ -16,7 +16,7 @@ func _ready():
 
 
 func switch_to_menu(menu_indx: int) -> void:
-	tab_container.current_tab = clampi(menu_indx, 0, 1)
+	tab_container.current_tab = clampi(menu_indx, 0, 2)
 
 
 func on_exit_pressed() -> void:

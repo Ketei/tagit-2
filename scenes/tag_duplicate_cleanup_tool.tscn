@@ -1,0 +1,606 @@
+[gd_scene load_steps=12 format=3 uid="uid://d35w2bc620iql"]
+
+[ext_resource type="PackedScene" uid="uid://bspxqadlbq7s5" path="res://scenes/named_separator.tscn" id="1_d8eka"]
+[ext_resource type="Script" path="res://scripts/tool_duplicate_cleaner.gd" id="1_mqxjp"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="2_4wbpk"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_elk7j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_st18y"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Resource" id="Resource_m1nei"]
+script = ExtResource("3_elk7j")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_60xca"]
+script = ExtResource("3_elk7j")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_cbj5m"]
+script = ExtResource("3_elk7j")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_1egyh"]
+script = ExtResource("3_elk7j")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnmu6"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="GDScript" id="GDScript_0njqm"]
+script/source = "extends MenuButton
+
+
+signal transfer_left_pressed(property: String)
+signal transfer_right_pressed(property: String)
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var this_pop: PopupMenu = get_popup()
+	var left_popup := PopupMenu.new()
+	var right_popup := PopupMenu.new()
+	
+	left_popup.name = \"LeftPopMenu\"
+	right_popup.name = \"RightPopMenu\"
+	
+	var menu_options: Array[String] = [
+		\"Category\",
+		\"Priority\",
+		\"Parents\",
+		\"Suggestions\",
+		\"Groups\",
+		\"Aliases\",
+		\"Wiki Data\",
+		\"Tooltip\"
+	]
+	
+	this_pop.add_child(left_popup)
+	this_pop.add_child(right_popup)
+	
+	this_pop.add_submenu_item(\"Transfer to Left\", \"LeftPopMenu\")
+	this_pop.add_submenu_item(\"Transfer to Right\", \"RightPopMenu\")
+	
+	for option in menu_options:
+		left_popup.add_item(option)
+		right_popup.add_item(option)
+	
+	left_popup.index_pressed.connect(transfer_to_left)
+	right_popup.index_pressed.connect(transfer_to_right)
+	
+	transfer_left_pressed.connect(print_left)
+	transfer_right_pressed.connect(print_rigth)
+
+
+func transfer_to_left(index_pressed: int) -> void:
+	if index_pressed == 0:
+		transfer_left_pressed.emit(\"category\")
+	elif index_pressed == 1:
+		transfer_left_pressed.emit(\"priority\")
+	elif index_pressed == 2:
+		transfer_left_pressed.emit(\"parents\")
+	elif index_pressed == 3:
+		transfer_left_pressed.emit(\"suggestions\")
+	elif index_pressed == 4:
+		transfer_left_pressed.emit(\"groups\")
+	elif index_pressed == 5:
+		transfer_left_pressed.emit(\"aliases\")
+	elif index_pressed == 6:
+		transfer_left_pressed.emit(\"wiki\")
+	elif index_pressed == 7:
+		transfer_left_pressed.emit(\"tooltip\")
+
+
+func transfer_to_right(index_pressed: int) -> void:
+	if index_pressed == 0:
+		transfer_right_pressed.emit(\"category\")
+	elif index_pressed == 1:
+		transfer_right_pressed.emit(\"priority\")
+	elif index_pressed == 2:
+		transfer_right_pressed.emit(\"parents\")
+	elif index_pressed == 3:
+		transfer_right_pressed.emit(\"suggestions\")
+	elif index_pressed == 4:
+		transfer_right_pressed.emit(\"groups\")
+	elif index_pressed == 5:
+		transfer_right_pressed.emit(\"aliases\")
+	elif index_pressed == 6:
+		transfer_right_pressed.emit(\"wiki\")
+	elif index_pressed == 7:
+		transfer_right_pressed.emit(\"tooltip\")
+
+
+
+func print_left(property: String) -> void:
+	print(\"Transfer from right to left \", property)
+
+func print_rigth(property: String) -> void:
+	print(\"Transfer from left to right \", property)
+
+"
+
+[node name="TagDuplicateCleanupTool" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mqxjp")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="AllItems" type="VBoxContainer" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HTitleSeparator" parent="MarginContainer/AllItems" instance=ExtResource("1_d8eka")]
+layout_mode = 2
+separator_text = "TagName"
+is_title = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AllItems"]
+layout_mode = 2
+alignment = 1
+
+[node name="ReloadLeftButton" type="Button" parent="MarginContainer/AllItems/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Reload"
+
+[node name="SectionOptionButton" type="OptionButton" parent="MarginContainer/AllItems/HBoxContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Data"
+popup/item_0/id = 0
+popup/item_1/text = "Wiki"
+popup/item_1/id = 1
+
+[node name="ReloadRightButton" type="Button" parent="MarginContainer/AllItems/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Reload"
+
+[node name="DataContainer" type="HBoxContainer" parent="MarginContainer/AllItems"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LeftTagFields" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftTabContainer" type="TabContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_st18y")
+tabs_visible = false
+
+[node name="BasicInfo" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer"]
+layout_mode = 2
+
+[node name="BasicData" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo"]
+layout_mode = 2
+
+[node name="CatContainer" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/BasicData"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/BasicData/CatContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Category:"
+
+[node name="CategoryLabel" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/BasicData/CatContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "[Category]"
+
+[node name="PrioContainer" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/BasicData"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/BasicData/PrioContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Priority:"
+
+[node name="PrioLabel" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/BasicData/PrioContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "[Priority]"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo"]
+layout_mode = 2
+
+[node name="ParentsSuggestions" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ParentsContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/ParentsSuggestions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/ParentsSuggestions/ParentsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Parents"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ParentsItemList" type="ItemList" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/ParentsSuggestions/ParentsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="SuggsContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/ParentsSuggestions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/ParentsSuggestions/SuggsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Suggestions"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SuggsItemList" type="ItemList" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/ParentsSuggestions/SuggsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="GroupsAliasesContainer" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GroupsContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Groups"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_4wbpk")
+speed = 350.0
+wheel_scroll_damper = SubResource("Resource_m1nei")
+dragging_scroll_damper = SubResource("Resource_60xca")
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+auto_allow_scroll = false
+allow_overdragging = false
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="GroupsRichTextLabel" type="RichTextLabel" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer/SmoothScrollContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+bbcode_enabled = true
+fit_content = true
+
+[node name="AliasContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer/AliasContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Aliases"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AliasItemList" type="ItemList" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/BasicInfo/GroupsAliasesContainer/AliasContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="WikiToolTipContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/WikiToolTipContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_4wbpk")
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_cbj5m")
+dragging_scroll_damper = SubResource("Resource_1egyh")
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+auto_allow_scroll = false
+allow_overdragging = false
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/WikiToolTipContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="WikiRichTextLabel" type="RichTextLabel" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/WikiToolTipContainer/SmoothScrollContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+bbcode_enabled = true
+text = "Wiki"
+fit_content = true
+
+[node name="TooltipLineEdit" type="LineEdit" parent="MarginContainer/AllItems/DataContainer/LeftTagFields/LeftTabContainer/WikiToolTipContainer"]
+layout_mode = 2
+mouse_filter = 1
+placeholder_text = "Tooltip"
+editable = false
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/AllItems/DataContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/AllItems/DataContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="RightTagFields" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightTabContainer" type="TabContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_dnmu6")
+tabs_visible = false
+
+[node name="BasicInfo" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer"]
+layout_mode = 2
+
+[node name="BasicData" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo"]
+layout_mode = 2
+
+[node name="CatContainer" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/BasicData"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/BasicData/CatContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Category:"
+
+[node name="CategoryLabel" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/BasicData/CatContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "[Category]"
+
+[node name="PrioContainer" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/BasicData"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/BasicData/PrioContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Priority:"
+
+[node name="PrioLabel" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/BasicData/PrioContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "[Priority]"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo"]
+layout_mode = 2
+
+[node name="ParentsSuggestions" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ParentsContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/ParentsSuggestions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/ParentsSuggestions/ParentsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Parents"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ParentsItemList" type="ItemList" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/ParentsSuggestions/ParentsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="SuggsContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/ParentsSuggestions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/ParentsSuggestions/SuggsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Suggestions"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SuggsItemList" type="ItemList" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/ParentsSuggestions/SuggsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="GroupsAliasesContainer" type="HBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GroupsContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Groups"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_4wbpk")
+speed = 350.0
+wheel_scroll_damper = SubResource("Resource_m1nei")
+dragging_scroll_damper = SubResource("Resource_60xca")
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+auto_allow_scroll = false
+allow_overdragging = false
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="GroupsRichTextLabel" type="RichTextLabel" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer/GroupsContainer/SmoothScrollContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+bbcode_enabled = true
+fit_content = true
+
+[node name="AliasContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer/AliasContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Aliases"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AliasItemList" type="ItemList" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/BasicInfo/GroupsAliasesContainer/AliasContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="WikiToolTipContainer" type="VBoxContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/WikiToolTipContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_4wbpk")
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_cbj5m")
+dragging_scroll_damper = SubResource("Resource_1egyh")
+drag_with_mouse = false
+drag_with_touch = false
+allow_horizontal_scroll = false
+auto_allow_scroll = false
+allow_overdragging = false
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/WikiToolTipContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="WikiRichTextLabel" type="RichTextLabel" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/WikiToolTipContainer/SmoothScrollContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+bbcode_enabled = true
+text = "Wiki"
+fit_content = true
+
+[node name="TooltipLineEdit" type="LineEdit" parent="MarginContainer/AllItems/DataContainer/RightTagFields/RightTabContainer/WikiToolTipContainer"]
+layout_mode = 2
+mouse_filter = 1
+placeholder_text = "Tooltip"
+editable = false
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/AllItems"]
+layout_mode = 2
+
+[node name="KeepButtons" type="HBoxContainer" parent="MarginContainer/AllItems"]
+layout_mode = 2
+
+[node name="KeepLeftButton" type="Button" parent="MarginContainer/AllItems/KeepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Keep this version"
+
+[node name="TransferMenuButton" type="MenuButton" parent="MarginContainer/AllItems/KeepButtons"]
+layout_mode = 2
+tooltip_text = "Transfer Data"
+text = "</>"
+flat = false
+script = SubResource("GDScript_0njqm")
+
+[node name="KeepRightButton" type="Button" parent="MarginContainer/AllItems/KeepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Keep this version"
+
+[node name="Explanation" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Explanation"]
+layout_mode = 2
+text = "This tool will help you remove duplicate tag files you might have on your database.
+You will be able to select parts of one tag to transfer to another if you wish. Once you've selected which tag you would like to keep, the other one 
+will be moved to your system's thrash can.
+While you're working on duplicates the system will disable all other interactions."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Explanation"]
+layout_mode = 2
+
+[node name="SearchDuplicatesButton" type="Button" parent="MarginContainer/Explanation/VBoxContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Search for Duplicates"
+
+[node name="DuplicateLabelStatus" type="Label" parent="MarginContainer/Explanation/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1

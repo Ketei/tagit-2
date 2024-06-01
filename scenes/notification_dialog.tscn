@@ -5,5 +5,6 @@
 [node name="NotificationDialog" type="AcceptDialog"]
 initial_position = 1
 visible = true
+transient = false
 always_on_top = true
 script = ExtResource("1_f0ftg")

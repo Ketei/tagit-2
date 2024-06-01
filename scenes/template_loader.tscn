@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdwih5ycurgtc"]
+[gd_scene load_steps=8 format=3 uid="uid://bdwih5ycurgtc"]
 
 [ext_resource type="Script" path="res://scripts/template_loader.gd" id="1_qc2g8"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="1_wvvcd"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="3_nuqw7"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_bykxp"]
 device = -1
@@ -9,6 +10,18 @@ keycode = 4194305
 
 [sub_resource type="Shortcut" id="Shortcut_p74xp"]
 events = [SubResource("InputEventKey_bykxp")]
+
+[sub_resource type="Resource" id="Resource_v0igg"]
+script = ExtResource("3_nuqw7")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_th5t8"]
+script = ExtResource("3_nuqw7")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="TemplateLoader" type="Control"]
 top_level = true
@@ -62,6 +75,9 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("1_wvvcd")
+speed = 500.0
+wheel_scroll_damper = SubResource("Resource_v0igg")
+dragging_scroll_damper = SubResource("Resource_th5t8")
 
 [node name="TemplateList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/SmoothScrollContainer"]
 layout_mode = 2

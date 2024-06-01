@@ -29,6 +29,8 @@ func _ready():
 	help_menu.get_popup().index_pressed.connect(on_help_menu_selected)
 	tagger_menu.sort_alphabetical_pressed.connect(sort_tags_aphabetically)
 	tagger_menu.sort_high_index_pressed.connect(sort_by_priority)
+	Tagger.menus_disabled.connect(disable_menus)
+	Tagger.menus_enabled.connect(enable_menus)
 
 
 func sort_by_priority() -> void:
@@ -47,6 +49,18 @@ func show_controls_window() -> void:
 	add_child(controls_window)
 
 
+func disable_menus() -> void:
+	main_menu.disabled = true
+	tagger_menu.disabled = true
+	help_menu.disabled = true
+
+
+func enable_menus() -> void:
+	main_menu.disabled = false
+	tagger_menu.disabled = false
+	help_menu.disabled = false
+
+
 func on_controls_closed() -> void:
 	controls_window.queue_free()
 	main_menu.show()
@@ -63,8 +77,9 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 	
 	hide_all_windows()
 	if target_window == 0: # Wiki
-		tagger.show()
-		tagger_menu.show()
+		wiki.show()
+		tagger_menu.visible = false
+		wiki.on_wiki_search_submit(args["tag"])
 	elif target_window == 1: # Review Tag
 		reviewer.show()
 		reviewer.clear_all()

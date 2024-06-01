@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cimm555ig005"]
+[gd_scene load_steps=15 format=3 uid="uid://cimm555ig005"]
 
 [ext_resource type="Script" path="res://scripts/tag_review_instance.gd" id="1_csr5t"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="1_t4hiu"]
@@ -9,6 +9,31 @@
 [ext_resource type="Script" path="res://scripts/tag_review_menu.gd" id="3_i77ie"]
 [ext_resource type="Script" path="res://scripts/review_smart_entries.gd" id="5_1gv4a"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="5_7suxg"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="9_1foxj"]
+
+[sub_resource type="Resource" id="Resource_cy1g5"]
+script = ExtResource("9_1foxj")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_popny"]
+script = ExtResource("9_1foxj")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_wxyin"]
+script = ExtResource("9_1foxj")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_cn641"]
+script = ExtResource("9_1foxj")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="TagReview" type="Control"]
 layout_mode = 3
@@ -228,11 +253,13 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 script = ExtResource("5_7suxg")
-speed = 7.0
-allow_overdragging = false
+speed = 300.0
+wheel_scroll_damper = SubResource("Resource_cy1g5")
+dragging_scroll_damper = SubResource("Resource_popny")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Lists/MarginContainer/SmoothScrollContainer"]
 layout_mode = 2
@@ -273,11 +300,13 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 script = ExtResource("5_7suxg")
-speed = 7.0
-allow_overdragging = false
+speed = 300.0
+wheel_scroll_damper = SubResource("Resource_wxyin")
+dragging_scroll_damper = SubResource("Resource_cn641")
 drag_with_mouse = false
 drag_with_touch = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="NumberHflow" type="HFlowContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/TabContainer/Groups/TabContainer/Amounts/MarginContainer/SmoothScrollContainer"]
 layout_mode = 2

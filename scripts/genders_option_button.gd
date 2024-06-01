@@ -1,21 +1,11 @@
 class_name GenderOptionButton
 extends OptionButton
 
-const GENDERS: Dictionary = {
-	"male": {"name": "Male", "tag": "male"},
-	"female": {"name": "Female", "tag": "female"},
-	"amb": {"name": "Ambiguous", "tag": "ambiguous gender"},
-	"andro": {"name": "Andromorph", "tag": "andromorph"},
-	"gyno": {"name": "Gynomorph", "tag": "gynomorph"},
-	"herm": {"name": "Hermaphrodite", "tag": "herm"},
-	"maleherm": {"name": "Male Hermaphrodite", "tag": "maleherm"}
-}
-
 
 func _ready():
 	var index_counter: int = 0
-	for key in GENDERS:
-		add_item(GENDERS[key]["name"])
+	for key in Tagger.GENDERS:
+		add_item(Tagger.GENDERS[key]["name"])
 		set_item_metadata(
 				index_counter,
 				key)
@@ -24,8 +14,16 @@ func _ready():
 
 
 func get_gender_tag() -> String:
-	return GENDERS[get_item_metadata(selected)]["tag"]
+	return Tagger.GENDERS[get_item_metadata(selected)]["tag"]
 
 
+func is_female() -> bool:
+	return Tagger.GENDERS[get_item_metadata(selected)]["is_female"]
 
 
+func set_gender_by_id(gender_id: String) -> void:
+	for gender_idx in range(item_count):
+		if get_item_metadata(gender_idx) == gender_id:
+			select(gender_idx)
+	
+	
