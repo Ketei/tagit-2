@@ -1,8 +1,8 @@
 class_name TemplateLoaderItem
 extends PanelContainer
 
-signal load_pressed(index: int)
-signal overwrite_pressed(index: int)
+signal load_pressed(template_title: String)
+signal overwrite_pressed(template_title: String)
 signal delete_pressed(title: String)
 
 enum ContainerMode{
@@ -10,7 +10,6 @@ enum ContainerMode{
 	LOAD
 }
 
-var template_index: int = 0
 var template_name: String = "": set = set_template_name
 var mode := ContainerMode.SAVE
 
@@ -51,7 +50,7 @@ func _on_delete_pressed() -> void:
 
 func _on_action_pressed() -> void:
 	if mode == ContainerMode.SAVE:
-		overwrite_pressed.emit(template_index)
+		overwrite_pressed.emit(template_name)
 	elif mode == ContainerMode.LOAD:
-		load_pressed.emit(template_index)
+		load_pressed.emit(template_name)
 

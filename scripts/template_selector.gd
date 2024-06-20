@@ -52,7 +52,6 @@ func load_entries(save_mode: bool) -> void:
 		templates_container.add_child(new_template)
 		new_template.template_name = Tagger.templates[template_index]["title"]
 		entry_titles.append(Tagger.templates[template_index]["title"])
-		new_template.template_index = template_index
 		new_template.delete_pressed.connect(_on_template_deleted)
 		if save_mode:
 			new_template.save_mode()
@@ -70,8 +69,10 @@ func clear_entries() -> void:
 		entry.queue_free()
 
 
-func on_overwrite_pressed(slot_index: int) -> void:
-	template_saved.emit(slot_index, template_le.text.strip_edges())
+func on_overwrite_pressed(slot_title: String) -> void:
+	template_saved.emit(
+		Tagger.get_template_idx_with_title(slot_title),
+		template_le.text.strip_edges())
 
 
 func on_save_pressed(_ignore := "") -> void:
@@ -80,21 +81,25 @@ func on_save_pressed(_ignore := "") -> void:
 	if save_title.is_empty():
 		return
 	
-	var entry_index: int = entry_titles.find(save_title)
+	var entry_index: int = Tagger.get_template_idx_with_title(save_title)
 	
 	template_saved.emit(entry_index, save_title)
 
 
 func on_load_text(_ignored: String = "") -> void:
-	var find: int = entry_titles.find(template_le.text.strip_edges())
+	var find: int = Tagger.get_template_idx_with_title(
+			template_le.text.strip_edges())
+	
 	if find == -1:
 		return
 	
-	on_load_pressed(find)
+	template_loaded.emit(find)
 
 
-func on_load_pressed(slot_index: int):
-	template_loaded.emit(slot_index)
+func on_load_pressed(slot_title: String):
+	template_loaded.emit(
+			Tagger.get_template_idx_with_title(slot_title)
+	)
 
 
 func _on_template_deleted(template_title: String) -> void:

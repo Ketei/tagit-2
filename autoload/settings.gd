@@ -1291,3 +1291,13 @@ func get_gender_id(gender_tag: String) -> String:
 			return gender_id
 	return "male"
 
+
+func get_template_idx_with_title(template_title: String) -> int:
+	var return_index: int = -1
+	for idx in range(templates.size()):
+		if templates[idx]["title"] == template_title:
+			return_index = idx
+			break
+	return return_index
+
+
