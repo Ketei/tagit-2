@@ -21,7 +21,6 @@ func _ready():
 	listen_for_input(false)
 	save_button.pressed.connect(on_save_pressed)
 	cancel_button.pressed.connect(_on_cancel_pressed)
-	template_le.text_submitted.connect(on_save_pressed)
 
 
 func _unhandled_key_input(event):
@@ -39,10 +38,14 @@ func listen_for_input(is_listening: bool) -> void:
 
 
 func load_entries(save_mode: bool) -> void:
+	DumbUtils.signal_disconnect_all(template_le.text_submitted)
+	
 	if save_mode:
 		save_button.text = "Save"
+		template_le.text_submitted.connect(on_save_pressed)
 	else:
 		save_button.text = "Load"
+		template_le.text_submitted.connect(on_load_text)
 	
 	for template_index in range(Tagger.templates.size()):
 		var new_template: TemplateLoaderItem = TEMPLATE_ELEMENT.instantiate()
