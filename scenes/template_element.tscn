@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch2uec0cvuuhl"]
+
+[ext_resource type="Script" path="res://scripts/template_element.gd" id="1_nnnah"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sokxw"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.129389, 0.227433, 0.393364, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="TemplateElement" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 42)
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_sokxw")
+script = ExtResource("1_nnnah")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TemplateLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 1
+text = "[TemplateName]"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="ButtonContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ActionButton" type="Button" parent="HBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 3.0
+mouse_filter = 1
+text = "Overwrite"
+
+[node name="Delete" type="Button" parent="HBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+mouse_filter = 1
+text = "Delete"
