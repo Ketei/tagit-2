@@ -27,7 +27,7 @@ func _ready():
 
 
 func on_save_pressed() -> void:
-	print("Select pressed for: " + save_title)
+	Tagger.log_message("Slot \"" + save_title + "\" selected.")
 	save_pressed.emit(save_title, self)
 
 

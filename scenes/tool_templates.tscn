@@ -1,8 +1,40 @@
-[gd_scene load_steps=4 format=3 uid="uid://c52fth8a6brwp"]
+[gd_scene load_steps=10 format=3 uid="uid://c52fth8a6brwp"]
 
 [ext_resource type="Script" path="res://scripts/tool_templates.gd" id="1_4sj5k"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="1_extqk"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="3_oc2ex"]
+[ext_resource type="Script" path="res://scripts/template_selector.gd" id="4_17ypx"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="5_b57pj"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="6_omyo1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2mm1a"]
+bg_color = Color(0.113725, 0.156863, 0.223529, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.088, 0.2288, 0.44, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="Resource" id="Resource_l8w3i"]
+script = ExtResource("6_omyo1")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_cknf4"]
+script = ExtResource("6_omyo1")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="ToolTemplates" type="Control"]
 layout_mode = 3
@@ -39,26 +71,33 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="NameContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/NameContainer"]
-layout_mode = 2
-text = "Template Name"
-
-[node name="NameLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/NameContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="DescriptionContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/DescriptionContainer"]
+custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
 text = "Template Description"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClearButton" type="Button" parent="MarginContainer/VBoxContainer/DescriptionContainer/Label"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+text = "Clear All"
 
 [node name="DescTextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/DescriptionContainer"]
 layout_mode = 2
@@ -125,6 +164,79 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 text = "Add"
 
-[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Save Template"
+
+[node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load Template"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "Save As..."
+
+[node name="TemplateSelector" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_17ypx")
+
+[node name="CenterContainer" type="CenterContainer" parent="TemplateSelector"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TemplateSelector/CenterContainer"]
+custom_minimum_size = Vector2(380, 550)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2mm1a")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TemplateSelector/CenterContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("5_b57pj")
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_l8w3i")
+dragging_scroll_damper = SubResource("Resource_cknf4")
+drag_with_mouse = false
+drag_with_touch = false
+
+[node name="MarginContainer" type="MarginContainer" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer/SmoothScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+
+[node name="TemplatesContainer" type="VBoxContainer" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer/SmoothScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="TemplateName" type="HBoxContainer" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TemplateLE" type="LineEdit" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer/TemplateName"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SaveButton" type="Button" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer/TemplateName"]
+layout_mode = 2
+text = "Save/Load"
+
+[node name="CancelButton" type="Button" parent="TemplateSelector/CenterContainer/PanelContainer/VBoxContainer/TemplateName"]
+layout_mode = 2
+text = "Cancel"

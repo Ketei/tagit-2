@@ -50,7 +50,7 @@ tab_alignment = 1
 [node name="Prefixes" parent="MarginContainer/TabContainer" instance=ExtResource("1_iui6u")]
 layout_mode = 2
 
-[node name="Template Creator" parent="MarginContainer/TabContainer" instance=ExtResource("2_7rhvu")]
+[node name="Template Editor" parent="MarginContainer/TabContainer" instance=ExtResource("2_7rhvu")]
 visible = false
 layout_mode = 2
 

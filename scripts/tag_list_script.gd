@@ -92,6 +92,11 @@ func reset_all_tags() -> void:
 			set_item_icon(
 					index,
 					load("res://textures/status/valid.png"))
+			if not tag_memory["tooltip"].is_empty():
+				set_item_tooltip(
+						index,
+						tag_memory["tooltip"]
+				)
 		elif Tagger.has_invalid_tag(get_item_text(index)):
 			tag_memory = Tagger.get_empty_meta(false)
 			for category in tag_metadata:
@@ -99,6 +104,9 @@ func reset_all_tags() -> void:
 			set_item_icon(
 				index,
 				load("res://textures/status/bad.png"))
+			set_item_tooltip(
+				index,
+				"This is an invalid tag")
 		else:
 			tag_memory = Tagger.get_empty_meta()
 			for category in tag_metadata:
