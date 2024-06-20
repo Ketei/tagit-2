@@ -97,6 +97,9 @@ func on_load_pressed(slot_index: int):
 	template_loaded.emit(slot_index)
 
 
-func _on_template_deleted(template_index: int) -> void:
-	Tagger.erase_template(template_index)
-
+func _on_template_deleted(template_title: String) -> void:
+	for template_idx in range(Tagger.templates.size()):
+		if Tagger.templates[template_idx]["title"] == template_title:
+			Tagger.erase_template(template_idx)
+			return
+	Tagger.log_message("Error deleting template: " + template_title, Tagger.LoggingLevel.ERROR)

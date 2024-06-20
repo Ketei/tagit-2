@@ -3,7 +3,7 @@ extends PanelContainer
 
 signal load_pressed(index: int)
 signal overwrite_pressed(index: int)
-signal delete_pressed(index: int)
+signal delete_pressed(title: String)
 
 enum ContainerMode{
 	SAVE,
@@ -45,7 +45,7 @@ func load_mode() -> void:
 
 
 func _on_delete_pressed() -> void:
-	delete_pressed.emit(template_index)
+	delete_pressed.emit(template_name)
 	queue_free()
 
 
