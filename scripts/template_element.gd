@@ -46,6 +46,7 @@ func load_mode() -> void:
 
 func _on_delete_pressed() -> void:
 	delete_pressed.emit(template_index)
+	queue_free()
 
 
 func _on_action_pressed() -> void:
