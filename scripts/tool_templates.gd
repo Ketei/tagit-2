@@ -41,10 +41,13 @@ func on_add_sugg_pressed() -> void:
 
 func on_add_sugg_submitted(suggestion_submitted: String) -> void:
 	var suggestion: String = Tagger.get_alias(suggestion_submitted.strip_edges().to_lower())
+	suggestions_line_edit.clear()	
+	
+	if suggestion.is_empty():
+		return
 	
 	if not suggestions.has_item(suggestion):
 		suggestions.add_item(suggestion)
-	suggestions_line_edit.clear()	
 
 
 func on_add_tag_pressed() -> void:
@@ -53,9 +56,13 @@ func on_add_tag_pressed() -> void:
 
 func on_add_tag_submitted(tag_submited: String) -> void:
 	var final_tag: String = Tagger.get_alias(tag_submited.strip_edges().to_lower())
+	tags_line_edit.clear()
+	
+	if final_tag.is_empty():
+		return
+	
 	if not normal_tags_item.has_item(final_tag):
 		normal_tags_item.add_item(final_tag)
-	tags_line_edit.clear()
 
 
 func show_save_selector() -> void:
