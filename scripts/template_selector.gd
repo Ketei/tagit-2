@@ -72,7 +72,7 @@ func clear_entries() -> void:
 func on_overwrite_pressed(slot_title: String) -> void:
 	template_saved.emit(
 		Tagger.get_template_idx_with_title(slot_title),
-		template_le.text.strip_edges())
+		slot_title)
 
 
 func on_save_pressed(_ignore := "") -> void:
