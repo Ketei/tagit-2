@@ -4,6 +4,7 @@
 
 [node name="NotificationDialog" type="AcceptDialog"]
 initial_position = 1
+size = Vector2i(300, 100)
 visible = true
 transient = false
 always_on_top = true

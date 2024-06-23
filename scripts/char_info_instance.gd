@@ -36,7 +36,12 @@ func _ready():
 
 
 func get_genders() -> Array[String]:
-	var return_array: Array[String] = [gender_opt.get_gender_tag()]
+	var gender: String = gender_opt.get_gender_tag()
+	var form: Array = bod_type_opt_btn.get_body_type()
+	
+	var gendered_form: String = gender + " " + form[0]
+	
+	var return_array: Array[String] = [gender, gendered_form]
 	
 	if not canon_gender.disabled:
 		return_array.append(canon_gender.get_gender_tag() + " (lore)")

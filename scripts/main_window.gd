@@ -20,9 +20,28 @@ var current_window_index: int = 0
 @onready var tagger_menu: MenuButton = $MenusContainer/TopMenuContainer/TaggerMenu
 @onready var help_menu: MenuButton = $MenusContainer/TopMenuContainer/HelpMenu
 
+@onready var splash_texture: ColorRect = $SplashTexture
+@onready var splash_fade: TextureRect = $SplashTexture/SplashFade
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if not splash_texture.visible:
+		splash_texture.visible = true
+	
+	splash_texture.color = ProjectSettings.get_setting("application/boot_splash/bg_color")
+	
+	var splash_path: String = ProjectSettings.get_setting("application/boot_splash/image")
+	
+	if splash_path.begins_with("res://") or\
+			not _is_image(splash_path) or\
+			not FileAccess.file_exists(splash_path):
+		
+		splash_fade.texture = load(splash_path)
+	else:
+		var img := Image.load_from_file(splash_path)
+		splash_fade.texture = ImageTexture.create_from_image(img)
+	
 	main_menu.get_popup().index_pressed.connect(on_menu_changed)
 	tagger_menu.get_popup().index_pressed.connect(on_tagger_menu_selected)
 	tagger.window_switch_signaled.connect(on_window_switch_signaled)
@@ -31,6 +50,16 @@ func _ready():
 	tagger_menu.sort_high_index_pressed.connect(sort_by_priority)
 	Tagger.menus_disabled.connect(disable_menus)
 	Tagger.menus_enabled.connect(enable_menus)
+	
+	await get_tree().process_frame
+	
+	var tween: Tween = create_tween()
+	tween.tween_property(splash_texture, "modulate", Color.TRANSPARENT, 0.85)
+	tween.tween_callback(splash_texture.queue_free)
+
+
+func _is_image(image_path: String) -> bool:
+	return image_path.ends_with("jpg") or image_path.ends_with("png")
 
 
 func sort_by_priority() -> void:
