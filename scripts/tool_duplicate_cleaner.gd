@@ -407,10 +407,9 @@ func on_keep_right_pressed() -> void:
 
 func on_search_dupes_pressed() -> void:
 	search_for_dupliactes()
-	print(duplicates)
 	
 	if 0 == duplicates.size():
-		duplicate_label_status.text = "No duplicates found!"
+		Tagger.queue_notification("No duplicates found!", "Duplicates")
 		return
 	Tagger.disable_shortcuts()
 	Tagger.disable_menus()
