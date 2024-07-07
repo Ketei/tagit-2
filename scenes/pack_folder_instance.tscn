@@ -1,8 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://b74j8u6a2s2t2"]
+[gd_scene load_steps=7 format=3 uid="uid://b74j8u6a2s2t2"]
 
 [ext_resource type="Script" path="res://scripts/pack_folder_instance.gd" id="1_v0b26"]
 [ext_resource type="PackedScene" uid="uid://b0pf1366qxb7y" path="res://scenes/category_option_button.tscn" id="2_3q7gh"]
 [ext_resource type="Script" path="res://addons/SmoothScroll/SmoothScrollContainer.gd" id="3_s5pod"]
+[ext_resource type="Script" path="res://addons/SmoothScroll/scroll_damper/expo_scroll_damper.gd" id="4_gji1a"]
+
+[sub_resource type="Resource" id="Resource_l2xfw"]
+script = ExtResource("4_gji1a")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
+
+[sub_resource type="Resource" id="Resource_yutps"]
+script = ExtResource("4_gji1a")
+friction = 4.0
+minimum_velocity = 0.4
+rebound_strength = 7.0
 
 [node name="PackFolder" type="Control"]
 layout_mode = 3
@@ -83,12 +96,13 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("3_s5pod")
-speed = 10.0
-allow_overdragging = false
+speed = 400.0
+wheel_scroll_damper = SubResource("Resource_l2xfw")
+dragging_scroll_damper = SubResource("Resource_yutps")
 drag_with_mouse = false
 drag_with_touch = false
-follow_focus_ = false
 allow_horizontal_scroll = false
+allow_overdragging = false
 
 [node name="TagsContainer" type="HFlowContainer" parent="VBoxContainer/MarginContainer/SmoothScrollContainer"]
 layout_mode = 2

@@ -1,6 +1,10 @@
 extends MarginContainer
 
 
+var msg_log: Array[String] = []
+var warn_log: Array[String] = []
+var err_log: Array[String] = []
+
 @onready var tab_container: TabContainer = $VBoxContainer/TabContainer
 
 @onready var all_text_edit: TextEdit = $VBoxContainer/TabContainer/All/AllTextEdit
@@ -31,11 +35,39 @@ func on_level_selected(selected_index: int) -> void:
 
 
 func on_log_emmited(message: String, level: Tagger.LoggingLevel) -> void:
-	all_text_edit.text += "\n" + message + "\n"
+	all_text_edit.text = Tagger.get_log_string()
 	if level == Tagger.LoggingLevel.NORMAL:
-		info_text_edit.text += "\n" + message + "\n"
+		msg_log.push_front(message)
 	elif level == Tagger.LoggingLevel.WARNING:
-		warning_text_edit.text += "\n" + message + "\n"
+		warn_log.push_front(message)
 	elif level == Tagger.LoggingLevel.ERROR:
-		error_text_edit.text += "\n" + message + "\n"
+		err_log.push_front(message)
+	
+	normalize_sizes()
+	
+	if level == Tagger.LoggingLevel.NORMAL:
+		info_text_edit.text = get_log_string(msg_log)
+	elif level == Tagger.LoggingLevel.WARNING:
+		warning_text_edit.text = get_log_string(warn_log)
+	elif level == Tagger.LoggingLevel.ERROR:
+		error_text_edit.text = get_log_string(err_log)
+
+
+func normalize_sizes() -> void:
+	if Tagger.LOG_SIZE < msg_log.size():
+		msg_log.resize(Tagger.LOG_SIZE)
+	if Tagger.LOG_SIZE < warn_log.size():
+		warn_log.resize(Tagger.LOG_SIZE)
+	if Tagger.LOG_SIZE < err_log.size():
+		err_log.resize(Tagger.LOG_SIZE)
+
+
+func get_log_string(log_array: Array[String]) -> String:
+	var log_string: String = ""
+	
+	for index in range(log_array.size() - 1, -1, -1):
+		log_string += msg_log[index] + "\n"
+	
+	return log_string
+
 
