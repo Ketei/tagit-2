@@ -110,11 +110,12 @@ const DEFAULT_SITES: Dictionary = {
 }
 
 const IMAGE_LIMIT: int = 128
+const LOG_SIZE: int = 100
 const TAGS_PATH: String = "tags/"
 const SAVES_PATH: String = "user://saves/"
 const WILDCARD_CHAR: String = "*"
 const TAG_SPLIT_CHAR: String = ","
-const AM_THE_THICC_SHIBE: bool = false
+const AM_THE_THICC_SHIBE: bool = true
 const SOURCE_RUN: bool = false
 # URLs
 
@@ -138,7 +139,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net//tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.3.5"
+const VERSION: String = "2.3.6"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 const GENDERS: Dictionary = {
@@ -284,6 +285,7 @@ var queued_logs: Dictionary = {
 	"WARNING": [],
 	"ERROR": []
 }
+var msg_log: Array[String] = []
 
 
 func _ready():
@@ -1204,21 +1206,42 @@ func save_settings() -> void:
 
 
 func log_message(message_to_log: String, message_class := LoggingLevel.NORMAL, queue := false) -> void:
+	var log_msg: String = ""
+	
 	if message_class == LoggingLevel.NORMAL:
 		print("INFO: " + message_to_log)
-		message_logged.emit("INFO: " + message_to_log, message_class)
+		log_msg += "INFO: "
 		if queue:
 			queued_logs["INFO"].append("INFO: " + message_to_log)
 	elif message_class == LoggingLevel.WARNING:
 		push_warning(message_to_log)
-		message_logged.emit("WARNING: " + message_to_log, message_class)
+		log_msg += "WARNING: "
 		if queue:
 			queued_logs["WARNING"].append("WARNING: " + message_to_log)
 	elif message_class == LoggingLevel.ERROR:
 		push_error(message_to_log)
-		message_logged.emit("ERROR: " + message_to_log, message_class)
+		log_msg += "ERROR: "
 		if queue:
 			queued_logs["ERROR"].append("ERROR: " + message_to_log)
+	else:
+		log_msg += "LOG: "
+	log_msg += message_to_log
+	
+	msg_log.push_front(log_msg)
+	
+	if LOG_SIZE < msg_log.size():
+		msg_log.resize(LOG_SIZE)
+	
+	message_logged.emit(log_msg, message_class)
+
+
+func get_log_string() -> String:
+	var log_string: String = ""
+	
+	for index in range(msg_log.size() - 1, -1, -1):
+		log_string += msg_log[index] + "\n"
+	
+	return log_string
 
 
 func get_queued_logs(log_level: LoggingLevel) -> Array[String]:

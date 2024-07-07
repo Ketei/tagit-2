@@ -213,6 +213,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+color = Color(0.301961, 0.301961, 0.301961, 1)
 
 [node name="SplashFade" type="TextureRect" parent="SplashTexture"]
 layout_mode = 1
