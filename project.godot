@@ -11,9 +11,12 @@ config_version=5
 [application]
 
 config/name="Tag_It_2"
+config/description="A tool that helps to create populated tag lists for your posts."
+config/version="2.3.6"
 run/main_scene="res://scenes/main_window.tscn"
 config/auto_accept_quit=false
 config/features=PackedStringArray("4.2", "GL Compatibility")
+run/low_processor_mode=true
 boot_splash/image="res://textures/splash/splash.png"
 config/icon="res://textures/icons/icon.svg"
 config/windows_native_icon="res://textures/icons/icon.ico"
@@ -30,6 +33,7 @@ Hydrus="*res://autoload/hydrus_requester.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/energy_saving/keep_screen_on=false
 
 [editor_plugins]
 
