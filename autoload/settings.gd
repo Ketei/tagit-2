@@ -115,7 +115,7 @@ const TAGS_PATH: String = "tags/"
 const SAVES_PATH: String = "user://saves/"
 const WILDCARD_CHAR: String = "*"
 const TAG_SPLIT_CHAR: String = ","
-const AM_THE_THICC_SHIBE: bool = true
+const AM_THE_THICC_SHIBE: bool = false
 const SOURCE_RUN: bool = false
 # URLs
 
