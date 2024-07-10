@@ -20,6 +20,12 @@ enum LoggingLevel {
 	ERROR,
 }
 
+enum CompareAlgorithms {
+	EXACT,
+	LEVENSHTEIN,
+	SORENSEN,
+}
+
 enum Categories {
 	GENERAL,
 	ARTIST,
@@ -136,10 +142,10 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 # search[order] = "date"|"count"|"name"
 # search[has_wiki] = bool
 # limit = int
-const TAGS: String = "https://e621.net//tags.json?"
+const TAGS: String = "https://e621.net/tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.3.6"
+const VERSION: String = "2.4.0"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 const GENDERS: Dictionary = {
@@ -214,6 +220,7 @@ var load_images: bool = false: # Hydrus Only
 		load_images = new_load
 		image_view_toggled.emit(load_images)
 var autofill_enabled: bool = true
+var search_algorithm: CompareAlgorithms = CompareAlgorithms.EXACT
 var open_e6_on_wiki_link: bool = true
 var include_invalid: bool = false
 var image_amount: int = 16
@@ -364,6 +371,7 @@ func _ready():
 	suggestion_confidence = _load_settings.suggestion_confidence
 	prefixes = _load_settings.prefixes
 	autofill_enabled = _load_settings.autofill_enabled
+	search_algorithm = _load_settings.search_algorithm as CompareAlgorithms
 
 	var directories := DirAccess.get_directories_at(database_path + TAGS_PATH)
 
@@ -602,6 +610,48 @@ func has_alias(from: String) -> bool:
 	if alias_list.has(from.left(1)):
 		return alias_list[from.left(1)].has(from)
 	return false
+
+
+func get_alias_prefixes(prefix: String, limit: int = 3) -> Array[Array]:
+	var found_list: Array[Array] = []
+	var alias_key: String = prefix.left(1)
+	
+	if has_alias(prefix): # Do exact matching first
+		found_list.append([prefix, get_alias(prefix)])
+	
+	if alias_list.has(alias_key):
+		var alias_sublist: Dictionary = alias_list[alias_key]
+		
+		# Get starting matches but not exact.
+		for sub_key:String in alias_sublist: 
+			if limit <= found_list.size():
+				break
+			if sub_key == prefix:
+				continue
+			if sub_key.begins_with(prefix):
+				found_list.append([sub_key, get_alias(sub_key)])
+	
+		for alias:String in alias_sublist: # Get similar matches but not exact
+			if limit <= found_list.size():
+				break
+			if alias == prefix:
+				continue
+			
+			var alias_substr: String = ""
+			
+			if prefix.length() <= alias.length():
+				alias_substr = alias.substr(0, prefix.length())
+			else:
+				alias_substr = alias
+			
+			if string_metric_range(alias_substr, prefix):
+				found_list.append(
+						[
+							alias, # From
+							get_alias(alias) #To
+						])
+		
+	return found_list
 
 
 func add_invalid_tag(tag_name: String) -> void:
@@ -912,7 +962,7 @@ func get_alias(tag_string: String, _starting_alias: String = "") -> String:
 
 ## Searches for all tag matches. If limit is -1 it'll go through all entries
 ## if not it'll stop once if finds "limit" matches.
-func search_local(search_string: String, limit: int = -1, invert := true) -> Array[String]:
+func search_local(search_string: String, limit: int = -1, invert := true) -> Array:
 	search_string = search_string.strip_edges().to_lower()
 	var pre_wild: bool = search_string.begins_with(WILDCARD_CHAR) # ends with
 	var suff_wild: bool = search_string.ends_with(WILDCARD_CHAR) # Begins with
@@ -933,16 +983,25 @@ func search_with_category(search_string: String, category: Categories, limit: in
 	
 	if has_alias(search_string):
 		return_array.push_front(get_alias(search_string))
-		limit -= 1
+		if 0 < limit:
+			limit -= 1
 	elif has_tag(search_string):
 		return_array.push_front(search_string)
-		limit -= 1
+		if 0 < limit:
+			limit -= 1
 	
 	if loaded_tags.has(tag_key):
-		for tag in loaded_tags[tag_key]:
+		for tag:String in loaded_tags[tag_key]:
 			if limit == 0:
 				break
-			if tag.begins_with(search_string) and\
+			var tag_substr: String = ""
+			
+			if search_string.length() <= tag.length():
+				tag_substr = tag.substr(0, search_string.length())
+			else:
+				tag_substr = tag
+			
+			if string_metric_range(tag_substr, search_string) and\
 			not return_array.has(tag) and\
 			loaded_tags[tag_key][tag]["category"] == category:
 				if invert:
@@ -1108,49 +1167,178 @@ func create_confirmation_dialog() -> TaggerConfirmationDialog:
 	return new_confirmation
 
 
-func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert := true) -> Array[String]:
+func _prefix_sorting(item_a, item_b, compare_string: String) -> bool:
+	# Use index 0 on arrays
+	var string_a: String = item_a if item_a is String else item_a[0]
+	var string_b: String = item_b if item_b is String else item_b[0]
+	
+	return levenshtein_distance(string_a, compare_string) < levenshtein_distance(string_b, compare_string)
+
+
+func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert := true) -> Array:
 	var tag_key: String = prefix_search.left(1)
-	var return_array: Array[String] = []
+	var unlimited_search: bool = limit < 0
+	var begin_with: Array = []
+	var similar: Array = []
+	var full_array: Array = []
+	var exact_match: bool = has_tag(prefix_search)
 	
-	if has_alias(prefix_search):
-		return_array.push_front(alias_list[tag_key][prefix_search])
-		limit -= 1
-	elif has_tag(prefix_search):
-		return_array.push_front(prefix_search)
+	if exact_match:
 		limit -= 1
 	
+	for p_found in get_alias_prefixes(prefix_search): # [from, to]
+		if not unlimited_search and limit <= 0:
+			break
+		
+		if p_found[0].begins_with(prefix_search):
+			begin_with.append(p_found)
+		else:
+			similar.append(p_found)
+		
+		if not unlimited_search:
+			limit -= 1
+		
 	if loaded_tags.has(tag_key):
-		for tag in loaded_tags[tag_key]:
-			if limit == 0:
+		for tag:String in loaded_tags[tag_key]:
+			if not unlimited_search and limit <= 0:
 				break
-			if tag.begins_with(prefix_search) and not return_array.has(tag):
-				if invert:
-					return_array.push_front(tag)
-				else:
-					return_array.push_back(tag)
-				limit -= 1
+			if tag == prefix_search:
+				continue
+			
+			if tag.begins_with(prefix_search) and not begin_with.has(tag): # Begins with
+				begin_with.append(tag)
+				if not unlimited_search:
+					limit -= 1
+			elif string_metric_range(tag, prefix_search) and not similar.has(tag):
+				similar.append(tag)
+				if not unlimited_search:
+					limit -= 1
 	
-	return return_array
+	begin_with.sort_custom(_prefix_sorting.bind(prefix_search))
+	similar.sort_custom(_prefix_sorting.bind(prefix_search))
+	
+	full_array.append_array(similar)
+	full_array.append_array(begin_with)
+	if exact_match:
+		full_array.append(prefix_search)
+	
+	if invert:
+		full_array.reverse()
+	
+	return full_array
 
 
-func _search_local_with_suffix(suffix_search: String, limit: int = -1, invert := true) -> Array[String]:
+func string_metric_range(string_a: String, string_b: String, similarity: float = 0.6) -> bool:
+	if search_algorithm == CompareAlgorithms.EXACT:
+		return string_a == string_b
+	elif search_algorithm == CompareAlgorithms.LEVENSHTEIN:
+		return similarity <= levenshtein_distance(string_a, string_b)
+	elif search_algorithm == CompareAlgorithms.SORENSEN:
+		return similarity <= string_a.similarity(string_b)
+	else:
+		return 0.0
+
+
+func hamming_distance(string_a: String, string_b: String) -> int:
+	var total_distance: int = 0
+	
+	for letter_index in range(string_a.length()):
+		if string_a[letter_index] != string_b[letter_index]:
+			total_distance += 1
+	
+	return total_distance
+
+
+func hamming_similarity(string_a: String, string_b: String) -> float:
+	var distance: int = hamming_distance(string_a, string_b) # 1
+	var total_length: int = string_a.length() # 3
+	
+	if total_length <= 0:
+		return 0.0
+	
+	var total: float = total_length - distance
+	
+	return total / total_length
+
+
+func levenshtein_distance(string_1: String, string_2: String) -> float:
+	# Written by ChatGPT
+	var len_1: int = string_1.length()
+	var len_2: int = string_2.length()
+	
+	# Empty vs something = completely different
+	if (len_1 == 0 and len_2 != 0) or (len_2 == 0 and len_1 != 0):
+		return 0.0
+
+	# Initialize a 2D array to store the distances
+	var dp: Array[Array] = []
+	for i in range(len_1 + 1):
+		dp.append([])
+		for j in range(len_2 + 1):
+			dp[i].append(0)
+	
+	# Initialize the first row and column of the array
+	for i in range(len_1 + 1):
+		dp[i][0] = i
+	for j in range(len_2 + 1):
+		dp[0][j] = j
+	
+	# Calculate Levenshtein distance
+	for i in range(1, len_1 + 1):
+		for j in range(1, len_2 + 1):
+			if string_1[i - 1] == string_2[j - 1]:
+				dp[i][j] = dp[i - 1][j - 1]
+			else:
+				dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1)
+	
+	# Calculate similarity (1 - normalized distance)
+	var distance: int = dp[len_1][len_2]
+	var max_len:int = maxi(len_1, len_2)
+	var similarity: float = 1.0 - float(distance) / float(max_len)
+	
+	return similarity
+
+
+func _sort_suffix(string_a: String, string_b: String, original_reverse: String) -> bool:
+	return string_metric_range(string_a.reverse(), original_reverse) < string_metric_range(string_b.reverse(), original_reverse)
+
+
+func _search_local_with_suffix(suffix_search: String, limit: int = -1, invert := true) -> Array:
 	var return_array: Array[String] = []
+	
+	var ends_with: Array[String] = []
+	var similar: Array[String] = []
 	
 	for key in loaded_tags:
-		for tag_name in loaded_tags[key]:
+		for tag_name: String in loaded_tags[key]:
 			if limit == 0:
 				break
-			if tag_name.ends_with(suffix_search) and not return_array.has(tag_name):
-				if invert:
-					return_array.push_front(tag_name)
-				else:
-					return_array.push_back(tag_name)
+			
+			var substr: String = ""
+			
+			if suffix_search.length() <= tag_name.length():
+				substr = tag_name.substr(tag_name.length() - suffix_search.length())
+			else:
+				substr = tag_name
+			
+			if tag_name.ends_with(suffix_search) and not ends_with.has(tag_name):
+				ends_with.append(tag_name)
 				limit -= 1
+			elif string_metric_range(suffix_search, substr) and not return_array.has(tag_name):
+				similar.append(tag_name)
+				limit -= 1
+	
+	ends_with.sort_custom(_sort_suffix.bind(suffix_search.reverse()))
+	similar.sort_custom(_sort_suffix.bind(suffix_search.reverse()))
+	return_array.append_array(similar)
+	return_array.append_array(ends_with)
+	if invert:
+		return_array.reverse()
 	
 	return return_array
 
 
-func _search_local_with_any(any_search: String, limit: int = -1, invert := true) -> Array[String]:
+func _search_local_with_any(any_search: String, limit: int = -1, invert := true) -> Array:
 	var return_array: Array[String] = []
 	
 	for key in loaded_tags:
@@ -1158,20 +1346,17 @@ func _search_local_with_any(any_search: String, limit: int = -1, invert := true)
 			if limit == 0:
 				break
 			if tag_name.contains(any_search) and not return_array.has(tag_name):
-				if invert:
-					return_array.push_front(tag_name)
-				else:
-					return_array.push_back(tag_name)
+				return_array.append(tag_name)
 				limit -= 1
-	
+	if invert:
+		return_array.reverse()
 	return return_array
 
 
 func save_settings() -> void:
 	if not SOURCE_RUN:
 		var new_settings := SettingsResource.new()
-		#var new_saves := SaveSlots.new()
-		
+
 		new_settings.first_run = false
 		new_settings.database_path = database_path
 		new_settings.load_images = load_images
@@ -1182,13 +1367,7 @@ func save_settings() -> void:
 		new_settings.invalid_tags = invalid_tags
 		new_settings.suggestion_blacklist = suggestion_blacklist
 		new_settings.constant_tags = constant_tags
-		new_settings.prefixes = prefixes
-		
-		#new_settings.templates = templates
-		#new_settings.saves = saves
-		#new_saves.saves = saves
-		#new_saves.templates = templates
-		
+		new_settings.prefixes = prefixes		
 		new_settings.search_online_suggestions = search_online_suggestions
 		new_settings.hydrus_port = hydrus_port
 		new_settings.hydrus_key = hydrus_key
@@ -1200,6 +1379,8 @@ func save_settings() -> void:
 		new_settings.blacklist_after_remove = blacklist_after_remove
 		new_settings.version_notified = version_notified
 		new_settings.update_notified = update_notified
+		new_settings.autofill_enabled = autofill_enabled
+		new_settings.search_algorithm = int(search_algorithm)
 		new_settings.save()
 	else:
 		print("Running from source: Skipping saving settings.")
