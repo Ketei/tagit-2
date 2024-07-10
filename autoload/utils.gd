@@ -73,5 +73,6 @@ static func is_letter(character: String) -> bool:
 	return valid_letters.has(character.to_lower())
 	
 
-
-
+static func array_remove_all(array: Array, value: Variant) -> void:
+	while array.has(value):
+		array.erase(value) 

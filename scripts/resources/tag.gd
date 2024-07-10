@@ -15,11 +15,11 @@ class_name Tag
 
 ## The name of the file the tag has. This is because some tags have symbols that
 ## are invalid in filenames like "?" and "<".
-@export var file_name: String = "":
-	set(new_file):
-		file_name = new_file
-		if not file_name.ends_with(".tres"):
-			file_name += ".tres"
+var file_name: String = ""#:
+	#set(new_file):
+		#file_name = new_file
+		#if not file_name.ends_with(".tres"):
+			#file_name += ".tres"
 
 ## The priority of the tag. A higher priority means it'll be added to the list
 ## earlier.
@@ -59,12 +59,7 @@ class_name Tag
 func save() -> String:
 	var path: String = Tagger.get_tag_filepath(tag)
 	
-	if file_name.is_empty():
-		file_name = tag.validate_filename() + ".tres"
-	
-	ResourceSaver.save(
-			self, 
-			path)
+	ResourceSaver.save(self, path)
 	
 	return path
 
