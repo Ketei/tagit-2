@@ -3,8 +3,6 @@ extends Control
 
 func _ready():
 	print("- Start -")
-	print(Tagger.levenshtein_distance("brown balls", "brown ballls"))
-	#print("ass".similarity("asa"))
 	print("- Done -")
 
 

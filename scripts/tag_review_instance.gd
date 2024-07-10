@@ -229,13 +229,14 @@ func on_save_pressed() -> void:
 	tag_resource.wiki_entry = wiki_text_edit.text
 	tag_resource.parents = parents_list.get_all_items()
 	tag_resource.suggestions = suggestions_list.get_all_items()
-	tag_resource.aliases = aliases_list.get_all_items()
+	#tag_resource.aliases = aliases_list.get_all_items()
 	tag_resource.smart_tags = groups_list.get_entries()
 	
-	#if Tagger.has_tag(tag_resource.tag):
-		#tag_path = Tagger.get_tag_filepath(tag_resource.tag)
-		#tag_resource.file_name = tag_path.get_file()
-
+	# Validation to prevent self-referencing
+	var aliases: Array[String] = aliases_list.get_all_items()
+	DumbUtils.array_remove_all(aliases, tag_title)
+	tag_resource.aliases = aliases
+	
 	tag_resource.save()
 	Tagger.register_tag(
 			tag_resource.tag,

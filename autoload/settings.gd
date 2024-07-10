@@ -621,35 +621,22 @@ func get_alias_prefixes(prefix: String, limit: int = 3) -> Array[Array]:
 	
 	if alias_list.has(alias_key):
 		var alias_sublist: Dictionary = alias_list[alias_key]
-		
-		# Get starting matches but not exact.
+
 		for sub_key:String in alias_sublist: 
 			if limit <= found_list.size():
 				break
 			if sub_key == prefix:
 				continue
-			if sub_key.begins_with(prefix):
-				found_list.append([sub_key, get_alias(sub_key)])
-	
-		for alias:String in alias_sublist: # Get similar matches but not exact
-			if limit <= found_list.size():
-				break
-			if alias == prefix:
+			
+			var array: Array = [sub_key, get_alias(sub_key)]
+			
+			if found_list.has(array):
 				continue
 			
-			var alias_substr: String = ""
-			
-			if prefix.length() <= alias.length():
-				alias_substr = alias.substr(0, prefix.length())
-			else:
-				alias_substr = alias
-			
-			if string_metric_range(alias_substr, prefix):
-				found_list.append(
-						[
-							alias, # From
-							get_alias(alias) #To
-						])
+			if sub_key.begins_with(prefix):
+				found_list.append(array)
+			elif string_metric_range(sub_key, prefix):
+				found_list.append(array)
 		
 	return found_list
 
@@ -929,7 +916,10 @@ func has_tag(tag_name: String) -> bool:
 
 ## Gets a tag file. Check with has_tag before using
 func get_tag(tag_name: String) -> Tag:
-	return load(loaded_tags[tag_name.left(1)][tag_name]["path"])
+	var path: String = loaded_tags[tag_name.left(1)][tag_name]["path"]
+	var _tag: Tag = load(path)
+	_tag.file_name = path
+	return _tag
 
 
 ## Gets the alias of a tag or the tag unchanged
@@ -949,6 +939,13 @@ func get_alias(tag_string: String, _starting_alias: String = "") -> String:
 				"Cyclic aliasing detected. From\"{0}\" to \"{1}\"".format(
 						[_starting_alias, tag_string]),
 				LoggingLevel.WARNING
+			)
+			return tag_string
+		elif tag_string == to_tag:
+			log_message(
+				"Self aliasing detected. From \"{0}\" to \"{1}\" to \"{2}\"".format(
+					[_starting_alias, tag_string, to_tag]),
+					LoggingLevel.WARNING
 			)
 			return tag_string
 		elif has_alias(to_tag):
@@ -1190,9 +1187,9 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 		if not unlimited_search and limit <= 0:
 			break
 		
-		if p_found[0].begins_with(prefix_search):
+		if p_found[0].begins_with(prefix_search) and not begin_with.has(p_found):
 			begin_with.append(p_found)
-		else:
+		elif not similar.has(p_found):
 			similar.append(p_found)
 		
 		if not unlimited_search:
@@ -1503,5 +1500,4 @@ func get_template_idx_with_title(template_title: String) -> int:
 			return_index = idx
 			break
 	return return_index
-
 
