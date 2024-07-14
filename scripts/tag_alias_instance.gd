@@ -117,11 +117,12 @@ func add_alias(new_alias: String, is_custom: bool) -> void:
 	#if Tagger.has_removed_alias(new_alias, parent_alias):
 		#alias_list.set_item_removed(item_index)
 	var was_removed: bool = Tagger.has_removed_alias(new_alias, parent_alias)
+	var was_custom: bool = Tagger.has_custom_alias(new_alias)
+	
 	if is_custom:
 		Tagger.add_to_custom_aliases(new_alias, parent_alias)
-		#if not Tagger.custom_aliases.has(new_alias.left(1)):
-			#Tagger.custom_aliases[new_alias.left(1)] = {}
-		#Tagger.custom_aliases[new_alias.left(1)][new_alias] = parent_alias
+	
+	if is_custom or was_custom:
 		alias_list.set_item_custom(item_index)
 		if was_removed:
 			Tagger.remove_from_removed_aliases(new_alias, parent_alias)
@@ -160,7 +161,7 @@ func has_custom_alias() -> bool:
 
 
 func clear_aliases() -> void:
-	for alias in alias_list.get_tag_array():
+	for alias in alias_list.get_tag_array(): 
 		Tagger.remove_alias(alias)
 	alias_list.clear()
 

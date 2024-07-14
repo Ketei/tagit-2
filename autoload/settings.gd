@@ -569,6 +569,16 @@ func has_custom_alias(from: String) -> bool:
 	return false
 
 
+func find_custom_alias_to(to_value: String) -> Array[String]:
+	var key_vals: Array[String] = []
+	var char_index: String = to_value.left(1)
+	if custom_aliases.has(char_index):
+		for from_alias in custom_aliases[char_index]:
+			if custom_aliases[char_index][from_alias] == to_value:
+				key_vals.append(from_alias)
+	return key_vals
+
+
 func add_to_removed_aliases(from: String, to: String) -> void:
 	if not removed_aliases.has(from.left(1)):
 		removed_aliases[from.left(1)] = {}
