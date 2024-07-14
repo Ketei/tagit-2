@@ -192,4 +192,5 @@ func on_tag_updated(tag_name: String) -> void:
 		child.clear_aliases()
 		for new_alias in tag_load.aliases:
 			child.add_alias(new_alias, false)
+		break # We shouldn't keep looking if we found the alias.
 

@@ -53,3 +53,16 @@ func set_item_custom(item_index: int, is_custom: bool = true) -> void:
 	
 	get_item_metadata(item_index)["custom"] = is_custom
 
+
+func is_item_custom(item_index: int) -> bool:
+	if typeof(get_item_metadata(item_index)) != TYPE_DICTIONARY or\
+			not get_item_metadata(item_index).has("custom"):
+		return false 
+	return get_item_metadata(item_index)["custom"]
+
+
+func is_item_removed(item_index: int) -> bool:
+	if typeof(get_item_metadata(item_index)) != TYPE_DICTIONARY or\
+			not get_item_metadata(item_index).has("remove"):
+		return false 
+	return get_item_metadata(item_index)["remove"]
