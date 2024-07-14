@@ -33,11 +33,12 @@ var website_installer: WebsiteInstallWindow
 @onready var port_spinbox: SpinBox = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/Wiki/WikiContainer/HydrusContainer/HydrusFields/PortContainer/PortSpinbox
 @onready var confidence_spin_box: SpinBox = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/SuggestContainer/ConfidenceSpinBox
 
-
 @onready var invalid_list: TagItemList = $"MarginContainer/HBoxContainer/BlackListTabs/Invalid Tags/VBoxContainer/InvalidList"
 @onready var sug_black_list: TagItemList = $"MarginContainer/HBoxContainer/BlackListTabs/Suggestion Blacklist/VBoxContainer/SugBlackList"
 @onready var constants_list: TagItemList = $"MarginContainer/HBoxContainer/BlackListTabs/Constant Tags/VBoxContainer/ConstantsList"
 @onready var sites_option_menu: SitesOptionButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/DefaultSite/SitesOptionMenu
+
+@onready var algoritm_button: OptionButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/AlgorithmType/AlgorithmButton
 
 
 # Called when the node enters the scene tree for the first time.
@@ -47,6 +48,8 @@ func _ready():
 	db_path_line_edit.tooltip_text = Tagger.database_path
 	remove_after_use.button_pressed = Tagger.remove_after_use
 	blacklist_after_remove.button_pressed = Tagger.blacklist_after_remove
+	algoritm_button.select(Tagger.search_algorithm)
+	
 	if Tagger.remove_after_use:
 		blacklist_after_remove.disabled = false
 	
@@ -64,6 +67,7 @@ func _ready():
 	if not Hydrus.api_key.is_empty():
 		on_hydrus_connect_pressed()
 	
+	algoritm_button.item_selected.connect(on_algoritm_selected)
 	folder_dialog.dir_selected.connect(on_folder_selected)
 	browse_path_button.pressed.connect(on_browse_folder_pressed)
 	hydrus_connect_button.pressed.connect(on_hydrus_connect_pressed)
@@ -82,6 +86,10 @@ func _ready():
 	remove_after_use.toggled.connect(on_remove_after_use)
 	blacklist_after_remove.toggled.connect(on_blacklist_after_remove)
 	hydrus_request_button.pressed.connect(on_request_pressed)
+
+
+func on_algoritm_selected(algorithm_id: int) -> void:
+	Tagger.search_algorithm = algorithm_id as Tagger.CompareAlgorithms
 
 
 func on_request_pressed() -> void:
@@ -153,10 +161,7 @@ func on_open_tag_folder_pressed() -> void:
 
 
 func on_reload_tags_pressed() -> void:
-	#reload_tag_button.disabled = true
 	Tagger.reload_tags()
-	#await Tagger.aliases_reloaded
-	#reload_tag_button.disabled = false
 
 
 func on_confidence_changed(new_value: float) -> void:

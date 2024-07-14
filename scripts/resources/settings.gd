@@ -12,8 +12,9 @@ extends Resource
 @export var load_images: bool = false # Hydrus Only
 @export var image_amount: int = 16
 @export var search_online_suggestions: bool = false
-@export var autofill_enabled: bool = true
 @export var open_e6_on_wiki_link: bool = true
+@export var autofill_enabled: bool = true
+@export var search_algorithm: int = 0
 
 # Tagger Settings
 @export var default_site: String = ""

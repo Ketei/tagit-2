@@ -113,13 +113,14 @@ select_all_on_focus = true
 [node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/NameContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Load tag from database"
 text = "Load"
 icon = ExtResource("2_piyp6")
 
 [node name="FetchButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SearchContainer/NameContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Grabs some basic information of the tag from e621 if the tag exists."
+tooltip_text = "Grabs tag information from e621 if it exists."
 text = "Fetch"
 icon = ExtResource("2_axmym")
 

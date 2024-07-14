@@ -66,7 +66,7 @@ func get_log_string(log_array: Array[String]) -> String:
 	var log_string: String = ""
 	
 	for index in range(log_array.size() - 1, -1, -1):
-		log_string += msg_log[index] + "\n"
+		log_string += log_array[index] + "\n"
 	
 	return log_string
 

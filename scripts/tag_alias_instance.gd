@@ -106,8 +106,6 @@ func add_alias(new_alias: String, is_custom: bool) -> void:
 				alias_list.set_item_custom(alias_index)
 		return # Since alias exists, we do nothing else.
 	
-	#child_alias.append(new_alias)
-	
 	var item_index: int = alias_list.add_item(new_alias)
 	
 	alias_list.set_item_metadata(
@@ -130,11 +128,6 @@ func add_alias(new_alias: String, is_custom: bool) -> void:
 	else:
 		if was_removed:
 			alias_list.set_item_removed(item_index)
-	
-	
-	#alias_list.set_item_metadata(
-			#item_index,
-			#{"custom": is_custom, "remove": false})
 
 
 func add_alias_no_update(new_alias: String, is_custom: bool) -> void:
@@ -164,4 +157,10 @@ func has_custom_alias() -> bool:
 		if item_metadata["custom"] or item_metadata["remove"]:
 			return true
 	return false
+
+
+func clear_aliases() -> void:
+	for alias in alias_list.get_tag_array():
+		Tagger.remove_alias(alias)
+	alias_list.clear()
 

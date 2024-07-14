@@ -67,3 +67,12 @@ static func has_suffix_array(string_to_check: String, suffix_array: Array[String
 	return false
 
 
+static func is_letter(character: String) -> bool:
+	const valid_letters: Array[String] = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
+	
+	return valid_letters.has(character.to_lower())
+	
+
+static func array_remove_all(array: Array, value: Variant) -> void:
+	while array.has(value):
+		array.erase(value) 

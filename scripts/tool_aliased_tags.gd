@@ -185,6 +185,11 @@ func text_alias_submitted(_ignored_text: String) -> void:
 func on_tag_updated(tag_name: String) -> void:
 	var tag_load: Tag = Tagger.get_tag(tag_name)
 	
-	for alias in tag_load.aliases:
-		add_alias(alias, tag_load.tag)
+	# Clear aliases and reload
+	for child:TagAliasInstance in alias_container.get_children():
+		if child.parent_alias != tag_name:
+			continue
+		child.clear_aliases()
+		for new_alias in tag_load.aliases:
+			child.add_alias(new_alias, false)
 

@@ -136,8 +136,10 @@ func on_request_completed(result: int, response_code: int, _headers: PackedStrin
 	var response: Array = []
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
 		Tagger.log_message(
-			"An error was encountered with the request.\nResult code: " + str(result) + "\nResponse code: " + str(response_code),
+			"An error was encountered with the request.\nEngine result code: " + str(result) + "\ne621 response code: " + str(response_code),
 			Tagger.LoggingLevel.WARNING)
+		request_get.emit(response)
+		return
 	
 	var json = JSON.new()
 	var error = json.parse(body.get_string_from_utf8())
@@ -163,8 +165,10 @@ func on_prio_request_completed(result: int, response_code: int, _headers: Packed
 	var response: Array = []
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
 		Tagger.log_message(
-			"An error was encountered with the request.\nResult code: " + str(result) + "\nResponse code: " + str(response_code),
+			"An error was encountered with the request.\nEngine result code: " + str(result) + "\ne621 response code: " + str(response_code),
 			Tagger.LoggingLevel.WARNING)
+		prio_get.emit(response)
+		return
 	
 	var json = JSON.new()
 	var error = json.parse(body.get_string_from_utf8())

@@ -135,6 +135,7 @@ icon = ExtResource("6_ym3uf")
 
 [node name="AutoSearch" parent="MarginContainer/MainContainer/MainTags/Interact" instance=ExtResource("11_pjino")]
 layout_mode = 2
+items_to_fetch = 13
 
 [node name="AddButton" type="Button" parent="MarginContainer/MainContainer/MainTags/Interact"]
 layout_mode = 2
@@ -226,6 +227,9 @@ custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+tooltip_text = "Generate your tag
+list based on your
+entries."
 text = "Generate List"
 
 [node name="ExtraOptions" type="VBoxContainer" parent="MarginContainer/MainContainer/Final/Buttons"]
@@ -244,6 +248,8 @@ icon = ExtResource("10_r4cct")
 [node name="CopyButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/ExtraOptions"]
 layout_mode = 2
 size_flags_vertical = 3
+tooltip_text = "Copy list to
+your clipboard."
 text = "Copy List"
 icon = ExtResource("13_51rkk")
 

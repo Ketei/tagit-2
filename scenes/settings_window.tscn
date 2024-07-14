@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cyodg6s04nvct"]
+[gd_scene load_steps=21 format=3 uid="uid://cyodg6s04nvct"]
 
 [ext_resource type="Script" path="res://scripts/settings_window.gd" id="1_7cc65"]
 [ext_resource type="PackedScene" uid="uid://dp0dtvv4h81x0" path="res://scenes/sites_option_menu.tscn" id="1_uwl5o"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/sett_load_wiki.gd" id="3_ej6ke"]
 [ext_resource type="Script" path="res://scripts/tool_aliased_tags.gd" id="3_uiqhg"]
 [ext_resource type="Texture2D" uid="uid://b8ahtdj032ml6" path="res://textures/icons/hydrus_icon.svg" id="4_4hhu3"]
+[ext_resource type="PackedScene" uid="uid://bspxqadlbq7s5" path="res://scenes/named_separator.tscn" id="4_4r0ih"]
 [ext_resource type="Texture2D" uid="uid://bri3qhcqvc25b" path="res://textures/icons/open_folder_icon.svg" id="4_c6dde"]
 [ext_resource type="Script" path="res://scripts/settings_invalid_tags.gd" id="4_ja1bu"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="5_i3xrb"]
@@ -178,12 +179,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Browse"
 
-[node name="HSeparator4" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+[node name="HTitleSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer" instance=ExtResource("4_4r0ih")]
 layout_mode = 2
+separator_text = "Autofill"
+is_title = true
 
 [node name="FunctionallityToggle" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
 layout_mode = 2
 alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/FunctionallityToggle"]
+layout_mode = 2
+text = "Enabled"
 
 [node name="AutofillEnabled" type="CheckButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/FunctionallityToggle"]
 layout_mode = 2
@@ -192,7 +199,36 @@ tooltip_text = "When typing on the tagger or wiki, show
 tags that contain the typed word. Accepts
 prefixing or suffixing with the wildcard \"*\""
 button_pressed = true
-text = "Autofill"
+
+[node name="AlgorithmType" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/AlgorithmType"]
+layout_mode = 2
+text = "Algorithm"
+
+[node name="AlgorithmButton" type="OptionButton" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/AlgorithmType"]
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Exact: Will only suggest if the tags match exactly
+
+Levenshtein (Reccommended): Will try to suggest even with typos.
+Works best with short words.
+
+Sorensen-Dice: Will try to suggest even with typos.
+It doesn't work well with short words.
+"
+alignment = 1
+item_count = 3
+popup/item_0/text = "Exact"
+popup/item_0/id = 0
+popup/item_1/text = "Levenshtein Distance (Reccomended)"
+popup/item_1/id = 1
+popup/item_2/text = "Sorensen-Dice Coefficient"
+popup/item_2/id = 2
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer"]
+layout_mode = 2
 
 [node name="Tag List" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer"]
 visible = false

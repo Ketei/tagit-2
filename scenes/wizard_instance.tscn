@@ -115,11 +115,6 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 mouse_filter = 1
 
-[node name="UnknownArtChkBtn" type="CheckButton" parent="MarginContainer/HBoxContainer/SmoothScrollContainer/ImageInfo/BasicData/ArtistContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Unknown Artist"
-
 [node name="YearContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SmoothScrollContainer/ImageInfo/BasicData"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -895,7 +890,6 @@ layout_mode = 2
 placeholder_text = "Character Tag"
 prompt_type = 2
 tag_type_search = 3
-invert_list = false
 key_direction = &"ui_down"
 container_direction = 1
 use_alt_container = NodePath("../../../../../AutoContainer")

@@ -117,7 +117,7 @@ alignment = 2
 
 [node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/Empty"]
 layout_mode = 2
-tooltip_text = "Close Wiki"
+tooltip_text = "Refresh Wiki"
 shortcut = ExtResource("2_u4b7t")
 icon = ExtResource("3_bvmml")
 icon_alignment = 1
@@ -137,7 +137,7 @@ theme_override_constants/margin_bottom = 8
 [node name="SmoothScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/PanelContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("2_oo4wn")
-speed = 400.0
+speed = 600.0
 wheel_scroll_damper = SubResource("Resource_avbip")
 dragging_scroll_damper = SubResource("Resource_8fnih")
 drag_with_mouse = false
@@ -169,11 +169,13 @@ placeholder_text = "Search on Wiki"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.5
+tooltip_text = "Search on local database"
 text = "Search"
 
 [node name="ESixSearch" type="Button" parent="MarginContainer/VBoxContainer/WikiContainer/WikiSide/LeftMenus"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Open e621 wiki in browser"
 text = "e621"
 icon = ExtResource("4_vsnv8")
 

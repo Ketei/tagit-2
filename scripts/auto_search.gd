@@ -9,8 +9,8 @@ enum SearchType {
 
 @export var prompt_type: SearchType = SearchType.TAGS
 @export var tag_type_search := Tagger.Categories.GENERAL
-@export_range(1,10,1) var items_to_fetch: int = 10
-@export var invert_list: bool = true
+@export_range(1,20,1) var items_to_fetch: int = 10
+@export var invert_list: bool = false
 @export var key_direction: StringName = "ui_up" ## If up, invert is usually true.
 @export_enum("Up","Down") var container_direction: int = 0
 @export var close_n_clear_on_select: bool = true
@@ -36,12 +36,8 @@ func _ready():
 	if use_alt_container == null:
 		if container_direction == 0:
 			auto_container.position.y = -auto_container.size.y
-			auto_container.alignment = VBoxContainer.ALIGNMENT_END
-			auto_fill.focus_neighbor_bottom = auto_fill.get_path_to(self)
 		else:
 			auto_container.position.y = size.y
-			auto_container.alignment = VBoxContainer.ALIGNMENT_BEGIN
-			auto_fill.focus_neighbor_top = auto_fill.get_path_to(self)
 	else:
 		auto_container.queue_free()
 		auto_container = use_alt_container
@@ -53,12 +49,22 @@ func _ready():
 		else:
 			auto_fill.focus_neighbor_top = auto_fill.get_path_to(self)
 	
+	if container_direction == 0:
+		auto_fill.focus_neighbor_bottom = auto_fill.get_path_to(self)
+		auto_container.alignment = VBoxContainer.ALIGNMENT_END
+		auto_container.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	else:
+		auto_fill.focus_neighbor_top = auto_fill.get_path_to(self)
+		auto_container.grow_vertical = Control.GROW_DIRECTION_END
+		auto_container.alignment = VBoxContainer.ALIGNMENT_BEGIN
+	
 	focus_exited.connect(on_focus_lost)
 	text_submitted.connect(on_text_submitted)
 	auto_fill.focus_exited.connect(on_item_list_focus_lost)
 	auto_fill.item_submited.connect(on_item_selected)
 	auto_fill.item_tabbed.connect(on_item_tabbed)
 	auto_fill.cancel_pressed.connect(cancel_grab)
+	auto_fill.text_continued.connect(on_text_continued)
 
 
 func _gui_input(event):
@@ -118,20 +124,27 @@ func on_text_changed(_ignored: String) -> void:
 	timer.start()
 
 
+func on_text_continued() -> void:
+	caret_column = text.length()
+	grab_focus()
+
+
 func search_for_tags() -> void:
 	var tag_to_search: String = text.strip_edges().to_lower()
 	
 	if tag_to_search.is_empty() or not has_focus():
 		return
 	
-	var tags_found: Array[String] = Tagger.search_local(tag_to_search, 10, invert_list)
+	var tags_found: Array = Tagger.search_local(tag_to_search, items_to_fetch, invert_list)
 	
 	auto_fill.clear()
-
 	for item in tags_found:
-		auto_fill.add_item(item)
+		if item is String:
+			auto_fill.add_tag_item(item)
+		else:
+			auto_fill.add_tag_item(item[1], str(item[0], " → ", item[1]))
 	
-	if 0 < tags_found.size():
+	if 0 < auto_fill.item_count:
 		auto_container.show()
 
 
