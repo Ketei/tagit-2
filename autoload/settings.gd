@@ -123,6 +123,7 @@ const WILDCARD_CHAR: String = "*"
 const TAG_SPLIT_CHAR: String = ","
 const AM_THE_THICC_SHIBE: bool = false
 const SOURCE_RUN: bool = false
+const BASE_SIMILARITY: float = 0.60
 # URLs
 
 const E6_SEARCH_URL: String = "https://e621.net/wiki_pages/show_or_new?title="
@@ -1225,7 +1226,7 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 	return full_array
 
 
-func string_metric_range(string_a: String, string_b: String, similarity: float = 0.6) -> bool:
+func string_metric_range(string_a: String, string_b: String, similarity := BASE_SIMILARITY) -> bool:
 	if search_algorithm == CompareAlgorithms.EXACT:
 		return string_a == string_b
 	elif search_algorithm == CompareAlgorithms.LEVENSHTEIN:
