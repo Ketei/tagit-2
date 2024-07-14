@@ -1207,7 +1207,11 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 				begin_with.append(tag)
 				if not unlimited_search:
 					limit -= 1
-			elif string_metric_range(tag, prefix_search) and not similar.has(tag):
+			elif string_metric_range(
+							equal_or_shorter_string(tag, prefix_search),
+							prefix_search)\
+					and not similar.has(tag):
+				
 				similar.append(tag)
 				if not unlimited_search:
 					limit -= 1
@@ -1224,6 +1228,10 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 		full_array.reverse()
 	
 	return full_array
+
+
+func equal_or_shorter_string(base_string: String, string_compare: String) -> String:
+	return base_string.substr(0, mini(base_string.length(), string_compare.length()))
 
 
 func string_metric_range(string_a: String, string_b: String, similarity := BASE_SIMILARITY) -> bool:
@@ -1293,7 +1301,6 @@ func levenshtein_distance(string_1: String, string_2: String) -> float:
 	var distance: int = dp[len_1][len_2]
 	var max_len:int = maxi(len_1, len_2)
 	var similarity: float = 1.0 - float(distance) / float(max_len)
-	
 	return similarity
 
 
@@ -1314,11 +1321,8 @@ func _search_local_with_suffix(suffix_search: String, limit: int = -1, invert :=
 			
 			var substr: String = ""
 			
-			if suffix_search.length() <= tag_name.length():
-				substr = tag_name.substr(tag_name.length() - suffix_search.length())
-			else:
-				substr = tag_name
-			
+			substr = tag_name.substr(maxi(0, tag_name.length() - suffix_search.length()))
+
 			if tag_name.ends_with(suffix_search) and not ends_with.has(tag_name):
 				ends_with.append(tag_name)
 				limit -= 1
