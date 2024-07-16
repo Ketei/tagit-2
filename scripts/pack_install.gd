@@ -84,7 +84,7 @@ func on_install_pressed() -> void:
 		var new_tag := Tag.new()
 		new_tag.tag = tag_dict["tag"]
 		new_tag.tag_id = tag_dict["tag_id"]
-		new_tag.file_name = tag_dict["file_name"]
+		#new_tag.file_name = tag_dict["file_name"]
 		new_tag.tag_priority = tag_dict["priority"]
 		new_tag.category = tag_dict["category"]
 		new_tag.parents = tag_dict["parents"]
@@ -93,11 +93,13 @@ func on_install_pressed() -> void:
 		new_tag.tooltip = tag_dict["tooltip"]
 		new_tag.wiki_entry = tag_dict["wiki"]
 		new_tag.smart_tags = tag_dict["smart"]
+		#print(pack_path + tag_dict["file_name"])
+		
+		var file_path: String = pack_path + tag_to_filename(new_tag.tag)
 		
 		ResourceSaver.save(
 				new_tag,
-				pack_path +
-				new_tag.file_name)
+				file_path)
 
 	clear_all()
 	Tagger.log_message("Tag pack\"" + tagger_load.pack_name + "\" installed.")
@@ -105,6 +107,14 @@ func on_install_pressed() -> void:
 	tagger_load = null
 	install_button.disabled = true
 	Tagger.reload_tags() # <- Moved the updated signals here.
+
+
+func tag_to_filename(tag_name: String) -> String:
+	var filename: String = tag_name.replace(" ", "_")
+	if not filename.is_valid_filename():
+		filename = filename.validate_filename()
+	filename += ".tres"
+	return filename
 
 
 func clear_all() -> void:
