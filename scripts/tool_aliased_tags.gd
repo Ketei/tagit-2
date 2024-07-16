@@ -66,8 +66,6 @@ func reload_aliases() -> void:
 	for char_index in Tagger.removed_aliases:
 		for alias in Tagger.removed_aliases[char_index]:
 			set_alias_deleted(alias, Tagger.removed_aliases[char_index][alias])
-	
-	#reload_tag_button.disabled = false
 
 
 func set_alias_deleted(from: String, to: String) -> void:

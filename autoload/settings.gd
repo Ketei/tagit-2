@@ -146,7 +146,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net/tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.4.0"
+const VERSION: String = "2.4.1"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 const GENDERS: Dictionary = {
@@ -232,12 +232,12 @@ var hydrus_key: String = ""
 var invalid_tags: Dictionary = {}
 var suggestion_blacklist: Array[String] = []
 var constant_tags: Array[String] = []
-var alias_list: Dictionary = {
+var alias_list: Dictionary = { # Contains tag file aliases & custom aliases
 	#"a": {"ass": "butt"}
 }
-var _loaded_aliases: Dictionary = {}
-var custom_aliases: Dictionary = {}
-var removed_aliases: Dictionary = {}
+var _loaded_aliases: Dictionary = {} # Contains tag file aliases only
+var custom_aliases: Dictionary = {} # Contains cutom aliases only
+var removed_aliases: Dictionary = {} # Contains removed aliases
 var prefixes: Dictionary = {}
 var prefix_sorting: Array[String] = []
 var remove_after_use: bool = false
@@ -738,19 +738,23 @@ func get_category_name(category: Categories) -> String:
 func reload_tags() -> void:
 	log_message("Clearing tag database and reloading", LoggingLevel.NORMAL)
 	
-	loaded_tags.clear()
-	alias_list.clear()
+	loaded_tags.clear() # Clear the loaded tags
+	alias_list.clear() # Clear the collective aliases
+	_loaded_aliases.clear() # Clear the loaded aliases
 	
-	for alias_key in custom_aliases:
-		if not alias_list.has(alias_key):
-			alias_list[alias_key] = {}
-		for alias in custom_aliases[alias_key]:
-			alias_list[alias_key][alias] = custom_aliases[alias_key][alias]
+	load_and_register_tag_files()
 	
+	# Prevents repeated/replaced tags from packs to be signaled.
+	for tag_char in loaded_tags:
+		for tag_name in loaded_tags[tag_char]:
+			tag_updated.emit(tag_name)
+	aliases_reloaded.emit()
+
+
+func load_and_register_tag_files() -> void:
 	var directories := DirAccess.get_directories_at(database_path + TAGS_PATH)
-	
+
 	for file in DirAccess.get_files_at(database_path + TAGS_PATH):
-		
 		if file.get_extension() != "tres":
 			log_message(
 					"File " + file +  " is not a resource file. Skipping -",
@@ -766,15 +770,18 @@ func reload_tags() -> void:
 					LoggingLevel.WARNING
 			)
 			continue
-
-		if tag.file_name != file:
-			tag.file_name = file
 		
-		register_tag(tag.tag, database_path + TAGS_PATH + file)
+		#if tag.file_name != file:
+			#tag.file_name = file
+		for alias in tag.aliases:
+			if not alias_list.has(alias.left(1)):
+				alias_list[alias.left(1)] = {}
+			alias_list[alias.left(1)][alias] = tag.tag
+		
+		register_tag(tag.tag, database_path + TAGS_PATH + file, true)
 	
 	for directory in directories:
 		for tag_file in DirAccess.get_files_at(database_path + TAGS_PATH + directory + "/"):
-			
 			if tag_file.get_extension() != "tres":
 				log_message(
 						"File \"" + tag_file +  "\" is not a resource file. Skipping",
@@ -791,16 +798,23 @@ func reload_tags() -> void:
 				)
 				continue
 			
-			if tag.file_name != tag_file:
-				tag.file_name = tag_file
-			
-			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file)
+			for alias in tag.aliases:
+				if not alias_list.has(alias.left(1)):
+					alias_list[alias.left(1)] = {}
+				alias_list[alias.left(1)][alias] = tag.tag
+			register_tag(tag.tag, database_path + TAGS_PATH + directory + "/" + tag_file, true)
 	
-	# Prevents repeated/replaced tags from packs to be signaled.
-	for tag_char in loaded_tags:
-		for tag_name in loaded_tags[tag_char]:
-			tag_updated.emit(tag_name)
-	aliases_reloaded.emit()
+	_loaded_aliases = alias_list.duplicate(true)
+	
+	for custom_alias_key in custom_aliases:
+		
+		if not alias_list.has(custom_alias_key):
+			alias_list[custom_alias_key] = {}
+		
+		alias_list[custom_alias_key].merge(custom_aliases[custom_alias_key], true)
+	
+	sort_prefixes()
+
 
 
 func database_changed() -> void:
