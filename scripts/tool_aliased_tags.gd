@@ -60,8 +60,8 @@ func reload_aliases() -> void:
 			load_alias(c_alias, Tagger.custom_aliases[c_index][c_alias], true)
 	
 	for index in Tagger._loaded_aliases:
-		for alias in Tagger.alias_list[index]:
-			load_alias(alias, Tagger.alias_list[index][alias])
+		for alias in Tagger._loaded_aliases[index]:
+			load_alias(alias, Tagger._loaded_aliases[index][alias])
 	
 	for char_index in Tagger.removed_aliases:
 		for alias in Tagger.removed_aliases[char_index]:
