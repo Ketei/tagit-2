@@ -102,3 +102,7 @@ func _unhandled_key_input(event):
 		on_close_pressed()
 
 
+func grab_search_focus() -> void:
+	tag_line.grab_focus()
+
+

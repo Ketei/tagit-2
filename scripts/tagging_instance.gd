@@ -113,6 +113,7 @@ func sort_tags_alphabetically() -> void:
 
 func on_full_search_open() -> void:
 	tag_full_search.show_searcher()
+	tag_full_search.grab_search_focus()
 
 
 func on_tag_map_open() -> void:
@@ -622,7 +623,6 @@ func get_save_data() -> Dictionary:
 	}
 	
 	for main_tag in range(tag_items.item_count):
-		#save_return["main"].append(tag_items.get_item_text(main_tag))
 		save_return["main"][tag_items.get_item_text(main_tag)] = tag_items.get_item_metadata(main_tag)
 	
 	for sugg_tag in range(suggestion_list.item_count):
@@ -645,6 +645,9 @@ func generate_full_tags() -> void:
 	var final_array: Array[String] = []
 	
 	# We'll just add tags in bulk without worring if they are duplicate for now.
+	
+	var added_tags: Array[String] = tag_items.get_tag_array()
+	
 	for main_tag in range(tag_items.item_count):
 		var metadata: Dictionary = tag_items.get_item_metadata(main_tag)
 		
@@ -660,12 +663,21 @@ func generate_full_tags() -> void:
 		
 		# Get all the connected parents to this tag
 		var parents: Dictionary = Tagger.get_prioritized_parents(tag_items.get_item_text(main_tag))
+		#print(priority_dictionary)
 		
 		for prio in parents: # Prio is a int as string
-			if not priority_dictionary.has(prio):
-				priority_dictionary[prio] = []
-				priority_numbers.append(int(prio))
-			priority_dictionary[prio].append_array(parents[prio])
+			for parent_tag in parents[prio]:
+				if added_tags.has(parent_tag): # If we added it don't include it
+					continue
+				
+				if not priority_dictionary.has(prio):
+					priority_dictionary[prio] = []
+					priority_numbers.append(int(prio))
+				
+				if not priority_dictionary[prio].has(parent_tag):
+					priority_dictionary[prio].append(parent_tag)
+				
+			#priority_dictionary[prio].append_array(parents[prio])
 	
 	priority_numbers.sort_custom(func(a, b): return b < a)
 	
