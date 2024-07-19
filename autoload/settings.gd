@@ -1059,7 +1059,9 @@ func build_tag_meta(tag_resource: Tag) -> Dictionary:
 		"priority": tag_resource.tag_priority,
 		"suggestions": tag_resource.suggestions.duplicate(),
 		"tooltip": tag_resource.tooltip,
-		"valid": true}	
+		"valid": true,
+		"alt_state": 0 as int,
+		}	
 
 
 func get_empty_meta(is_valid_tag := true) -> Dictionary:
@@ -1069,7 +1071,8 @@ func get_empty_meta(is_valid_tag := true) -> Dictionary:
 		"priority": 0,
 		"suggestions": [],
 		"tooltip": "",
-		"valid": is_valid_tag
+		"valid": is_valid_tag,
+		"alt_state": 0 as int,
 		}
 
 

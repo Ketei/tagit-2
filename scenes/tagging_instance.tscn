@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cv04584lewxfj"]
+[gd_scene load_steps=18 format=3 uid="uid://cv04584lewxfj"]
 
 [ext_resource type="Script" path="res://scripts/tagging_instance.gd" id="1_qwxx4"]
 [ext_resource type="Texture2D" uid="uid://bspy7b4mnwwtt" path="res://textures/icons/wizard.svg" id="2_cc4m6"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://dkbd01s367esl" path="res://scenes/tag_full_search.tscn" id="7_jn3ja"]
 [ext_resource type="Texture2D" uid="uid://bt5shjh0vtvkv" path="res://textures/icons/export_icon.svg" id="10_r4cct"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="11_pjino"]
+[ext_resource type="Script" path="res://scripts/generator_button.gd" id="12_nab3q"]
 [ext_resource type="Texture2D" uid="uid://4o3c2a4my706" path="res://textures/icons/copy_icon.svg" id="13_51rkk"]
 
 [node name="TaggingInstance" type="Control"]
@@ -123,6 +124,7 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 9.5
 select_mode = 1
 script = ExtResource("4_kxfaf")
+allow_alting = true
 
 [node name="Interact" type="HBoxContainer" parent="MarginContainer/MainContainer/MainTags"]
 layout_mode = 2
@@ -222,15 +224,36 @@ autowrap_mode = 2
 [node name="Buttons" type="HBoxContainer" parent="MarginContainer/MainContainer/Final"]
 layout_mode = 2
 
-[node name="GenerateButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons"]
-custom_minimum_size = Vector2(0, 64)
+[node name="GeneratorButtons" type="HBoxContainer" parent="MarginContainer/MainContainer/Final/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 3
+
+[node name="GenerateButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/GeneratorButtons"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
 tooltip_text = "Generate your tag
 list based on your
 entries."
 text = "Generate List"
+
+[node name="GeneratorButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/GeneratorButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "^"
+script = ExtResource("12_nab3q")
+
+[node name="PopupMenu" type="PopupMenu" parent="MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GeneratorButton"]
+size = Vector2i(190, 62)
+visible = true
+item_count = 2
+item_0/text = "Generate Default"
+item_0/id = 0
+item_1/text = "Generate Alternative"
+item_1/id = 1
 
 [node name="ExtraOptions" type="VBoxContainer" parent="MarginContainer/MainContainer/Final/Buttons"]
 layout_mode = 2
