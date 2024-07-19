@@ -3,6 +3,7 @@ extends Control
 
 
 signal add_selected_pressed(selected_tags: Array[String])
+signal full_search_closed
 
 @onready var search_item_list: ItemList = $CenterContainer/MarginContainer/VBoxContainer/SearchItemList
 @onready var tag_line: LineEdit = $CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/LineEdit
@@ -95,6 +96,7 @@ func on_close_pressed() -> void:
 	hide()
 	set_process_unhandled_key_input(false)
 	Tagger.shortcuts_disabled = false
+	full_search_closed.emit()
 
 
 func _unhandled_key_input(event):
