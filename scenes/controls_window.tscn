@@ -389,6 +389,30 @@ mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + E"
 
+[node name="HSeparator5" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SelectAll4" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll4"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Open Tag Searcher"
+
+[node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll4"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll4/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Ctrl + F"
+
 [node name="HTitleSeparator2" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2
 separator_text = "Tagger Controls"
