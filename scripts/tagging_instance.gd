@@ -40,7 +40,7 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var full_search_button: Button = $MarginContainer/MainContainer/MainTags/Interact/FullSearchButton
 @onready var select_tag_button: Button = $MarginContainer/MainContainer/MainTags/Interact/SelectTagButton
 @onready var add_current_button: Button = $MarginContainer/MainContainer/MainTags/Interact/AddButton
-@onready var generate_button: Button = $MarginContainer/MainContainer/Final/Buttons/GenerateButton
+@onready var generate_button: Button = $MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GenerateButton
 @onready var export_button: Button = $MarginContainer/MainContainer/Final/Buttons/ExtraOptions/ExportButton
 @onready var copy_button: Button = $MarginContainer/MainContainer/Final/Buttons/ExtraOptions/CopyButton
 @onready var template_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/TemplateButton
@@ -49,6 +49,8 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var new_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/NewListButton
 @onready var save_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/SaveListButton
 @onready var load_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/LoadListButton
+@onready var generator_toggle = $MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GeneratorToggle
+
 
 
 @onready var special_tag_window: PromptTagWindow = $SpecialTagWindow
@@ -79,12 +81,19 @@ func _ready():
 	wizard_button.pressed.connect(summon_wizard)
 	tag_items.item_activated.connect(on_item_activated)
 	select_tag_button.pressed.connect(on_tag_map_open)
-	tag_full_search.add_selected_pressed.connect(load_tag_array)
+	tag_full_search.add_selected_pressed.connect(on_full_search_add)
+	tag_full_search.full_search_closed.connect(on_full_search_closed)
 	full_search_button.pressed.connect(on_full_search_open)
 	new_list_button.pressed.connect(new_list)
 	save_list_button.pressed.connect(open_save_window)
 	load_list_button.pressed.connect(open_load_window)
 	Tagger.tag_updated.connect(on_tag_updated)
+
+
+func on_full_search_add(tags: Array[String]) -> void:
+	var prev_text: String = add_tag_line_edit.text
+	load_tag_array(tags)
+	add_tag_line_edit.text = prev_text
 
 
 func on_special_submitted(tag_string: String) -> void:
@@ -113,6 +122,7 @@ func sort_tags_alphabetically() -> void:
 
 func on_full_search_open() -> void:
 	tag_full_search.show_searcher()
+	tag_full_search.grab_search_focus()
 
 
 func on_tag_map_open() -> void:
@@ -177,6 +187,7 @@ func on_item_activated(item_index: int) -> void:
 	in_tag_editor.done_editing.connect(on_tag_edited)
 	in_tag_editor.add_suggestions.connect(on_intag_suggestions)
 	in_tag_editor.go_to_fetch.connect(on_go_to_fetch_pressed)
+	in_tag_editor.alt_edited.connect(on_alt_edited)
 	add_child(in_tag_editor)
 	in_tag_editor.set_data_and_show(
 			item_index,
@@ -189,10 +200,16 @@ func on_intag_suggestions(suggs:Array[String]) -> void:
 		on_tag_submitted(sug_to_tag)
 
 
+func on_alt_edited(tag_idx: int, new_status: int) -> void:
+	tag_items.set_alt_state(tag_idx, new_status)
+
+
 func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
 	var tag_name: String = tag_items.get_item_text(tag_index)
 	
 	tag_items.get_item_metadata(tag_index).merge(tag_data, true)
+	tag_items.load_alt_state(tag_index)
+	#tag_items.set_alt_state(tag_index, tag_data["alt_state"])
 	
 	if Tagger.has_tag(tag_name):
 		tag_items.set_item_icon(
@@ -302,6 +319,7 @@ func on_load_pressed(load_data: Dictionary) -> void:
 		#on_tag_submitted(main_tag)	
 		var tag_index: int = tag_items.add_item(main_tag)
 		tag_items.set_item_metadata(tag_index, load_data["main"][main_tag])
+		tag_items.load_alt_state(tag_index)
 		if not load_data["main"][main_tag]["tooltip"].is_empty():
 			tag_items.set_item_tooltip(tag_index, load_data["main"][main_tag]["tooltip"])
 		if load_data["main"][main_tag]["valid"]:
@@ -315,8 +333,17 @@ func on_load_pressed(load_data: Dictionary) -> void:
 						load("res://textures/status/generic_custom.png"))
 		else:
 			tag_items.set_item_icon(tag_index, load("res://textures/status/bad_custom.png"))
+	
 	for suggestion in load_data["suggs"]:
-		suggestion_list.add_item(suggestion)
+		var _sugg_index: int = suggestion_list.add_item(suggestion)
+		if Tagger.has_tag(suggestion):
+			var _tool: String = Tagger.get_tag(suggestion).tooltip
+			if not _tool.is_empty():
+				suggestion_list.set_item_tooltip(
+					_sugg_index,
+					_tool
+				)
+		
 	for smart in load_data["smart"]:
 		var smart_index: int = smart_list.add_item(smart)
 		smart_list.set_item_metadata(
@@ -456,7 +483,14 @@ func on_tag_submitted(tag_text: String) -> void:
 			not tag_items.has_item(sugg) and\
 			not session_blacklist.has_item(sugg) and\
 			not Tagger.suggestion_blacklist.has(sugg):
-				suggestion_list.add_item(sugg)
+				var suggestion_index: int = suggestion_list.add_item(sugg)
+				if Tagger.has_tag(sugg):
+					var _tool: String = Tagger.get_tag(sugg).tooltip
+					if not _tool.is_empty():
+						suggestion_list.set_item_tooltip(
+							suggestion_index,
+							_tool
+						)
 		
 		var extra_suggs: Dictionary = Tagger.get_suggestions(
 				Tagger.get_parents(end_tag))
@@ -617,13 +651,21 @@ func get_save_data() -> Dictionary:
 	var save_return: Dictionary = {
 		"main": {},
 		"suggs": [],
+		"suggs_tooltip": [],
 		"smart": {},
-		"blacklist": []
+		"blacklist": [],
 	}
 	
 	for main_tag in range(tag_items.item_count):
-		#save_return["main"].append(tag_items.get_item_text(main_tag))
-		save_return["main"][tag_items.get_item_text(main_tag)] = tag_items.get_item_metadata(main_tag)
+		var tag_text: String = tag_items.get_item_text(main_tag)
+		var metadata: Dictionary = tag_items.get_item_metadata(main_tag)
+		
+		if metadata["alt_state"] == 1:
+			tag_text = tag_text.trim_suffix(TagItemList.ALT_MAIN_SUFFIX)
+		elif metadata["alt_state"] == 2:
+			tag_text = tag_text.trim_suffix(TagItemList.ALT_SUFFIX)
+		
+		save_return["main"][tag_text] = tag_items.get_item_metadata(main_tag)
 	
 	for sugg_tag in range(suggestion_list.item_count):
 		save_return["suggs"].append(suggestion_list.get_item_text(sugg_tag))
@@ -637,6 +679,8 @@ func get_save_data() -> Dictionary:
 
 
 func generate_full_tags() -> void:
+	var use_alts: bool = generator_toggle.use_alts()
+	
 	final_tags.clear()
 	
 	var priority_dictionary: Dictionary = {}
@@ -645,8 +689,22 @@ func generate_full_tags() -> void:
 	var final_array: Array[String] = []
 	
 	# We'll just add tags in bulk without worring if they are duplicate for now.
+	
+	var added_tags: Array[String] = tag_items.get_tag_array()
+	
 	for main_tag in range(tag_items.item_count):
 		var metadata: Dictionary = tag_items.get_item_metadata(main_tag)
+		var tag_text: String = tag_items.get_item_text(main_tag)
+		
+		if metadata["alt_state"] == 2 and not use_alts: # We skip the alt exclusives
+			continue
+		elif metadata["alt_state"] == 1 and use_alts: # We skip the main exclusives
+			continue
+		
+		if metadata["alt_state"] == 1:
+			tag_text = tag_text.trim_suffix(TagItemList.ALT_MAIN_SUFFIX)
+		elif metadata["alt_state"] == 2:
+			tag_text = tag_text.trim_suffix(TagItemList.ALT_SUFFIX)
 		
 		if not metadata["valid"] and not Tagger.include_invalid:
 			continue
@@ -655,17 +713,25 @@ func generate_full_tags() -> void:
 			priority_dictionary[str(int(metadata["priority"]))] = []
 			priority_numbers.append(int(metadata["priority"]))
 		
-		priority_dictionary[str(metadata["priority"])].append(
-				tag_items.get_item_text(main_tag))
+		priority_dictionary[str(metadata["priority"])].append(tag_text)
 		
 		# Get all the connected parents to this tag
-		var parents: Dictionary = Tagger.get_prioritized_parents(tag_items.get_item_text(main_tag))
+		var parents: Dictionary = Tagger.get_prioritized_parents(tag_text)
+		#print(priority_dictionary)
 		
 		for prio in parents: # Prio is a int as string
-			if not priority_dictionary.has(prio):
-				priority_dictionary[prio] = []
-				priority_numbers.append(int(prio))
-			priority_dictionary[prio].append_array(parents[prio])
+			for parent_tag in parents[prio]:
+				if added_tags.has(parent_tag): # If we added it don't include it
+					continue
+				
+				if not priority_dictionary.has(prio):
+					priority_dictionary[prio] = []
+					priority_numbers.append(int(prio))
+				
+				if not priority_dictionary[prio].has(parent_tag):
+					priority_dictionary[prio].append(parent_tag)
+				
+			#priority_dictionary[prio].append_array(parents[prio])
 	
 	priority_numbers.sort_custom(func(a, b): return b < a)
 	
@@ -733,6 +799,11 @@ func reset_tag_data() -> void:
 	reset_warning.queue_free()
 	Tagger.enable_shortcuts()
 	prompt_save_on_new = true
+
+
+func on_full_search_closed() -> void:
+	add_tag_line_edit.grab_focus()
+	add_tag_line_edit.caret_column = add_tag_line_edit.text.length()
 
 
 func sort_tags_by_priority() -> void:

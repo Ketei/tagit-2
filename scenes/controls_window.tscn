@@ -73,6 +73,7 @@ text = "Close"
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("1_ow2g4")
+speed = 700.0
 wheel_scroll_damper = SubResource("Resource_khej4")
 dragging_scroll_damper = SubResource("Resource_c87wu")
 drag_with_mouse = false
@@ -250,12 +251,27 @@ size_flags_horizontal = 3
 mouse_filter = 1
 text = "Deselect All Tags"
 
-[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/DeselectAll"]
+[node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/DeselectAll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label5" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/DeselectAll/Controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + D"
+
+[node name="VSeparator" type="VSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/DeselectAll/Controls"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label3" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/DeselectAll/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Alt + A"
 
 [node name="HSeparator2" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
 layout_mode = 2
@@ -302,6 +318,100 @@ size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
 text = "Ctrl + R"
+
+[node name="HSeparator3" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SelectAll2" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Set tag as alternate"
+
+[node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Alt + 1 (All Lists)"
+
+[node name="VSeparator" type="VSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2/Controls"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label3" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Alt + 2 (Main Only)"
+
+[node name="VSeparator2" type="VSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2/Controls"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label4" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Alt + 3 (Alt Only)"
+
+[node name="HSeparator4" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SelectAll3" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Toggle tag alternate mode"
+
+[node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll3/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Ctrl + E"
+
+[node name="HSeparator5" type="HSeparator" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SelectAll4" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll4"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Open Tag Searcher"
+
+[node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll4"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll4/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.666667, 0.8, 1, 1)
+text = "Ctrl + F"
 
 [node name="HTitleSeparator2" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList" instance=ExtResource("4_dnnvq")]
 layout_mode = 2

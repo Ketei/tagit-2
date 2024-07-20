@@ -5,8 +5,13 @@ extends ItemList
 signal item_deleted(item_text)
 signal list_emptied
 
+const ALT_COLOR: Color = Color("f2875a")
+const ALT_MAIN_COL: Color = Color("F4BF75")
+const ALT_SUFFIX: String = " ★"
+const ALT_MAIN_SUFFIX: String = " ☆"
 
 @export var deselect_on_focus_lost: bool = true
+@export var allow_alting: bool = false
 var delete_timer: Timer
 
 
@@ -30,6 +35,21 @@ func _gui_input(_event):
 				select(item, false)
 		elif Input.is_action_just_pressed("deselect_all_tags") and is_anything_selected():
 			deselect_all()
+		elif allow_alting and is_anything_selected() and (Input.is_action_just_pressed("set_alt_all") or Input.is_action_just_pressed("set_alt_main") or Input.is_action_just_pressed("set_alt_alt")):
+			set_alt_on(get_selected_items(), get_alt_pressed())
+		elif allow_alting and Input.is_action_just_pressed("toggle_alt"):
+			toggle_alt_on(get_selected_items())
+
+
+func get_alt_pressed() -> int:
+	if Input.is_key_pressed(KEY_1):
+		return 0
+	elif Input.is_key_pressed(KEY_2):
+		return 1
+	elif Input.is_key_pressed(KEY_3):
+		return 2
+	else:
+		return -1
 
 
 func has_item(item_name: String) -> bool:
@@ -114,5 +134,77 @@ func reset_all_tags() -> void:
 			set_item_icon(
 					index,
 					load("res://textures/status/generic.png"))
+
+
+# Alt states:
+# 0 = Generic Only
+# 1 = Main Only
+# 2 = Alt Only
+func toggle_alt(item_idx: int) -> void:
+	var item_dict: Dictionary = get_item_metadata(item_idx)
+	
+	item_dict["alt_state"] = (item_dict["alt_state"] + 1) % 3
+	
+	if item_dict["alt_state"] == 1:
+		set_item_custom_fg_color(item_idx, ALT_MAIN_COL)
+	elif item_dict["alt_state"] == 2:
+		set_item_custom_fg_color(item_idx, ALT_COLOR)
+	else:
+		set_item_custom_fg_color(item_idx, Color.BLACK)
+
+	if item_dict["alt_state"] == 0:
+		set_item_text(item_idx, get_item_text(item_idx).trim_suffix(ALT_SUFFIX))
+	elif item_dict["alt_state"] == 1:
+		set_item_text(item_idx, get_item_text(item_idx) + ALT_MAIN_SUFFIX)
+	elif item_dict["alt_state"] == 2:
+		set_item_text(item_idx, get_item_text(item_idx).trim_suffix(ALT_MAIN_SUFFIX) + ALT_SUFFIX)
+
+
+func set_alt_state(item_idx: int, alt_state: int) -> void:
+	var item_dict: Dictionary = get_item_metadata(item_idx)
+	
+	if alt_state == item_dict["alt_state"]:
+		return
+	
+	var prev_state: int = item_dict["alt_state"]
+	var raw_text: String = get_item_text(item_idx)
+	
+	if prev_state == 1:
+		raw_text = raw_text.trim_suffix(ALT_MAIN_SUFFIX)
+	elif prev_state == 2:
+		raw_text = raw_text.trim_suffix(ALT_SUFFIX)
+	
+	item_dict["alt_state"] = maxi(0, alt_state % 3)
+	
+	if item_dict["alt_state"] == 1:
+		set_item_custom_fg_color(item_idx, ALT_MAIN_COL)
+	elif item_dict["alt_state"] == 2:
+		set_item_custom_fg_color(item_idx, ALT_COLOR)
+	else:
+		set_item_custom_fg_color(item_idx, Color.BLACK)
+
+	if item_dict["alt_state"] == 0:
+		set_item_text(item_idx, raw_text)
+	elif item_dict["alt_state"] == 1:
+		set_item_text(item_idx, raw_text + ALT_MAIN_SUFFIX)
+	elif item_dict["alt_state"] == 2:
+		set_item_text(item_idx, raw_text + ALT_SUFFIX)
+
+
+func load_alt_state(item_idx: int) -> void:
+	set_alt_state(
+		item_idx,
+		get_item_metadata(item_idx)["alt_state"]
+	)
+
+
+func set_alt_on(index_array: PackedInt32Array, toggle_option: int) -> void:
+	for index in index_array:
+		set_alt_state(index, toggle_option)
+
+
+func toggle_alt_on(index_array: PackedInt32Array) -> void:
+	for index in index_array:
+		toggle_alt(index)
 
 

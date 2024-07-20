@@ -64,6 +64,10 @@ horizontal_alignment = 1
 
 [node name="TypeOptionButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/TagTypeContainer"]
 layout_mode = 2
+focus_neighbor_right = NodePath("../../CategoryContainer/CategoryOptionButton")
+focus_neighbor_bottom = NodePath("../../../ButtonContainer/CancelButton")
+focus_next = NodePath("../../CategoryContainer/CategoryOptionButton")
+focus_previous = NodePath("../../../ButtonContainer/CancelButton")
 
 [node name="TypeInfo" type="TextEdit" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/TagTypeContainer"]
 layout_mode = 2
@@ -82,6 +86,10 @@ horizontal_alignment = 1
 
 [node name="CategoryOptionButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CategoryContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../../TagTypeContainer/TypeOptionButton")
+focus_neighbor_right = NodePath("../../TagsContainer/TagsOptionButton")
+focus_next = NodePath("../../TagsContainer/TagsOptionButton")
+focus_previous = NodePath("../../TagTypeContainer/TypeOptionButton")
 
 [node name="CategoryInfo" type="TextEdit" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CategoryContainer"]
 layout_mode = 2
@@ -100,6 +108,9 @@ horizontal_alignment = 1
 
 [node name="TagsOptionButton" type="OptionButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/TagsContainer"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../../CategoryContainer/CategoryOptionButton")
+focus_next = NodePath("../../../ButtonContainer/AddButton")
+focus_previous = NodePath("../../CategoryContainer/CategoryOptionButton")
 
 [node name="TagInfo" type="TextEdit" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/TagsContainer"]
 layout_mode = 2
@@ -114,10 +125,18 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+focus_neighbor_top = NodePath("../../HBoxContainer/TagTypeContainer/TypeOptionButton")
+focus_neighbor_right = NodePath("../AddButton")
+focus_next = NodePath("../../HBoxContainer/TagTypeContainer/TypeOptionButton")
+focus_previous = NodePath("../AddButton")
 text = "Close"
 
 [node name="AddButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+focus_neighbor_left = NodePath("../CancelButton")
+focus_neighbor_top = NodePath("../../HBoxContainer/TagsContainer/TagsOptionButton")
+focus_next = NodePath("../CancelButton")
+focus_previous = NodePath("../../HBoxContainer/TagsContainer/TagsOptionButton")
 text = "Add"

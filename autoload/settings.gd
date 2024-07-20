@@ -146,7 +146,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net/tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.4.1"
+const VERSION: String = "2.5.0"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 const GENDERS: Dictionary = {
@@ -1059,7 +1059,9 @@ func build_tag_meta(tag_resource: Tag) -> Dictionary:
 		"priority": tag_resource.tag_priority,
 		"suggestions": tag_resource.suggestions.duplicate(),
 		"tooltip": tag_resource.tooltip,
-		"valid": true}	
+		"valid": true,
+		"alt_state": 0 as int,
+		}	
 
 
 func get_empty_meta(is_valid_tag := true) -> Dictionary:
@@ -1069,7 +1071,8 @@ func get_empty_meta(is_valid_tag := true) -> Dictionary:
 		"priority": 0,
 		"suggestions": [],
 		"tooltip": "",
-		"valid": is_valid_tag
+		"valid": is_valid_tag,
+		"alt_state": 0 as int,
 		}
 
 

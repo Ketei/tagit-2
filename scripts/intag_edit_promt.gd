@@ -3,6 +3,7 @@ extends Control
 
 
 signal done_editing(tag_index: int, tag_data: Dictionary)
+signal alt_edited(tag_idx: int, alt_status)
 signal add_suggestions(suggestions: Array[String])
 signal go_to_fetch(args: Dictionary)
 
@@ -10,11 +11,12 @@ var tag_index: int = 0
 
 var original_prio: int = 0
 var original_cat :=  Tagger.Categories.GENERAL
+var original_alt: int = 0
 
 
 @onready var tag_name_label: Label = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagNameLabel
 
-@onready var priority_spin_box: SpinBox = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/PrioContainer/PrioritySpinBox
+@onready var priority_spin_box: SpinBox = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/SmallData/PrioContainer/PrioritySpinBox
 
 @onready var category_option_button: CategoryOptionButton = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/CatContaienr/CategoryOptionButton
 
@@ -25,6 +27,8 @@ var original_cat :=  Tagger.Categories.GENERAL
 @onready var fetch_button: Button = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/VBoxContainer/FetchButton
 @onready var reset_button: Button = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/VBoxContainer/ResetButton
 
+@onready var alt_options: OptionButton = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagDataContainer/SmallData/VBoxContainer/AltOptions
+
 
 func _ready():
 	visible = false	
@@ -32,6 +36,12 @@ func _ready():
 	add_selected_button.pressed.connect(on_add_sugg_pressed)
 	fetch_button.pressed.connect(on_fetch_pressed)
 	reset_button.pressed.connect(on_reset_pressed)
+
+
+func _unhandled_key_input(event):
+	if event.is_action("ui_cancel"):
+		on_close_pressed()
+		get_viewport().set_input_as_handled()
 
 
 func on_fetch_pressed() -> void:
@@ -60,6 +70,8 @@ func set_data_and_show(item_index: int, tag_name: String, tag_data: Dictionary) 
 	original_prio = int(tag_data["priority"])
 	category_option_button.select_category(tag_data["category"])
 	original_cat = tag_data["category"]
+	original_alt = tag_data["alt_state"]
+	alt_options.select(tag_data["alt_state"])
 	
 	for item in tag_data["suggestions"]:
 		suggestions_item_list.add_item(item)
@@ -71,21 +83,25 @@ func set_data_and_show(item_index: int, tag_name: String, tag_data: Dictionary) 
 	visible = true
 
 
-func update_data(new_cat: Tagger.Categories, new_prio: int) -> void:
+func update_data(new_cat: Tagger.Categories, new_prio: int, new_alt: int) -> void:
 	done_editing.emit(
 			tag_index, 
 			{
 				"category": new_cat,
-				"priority": new_prio
+				"priority": new_prio,
+				"alt_state": new_alt,
 			})
 
 
 func on_close_pressed() -> void:
 	var new_category: Tagger.Categories = category_option_button.get_category()
 	var new_priority: int = int(priority_spin_box.value)
+	var new_alt: int = alt_options.selected
 	
 	if new_category != original_cat or new_priority != original_prio:
-		update_data(new_category, new_priority)
+		update_data(new_category, new_priority, new_alt)
+	elif new_alt != original_alt:
+		alt_edited.emit(tag_index, new_alt)
 	Tagger.shortcuts_disabled = false
 	queue_free()
 
@@ -101,4 +117,5 @@ func on_reset_pressed() -> void:
 		suggestions_item_list.clear()
 		for item in tag_data.suggestions:
 			suggestions_item_list.add_item(item)
+	alt_options.select(0)
 

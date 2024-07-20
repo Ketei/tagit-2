@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://d3yr67bkeq33d"]
+[gd_scene load_steps=28 format=3 uid="uid://d3yr67bkeq33d"]
 
 [ext_resource type="Theme" uid="uid://c8ad5ntep5ucc" path="res://theme/default.tres" id="1_aon24"]
 [ext_resource type="PackedScene" uid="uid://cv04584lewxfj" path="res://scenes/tagging_instance.tscn" id="1_lifxp"]
@@ -63,6 +63,24 @@ func _ready():
 
 func on_shortcuts_disabled(shortcuts_disabled: bool) -> void:
 	set_disable_shortcuts(shortcuts_disabled)
+"
+
+[sub_resource type="GDScript" id="GDScript_48p16"]
+resource_name = "shortcut_set"
+script/source = "extends MenuButton
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	Tagger.disabled_shortcuts.connect(on_shortcuts_disabled)
+	get_popup().set_item_shortcut(
+			1,
+			load(\"res://resources/shortcuts/windows/about_window_shortcut.tres\"))
+
+
+func on_shortcuts_disabled(shortcuts_disabled: bool) -> void:
+	set_disable_shortcuts(shortcuts_disabled)
+
 "
 
 [node name="MainWindow" type="Control"]
@@ -204,8 +222,10 @@ popup/item_0/text = "Controls"
 popup/item_0/id = 0
 popup/item_1/text = "About"
 popup/item_1/id = 1
+script = SubResource("GDScript_48p16")
 
 [node name="SplashTexture" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
