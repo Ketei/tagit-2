@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bv0lodmh5bkey" path="res://textures/icons/search_icon.svg" id="6_ym3uf"]
 [ext_resource type="PackedScene" uid="uid://dvsreawj4roce" path="res://scenes/special_tag_window.tscn" id="7_f11d4"]
 [ext_resource type="PackedScene" uid="uid://dkbd01s367esl" path="res://scenes/tag_full_search.tscn" id="7_jn3ja"]
-[ext_resource type="Shortcut" uid="uid://b51shdx0qgn0f" path="res://resources/shortcuts/list_actions/search_for_tag_shortcut.tres" id="9_es8co"]
+[ext_resource type="Shortcut" uid="uid://c8vtq8aveyo58" path="res://resources/shortcuts/list_actions/search_for_tag_shortcut.tres" id="9_es8co"]
 [ext_resource type="Texture2D" uid="uid://bt5shjh0vtvkv" path="res://textures/icons/export_icon.svg" id="10_r4cct"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="11_pjino"]
 [ext_resource type="Script" path="res://scripts/generator_button.gd" id="12_nab3q"]
