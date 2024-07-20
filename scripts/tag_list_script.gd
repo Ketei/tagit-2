@@ -108,6 +108,8 @@ func reset_all_tags() -> void:
 					Tagger.get_tag(
 							get_item_text(index)))
 			for category in tag_metadata:
+				if category == "alt_state":
+					continue
 				tag_metadata[category] = tag_memory[category]
 			set_item_icon(
 					index,
@@ -120,6 +122,8 @@ func reset_all_tags() -> void:
 		elif Tagger.has_invalid_tag(get_item_text(index)):
 			tag_memory = Tagger.get_empty_meta(false)
 			for category in tag_metadata:
+				if category == "alt_state":
+					continue
 				tag_metadata[category] = tag_memory[category]
 			set_item_icon(
 				index,
@@ -130,6 +134,8 @@ func reset_all_tags() -> void:
 		else:
 			tag_memory = Tagger.get_empty_meta()
 			for category in tag_metadata:
+				if category == "alt_state":
+					continue
 				tag_metadata[category] = tag_memory[category]
 			set_item_icon(
 					index,
@@ -160,10 +166,10 @@ func toggle_alt(item_idx: int) -> void:
 		set_item_text(item_idx, get_item_text(item_idx).trim_suffix(ALT_MAIN_SUFFIX) + ALT_SUFFIX)
 
 
-func set_alt_state(item_idx: int, alt_state: int) -> void:
+func set_alt_state(item_idx: int, alt_state: int, ignore_reset := false) -> void:
 	var item_dict: Dictionary = get_item_metadata(item_idx)
 	
-	if alt_state == item_dict["alt_state"]:
+	if alt_state == item_dict["alt_state"] and not ignore_reset:
 		return
 	
 	var prev_state: int = item_dict["alt_state"]
@@ -194,7 +200,8 @@ func set_alt_state(item_idx: int, alt_state: int) -> void:
 func load_alt_state(item_idx: int) -> void:
 	set_alt_state(
 		item_idx,
-		get_item_metadata(item_idx)["alt_state"]
+		get_item_metadata(item_idx)["alt_state"],
+		true
 	)
 
 
