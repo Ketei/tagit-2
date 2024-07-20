@@ -330,7 +330,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-text = "Set Alternate Mode"
+text = "Set tag as alternate"
 
 [node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll2"]
 layout_mode = 2
@@ -376,7 +376,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
-text = "Toggle Alternate"
+text = "Toggle tag alternate mode"
 
 [node name="Controls" type="HBoxContainer" parent="ControlsContainer/VBoxContainer/SmoothScrollContainer/MarginContainer/ControlsList/TagList/SelectAll3"]
 layout_mode = 2

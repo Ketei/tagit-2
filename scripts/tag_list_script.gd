@@ -5,8 +5,8 @@ extends ItemList
 signal item_deleted(item_text)
 signal list_emptied
 
-const ALT_COLOR: Color = Color("ed5d1f")
-const ALT_HOVER: Color = Color("f6b295")
+const ALT_COLOR: Color = Color("f2875a")
+const ALT_MAIN_COL: Color = Color("F4BF75")
 const ALT_SUFFIX: String = " ★"
 const ALT_MAIN_SUFFIX: String = " ☆"
 
@@ -145,7 +145,9 @@ func toggle_alt(item_idx: int) -> void:
 	
 	item_dict["alt_state"] = (item_dict["alt_state"] + 1) % 3
 	
-	if item_dict["alt_state"] != 0:
+	if item_dict["alt_state"] == 1:
+		set_item_custom_fg_color(item_idx, ALT_MAIN_COL)
+	elif item_dict["alt_state"] == 2:
 		set_item_custom_fg_color(item_idx, ALT_COLOR)
 	else:
 		set_item_custom_fg_color(item_idx, Color.BLACK)
@@ -174,7 +176,9 @@ func set_alt_state(item_idx: int, alt_state: int) -> void:
 	
 	item_dict["alt_state"] = maxi(0, alt_state % 3)
 	
-	if item_dict["alt_state"] != 0:
+	if item_dict["alt_state"] == 1:
+		set_item_custom_fg_color(item_idx, ALT_MAIN_COL)
+	elif item_dict["alt_state"] == 2:
 		set_item_custom_fg_color(item_idx, ALT_COLOR)
 	else:
 		set_item_custom_fg_color(item_idx, Color.BLACK)

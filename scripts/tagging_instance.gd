@@ -49,7 +49,8 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var new_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/NewListButton
 @onready var save_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/SaveListButton
 @onready var load_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/LoadListButton
-@onready var generator_button: Button = $MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GeneratorButton
+@onready var generator_toggle = $MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GeneratorToggle
+
 
 
 @onready var special_tag_window: PromptTagWindow = $SpecialTagWindow
@@ -86,18 +87,7 @@ func _ready():
 	new_list_button.pressed.connect(new_list)
 	save_list_button.pressed.connect(open_save_window)
 	load_list_button.pressed.connect(open_load_window)
-	generator_button.generate_default_pressed.connect(on_generator_default_pressed)
-	generator_button.generate_alternative_pressed.connect(on_generator_alt_pressed)
 	Tagger.tag_updated.connect(on_tag_updated)
-
-
-
-func on_generator_default_pressed() -> void:
-	generate_full_tags()
-
-
-func on_generator_alt_pressed() -> void:
-	generate_full_tags(true)
 
 
 func on_full_search_add(tags: Array[String]) -> void:
@@ -688,7 +678,9 @@ func get_save_data() -> Dictionary:
 	return save_return
 
 
-func generate_full_tags(use_alts := false) -> void:
+func generate_full_tags() -> void:
+	var use_alts: bool = generator_toggle.use_alts()
+	
 	final_tags.clear()
 	
 	var priority_dictionary: Dictionary = {}

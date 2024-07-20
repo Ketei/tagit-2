@@ -78,7 +78,7 @@ icon_alignment = 1
 [node name="WizardButton" type="Button" parent="MarginContainer/MainContainer/MainTags/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-tooltip_text = "Open the tag wizard."
+tooltip_text = "Open the Tag Wizard"
 theme_override_constants/icon_max_width = 24
 icon = ExtResource("2_cc4m6")
 icon_alignment = 1
@@ -243,20 +243,11 @@ list based on your
 entries."
 text = "Generate List"
 
-[node name="GeneratorButton" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/GeneratorButtons"]
+[node name="GeneratorToggle" type="Button" parent="MarginContainer/MainContainer/Final/Buttons/GeneratorButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "^"
+text = "☆"
 script = ExtResource("12_nab3q")
-
-[node name="PopupMenu" type="PopupMenu" parent="MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GeneratorButton"]
-size = Vector2i(190, 62)
-visible = true
-item_count = 2
-item_0/text = "Generate Default"
-item_0/id = 0
-item_1/text = "Generate Alternative"
-item_1/id = 1
 
 [node name="ExtraOptions" type="VBoxContainer" parent="MarginContainer/MainContainer/Final/Buttons"]
 layout_mode = 2
