@@ -318,7 +318,7 @@ func on_load_pressed(load_data: Dictionary) -> void:
 	for main_tag in load_data["main"]:
 		#on_tag_submitted(main_tag)	
 		var tag_index: int = tag_items.add_item(main_tag)
-		tag_items.set_item_metadata(tag_index, load_data["main"][main_tag])
+		tag_items.set_tag_metadata(tag_index, load_data["main"][main_tag])
 		tag_items.load_alt_state(tag_index)
 		if not load_data["main"][main_tag]["tooltip"].is_empty():
 			tag_items.set_item_tooltip(tag_index, load_data["main"][main_tag]["tooltip"])
