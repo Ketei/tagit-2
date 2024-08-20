@@ -138,7 +138,6 @@ func on_help_menu_selected(menu_index: int) -> void:
 
 func on_tagger_menu_selected(menu_index: int) -> void:
 	var menu_id: int = tagger_menu.get_popup().get_item_id(menu_index)
-	print(menu_id)
 	if menu_id == 0: # New List
 		tagger.new_list()
 	elif menu_id ==1: # Save
