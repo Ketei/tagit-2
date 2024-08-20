@@ -511,9 +511,9 @@ func clear_tag_map() -> void:
 
 func save_slot(save_data: Dictionary, save_title: String, save_index: int = -1) -> void:
 	if save_index != -1:
-		saves[save_index]["data"] = save_data
+		saves[save_index]["data"] = save_data.duplicate(true)
 	else:
-		saves.append({"title": save_title, "data": save_data})
+		saves.append({"title": save_title, "data": save_data.duplicate(true)})
 	
 	var existing_data = SaveSlots.get_save_data()
 	existing_data.saves = saves
@@ -529,9 +529,9 @@ func erase_slot(slot_index: int) -> void:
 
 func save_template(template_data: Dictionary, template_index: int = -1) -> void:
 	if template_index != -1:
-		templates[template_index] = template_data
+		templates[template_index] = template_data.duplicate()
 	else:
-		templates.append(template_data)
+		templates.append(template_data.duplicate())
 	var _existing_data := SaveSlots.get_save_data()
 	_existing_data.templates = templates
 	_existing_data.save()
@@ -1532,4 +1532,3 @@ func get_template_idx_with_title(template_title: String) -> int:
 			return_index = idx
 			break
 	return return_index
-
