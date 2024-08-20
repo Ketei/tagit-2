@@ -110,7 +110,7 @@ func save_file(title: String, index:int = -1):
 		var _new_entry: SaveDataEntry = SAVE_DATA_ENTRY.instantiate()
 		_new_entry.save_title = title
 		_new_entry.mode = mode
-		_new_entry.save_data = save_data
+		_new_entry.save_data = save_data.duplicate(true)
 		_new_entry.save_pressed.connect(on_overwrite_pressed)
 		save_entries_container.add_child(_new_entry)
 
@@ -126,5 +126,3 @@ func on_close_pressed() -> void:
 func close_window() -> void:
 	Tagger.enable_shortcuts()
 	queue_free()
-
-

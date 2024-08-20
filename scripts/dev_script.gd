@@ -201,4 +201,3 @@ func convert_tags() -> void:
 		new_tag.tooltip = convert_tag.tooltip
 		new_tag.wiki_entry = convert_tag.wiki_entry
 		ResourceSaver.save(new_tag, "D:/Tagger/tags/new_tags/convert_tags/" + tag_file)
-
