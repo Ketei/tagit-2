@@ -219,5 +219,3 @@ func set_tag_metadata(index: int, metadata: Dictionary) -> void:
 	var new_meta: Dictionary = Tagger.get_empty_meta()
 	new_meta.merge(metadata, true)
 	set_item_metadata(index, new_meta)
-
-

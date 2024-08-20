@@ -828,4 +828,3 @@ func sort_tags_by_priority() -> void:
 		tag_items.add_item(items_array[index]["name"])
 		tag_items.set_item_metadata(index, items_array[index]["metadata"])
 		tag_items.set_item_icon(index, items_array[index]["icon"])
-

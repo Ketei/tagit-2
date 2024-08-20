@@ -48,4 +48,3 @@ func signal_saved_or_loaded() -> void:
 	await get_tree().create_timer(1.0).timeout
 	select_button.disabled = false
 	select_button.text = prev_text
-
