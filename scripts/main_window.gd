@@ -127,18 +127,17 @@ func on_window_switch_signaled(target_window: int, args = {}) -> void:
 func on_help_menu_selected(menu_index: int) -> void:
 	if is_other_open():
 		return
-	var menu_id: int = help_menu.get_popup().get_item_id(menu_index)
+	#var menu_id: int = help_menu.get_popup().get_item_id(menu_index)
 	Tagger.shortcuts_disabled = true
 	
-	if menu_id == 0: # Show Controls
+	if menu_index == 0: # Show Controls
 		show_controls_window()
-	elif menu_id == 1: # About Tagit
+	elif menu_index == 1: # About Tagit
 		about_window.show_info()
 
 
 func on_tagger_menu_selected(menu_index: int) -> void:
 	var menu_id: int = tagger_menu.get_popup().get_item_id(menu_index)
-	
 	if menu_id == 0: # New List
 		tagger.new_list()
 	elif menu_id ==1: # Save
@@ -163,23 +162,22 @@ func on_tagger_menu_selected(menu_index: int) -> void:
 
 
 func on_menu_changed(menu_index: int) -> void:
-	var menu_id: int = main_menu.get_popup().get_item_id(menu_index)
-	if menu_id == 4: # Exit
+	#var menu_id: int = main_menu.get_popup().get_item_id(menu_index)
+	if menu_index == 5: # Exit
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 		return
 	
 	hide_all_windows()
 	current_window_index = menu_index
-	
-	if menu_id == 0: # Wiki
+	if menu_index == 1: # Wiki
 		wiki.show()
-	elif menu_id == 1: # Rewview Tag
+	elif menu_index == 2: # Rewview Tag
 		reviewer.show()
-	elif menu_id == 2: # Tools
+	elif menu_index == 3: # Tools
 		tools.show()
-	elif menu_id == 3: # Settings
+	elif menu_index == 4: # Settings
 		settings.show()
-	elif menu_id == 5: # Tagger
+	elif menu_index == 0: # Tagger
 		tagger.show()
 		tagger_menu.show()
 
