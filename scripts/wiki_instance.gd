@@ -47,7 +47,7 @@ func _ready():
 func _unhandled_key_input(_event):
 	if full_screen_view.visible and full_image.visible and Input.is_action_just_pressed("ui_cancel"):
 		full_screen_view.hide() # This is shown when clicked
-		full_image.hide() # This is shown when loaded
+		full_image.hide_pic() # This is shown when loaded
 
 
 func on_online_search_pressed() -> void:
@@ -150,8 +150,8 @@ func on_thumbnail_pressed(thumb_id: int) -> void:
 	if full_image.expand_mode == TextureRect.EXPAND_KEEP_SIZE:
 		full_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	full_screen_view.show()
-	full_image.texture = await Hydrus.get_file(thumb_id)
-	full_image.show()
+	full_image.sprite_frames = await Hydrus.get_file(thumb_id)
+	full_image.show_pic()
 
 
 func clear_wiki() -> void:
@@ -180,4 +180,3 @@ func on_meta_clicked(meta) -> void:
 			on_wiki_search_submit(meta_string)
 	elif Tagger.open_e6_on_wiki_link:
 		OS.shell_open(Tagger.E6_SEARCH_URL + meta_string)
-

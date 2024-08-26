@@ -149,6 +149,7 @@ popup/item_0/icon = ExtResource("8_jmtav")
 popup/item_0/id = 5
 popup/item_1/text = "Wiki"
 popup/item_1/icon = ExtResource("9_qvkhg")
+popup/item_1/id = 1
 popup/item_2/text = "Review Tags"
 popup/item_2/icon = ExtResource("10_dtfhi")
 popup/item_2/id = 1

@@ -187,4 +187,3 @@ func cancel_grab() -> void:
 	if auto_fill.is_anything_selected():
 		auto_fill.deselect_all()
 	grab_focus()
-
