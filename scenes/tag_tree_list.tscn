@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bphlr0d58eqwa"]
+
+[ext_resource type="Script" path="res://new_tag_tree_list.gd" id="1_n7hkm"]
+
+[node name="Tree" type="Tree"]
+anchors_preset = -1
+anchor_right = 0.277344
+anchor_bottom = 0.777778
+theme_override_constants/draw_guides = 0
+theme_override_constants/draw_relationship_lines = 1
+hide_root = true
+select_mode = 2
+scroll_horizontal_enabled = false
+script = ExtResource("1_n7hkm")
+metadata/_edit_use_anchors_ = true
