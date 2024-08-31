@@ -44,7 +44,8 @@ func on_search_submitted(_ignored: String = "") -> void:
 		if item is String:
 			local_array.append(item)
 		else:
-			local_array.append(item[1])
+			if not local_search.has(item[1]):
+				local_array.append(item[1])
 	
 	ESixRequester.request_prio(
 		Tagger.get_tag_request_url(tag_to_search, Tagger.E621_CATEGORY.ALL, "count", 100)

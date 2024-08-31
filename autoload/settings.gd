@@ -1214,7 +1214,6 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 	for p_found in get_alias_prefixes(prefix_search): # [from, to]
 		if not unlimited_search and limit <= 0:
 			break
-		
 		if p_found[0].begins_with(prefix_search) and not begin_with.has(p_found):
 			begin_with.append(p_found)
 		elif not similar.has(p_found):
@@ -1243,11 +1242,13 @@ func _search_local_with_prefix(prefix_search: String, limit: int = -1, invert :=
 				if not unlimited_search:
 					limit -= 1
 	
+	
 	begin_with.sort_custom(_prefix_sorting.bind(prefix_search))
 	similar.sort_custom(_prefix_sorting.bind(prefix_search))
-	
+
 	full_array.append_array(similar)
 	full_array.append_array(begin_with)
+	
 	if exact_match:
 		full_array.append(prefix_search)
 	
