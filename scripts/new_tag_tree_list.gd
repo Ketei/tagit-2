@@ -268,6 +268,17 @@ func sort_tags_by_priority() -> void:
 		tree_array[tree_idx].move_after(tree_array[tree_idx - 1])
 
 
+func sort_tags_by_alt_state() -> void:
+	var tree_array: Array[TreeItem] = tag_root.get_children()
+	if tree_array.size() < 2:
+		return
+	
+	tree_array.sort_custom(sort_custom_treeitem_altlist)
+	tree_array[0].move_before(tag_root.get_child(0))
+	for tree_idx in range(1, tree_array.size()):
+		tree_array[tree_idx].move_after(tree_array[tree_idx - 1])
+
+
 func get_tag_tree(tag_name: String) -> TreeItem:
 	for tag_tree:TreeItem in tag_root.get_children():
 		if tag_tree.get_text(0) == tag_name:
@@ -303,6 +314,14 @@ func update_tag(tag_name: String) -> void:
 			if not signal_change and meta_key != "suggestions" and meta_key != "tooltip":
 				signal_change = true
 	
+	for parent in relevant_tagtree.get_children():
+		parent.free()
+	
+	for new_parent in tag_metadata["parents"]:
+		var parent_tag: TreeItem = relevant_tagtree.create_child()
+		parent_tag.set_text(0, new_parent)
+		parent_tag.add_button(0, load("res://textures/icons/wiki_icon_m.svg"), WIKI_ID, not Tagger.has_tag(new_parent))
+	
 	if signal_change:
 		list_changed.emit()
 
@@ -332,6 +351,10 @@ static func sort_custom_treeitem_alphabetically(item_a: TreeItem, item_b: TreeIt
 
 static func sort_custom_treeitem_priority(item_a: TreeItem, item_b: TreeItem) -> bool:
 	return item_b.get_metadata(0)["priority"] < item_a.get_metadata(0)["priority"]
+
+
+static func sort_custom_treeitem_altlist(item_a: TreeItem, item_b: TreeItem) -> bool:
+	return item_a.get_metadata(0)["alt_state"] < item_b.get_metadata(0)["alt_state"]
 
 
 static func get_list_texture(state: int) -> Texture2D:

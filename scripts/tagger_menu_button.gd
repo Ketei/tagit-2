@@ -2,6 +2,7 @@ extends MenuButton
 
 signal sort_alphabetical_pressed
 signal sort_high_index_pressed
+signal sort_alt_list_pressed
 
 
 # Called when the node enters the scene tree for the first time.
@@ -12,6 +13,7 @@ func _ready():
 	submenu.name = "SortSubMenu"
 	submenu.add_item("Alphabetically", 0)
 	submenu.add_item("Priority", 1)
+	submenu.add_item("Alt Category", 2)
 	menu_popup.add_child(submenu)
 	menu_popup.set_item_submenu(
 			4,
@@ -43,8 +45,9 @@ func on_sort_submenu_pressed(menu_id: int) -> void:
 		sort_alphabetical_pressed.emit()
 	elif menu_id == 1: # HighPrio
 		sort_high_index_pressed.emit()
+	elif menu_id == 2: # Alt list
+		sort_alt_list_pressed.emit()
 
 
 func on_shortcuts_disabled(shortcuts_disabled: bool) -> void:
 	set_disable_shortcuts(shortcuts_disabled)
-

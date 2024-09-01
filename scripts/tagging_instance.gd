@@ -118,6 +118,10 @@ func sort_tags_alphabetically() -> void:
 	tag_items.sort_tags_by_text()
 
 
+func sort_tags_by_alt_state() -> void:
+	tag_items.sort_tags_by_alt_state()
+
+
 func on_full_search_open() -> void:
 	tag_full_search.show_searcher()
 	tag_full_search.grab_search_focus()
