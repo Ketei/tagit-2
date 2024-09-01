@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bphlr0d58eqwa"]
 
-[ext_resource type="Script" path="res://new_tag_tree_list.gd" id="1_n7hkm"]
+[ext_resource type="Script" path="res://scripts/new_tag_tree_list.gd" id="1_n7hkm"]
 
 [node name="Tree" type="Tree"]
 anchors_preset = -1

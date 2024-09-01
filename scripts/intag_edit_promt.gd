@@ -2,16 +2,18 @@ class_name InTagEditor
 extends Control
 
 
-signal done_editing(tag_index: int, tag_data: Dictionary)
-signal alt_edited(tag_idx: int, alt_status)
 signal add_suggestions(suggestions: Array[String])
 signal go_to_fetch(args: Dictionary)
+
+signal list_changed
 
 var tag_index: int = 0
 
 var original_prio: int = 0
 var original_cat :=  Tagger.Categories.GENERAL
 var original_alt: int = 0
+
+var tag_tree: TreeItem = null
 
 
 @onready var tag_name_label: Label = $CenterContainer/PanelContainer/MarginContainer/HBoxContainer/DataContainer/TagNameLabel
@@ -61,17 +63,20 @@ func on_add_sugg_pressed() -> void:
 		add_suggestions.emit(suggs_array)
 
 
-func set_data_and_show(item_index: int, tag_name: String, tag_data: Dictionary) -> void:
-	var tag_exists: bool = Tagger.has_tag(tag_name)
+func set_data_and_show(target_tree: TreeItem) -> void:
+	var tag_exists: bool = Tagger.has_tag(target_tree.get_text(0))
+	var tag_data: Dictionary = target_tree.get_metadata(0)
 	
-	tag_name_label.text = tag_name
-	tag_index = item_index
+	tag_tree = target_tree
+	tag_name_label.text = target_tree.get_text(0)
 	priority_spin_box.value = tag_data["priority"]
-	original_prio = int(tag_data["priority"])
 	category_option_button.select_category(tag_data["category"])
+	
+	original_prio = int(tag_data["priority"])
 	original_cat = tag_data["category"]
 	original_alt = tag_data["alt_state"]
-	alt_options.select(tag_data["alt_state"])
+	
+	alt_options.select(original_alt)
 	
 	for item in tag_data["suggestions"]:
 		suggestions_item_list.add_item(item)
@@ -83,25 +88,20 @@ func set_data_and_show(item_index: int, tag_name: String, tag_data: Dictionary) 
 	visible = true
 
 
-func update_data(new_cat: Tagger.Categories, new_prio: int, new_alt: int) -> void:
-	done_editing.emit(
-			tag_index, 
-			{
-				"category": new_cat,
-				"priority": new_prio,
-				"alt_state": new_alt,
-			})
-
-
 func on_close_pressed() -> void:
 	var new_category: Tagger.Categories = category_option_button.get_category()
 	var new_priority: int = int(priority_spin_box.value)
 	var new_alt: int = alt_options.selected
-	
-	if new_category != original_cat or new_priority != original_prio:
-		update_data(new_category, new_priority, new_alt)
-	elif new_alt != original_alt:
-		alt_edited.emit(tag_index, new_alt)
+	var tag_data: Dictionary = tag_tree.get_metadata(0)
+	tag_data["category"] = new_category
+	tag_data["priority"] = new_priority
+	tag_data["alt_state"] = new_alt
+	if new_alt != original_alt:
+		var button_idx: int = tag_tree.get_button_by_id(0, TagTreeList.ALT_LIST_ID)
+		tag_tree.set_button(0, button_idx, TagTreeList.get_list_texture(tag_data["alt_state"]))
+		tag_tree.set_button_tooltip_text(0, button_idx, TagTreeList.get_list_tooltip(tag_data["alt_state"]))
+	if new_category != original_cat or new_priority != original_prio or new_alt != original_alt:
+		list_changed.emit()
 	Tagger.shortcuts_disabled = false
 	queue_free()
 
@@ -118,4 +118,3 @@ func on_reset_pressed() -> void:
 		for item in tag_data.suggestions:
 			suggestions_item_list.add_item(item)
 	alt_options.select(0)
-

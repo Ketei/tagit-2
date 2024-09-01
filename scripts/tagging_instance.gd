@@ -29,7 +29,7 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var sites_option_menu = $MarginContainer/MainContainer/Final/Platform/SitesOptionMenu
 @onready var final_tags: TextEdit = $MarginContainer/MainContainer/Final/FinalTags
 
-@onready var tag_items: TagItemList = $MarginContainer/MainContainer/MainTags/TagItems
+@onready var tag_items: TagTreeList = $MarginContainer/MainContainer/MainTags/TagTreeList
 @onready var suggestion_list: TagItemList = $MarginContainer/MainContainer/Suggests/SuggestionList
 @onready var smart_list: TagItemList = $MarginContainer/MainContainer/Suggests/SmartList
 
@@ -50,8 +50,6 @@ var unsaved_work_window: UnsavedWorkWindow
 @onready var save_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/SaveListButton
 @onready var load_list_button: Button = $MarginContainer/MainContainer/MainTags/HBoxContainer/LoadListButton
 @onready var generator_toggle = $MarginContainer/MainContainer/Final/Buttons/GeneratorButtons/GeneratorToggle
-
-
 
 @onready var special_tag_window: PromptTagWindow = $SpecialTagWindow
 @onready var tag_full_search: TagFullSearch = $TagFullSearch
@@ -79,7 +77,9 @@ func _ready():
 	export_button.pressed.connect(on_export_pressed)
 	load_tag_button.pressed.connect(open_taglist_importer)
 	wizard_button.pressed.connect(summon_wizard)
-	tag_items.item_activated.connect(on_item_activated)
+	tag_items.tag_activated.connect(on_item_activated)
+	tag_items.wiki_tag_pressed.connect(on_tag_button_wiki_activated)
+	tag_items.list_changed.connect(on_main_list_changed)
 	select_tag_button.pressed.connect(on_tag_map_open)
 	tag_full_search.add_selected_pressed.connect(on_full_search_add)
 	tag_full_search.full_search_closed.connect(on_full_search_closed)
@@ -115,9 +115,7 @@ func on_multiple_special_submitted(tag_array: Array[String]) -> void:
 
 
 func sort_tags_alphabetically() -> void:
-	if tag_items.item_count == 0:
-		return
-	tag_items.sort_items_by_text()
+	tag_items.sort_tags_by_text()
 
 
 func on_full_search_open() -> void:
@@ -166,7 +164,7 @@ func on_wizard_orgasm(tag_data: Dictionary) -> void:
 		on_tag_submitted(tag)
 	
 	for sugg in tag_data["suggestions"]:
-		if not tag_items.has_item(sugg) and not suggestion_list.has_item(sugg):
+		if not tag_items.has_tag(sugg) and not suggestion_list.has_item(sugg):
 			suggestion_list.add_item(sugg)
 	
 	Tagger.search_online_suggestions = _online_suggs
@@ -174,9 +172,9 @@ func on_wizard_orgasm(tag_data: Dictionary) -> void:
 	tag_wizard.close_wizard()
 
 
-func on_item_activated(item_index: int) -> void:
-	if Input.is_action_pressed("shift_key") and Tagger.has_tag(tag_items.get_item_text(item_index)):
-		window_switch_signaled.emit(0, {"tag": tag_items.get_item_text(item_index)})
+func on_item_activated(tag_tree: TreeItem) -> void:
+	if Input.is_action_pressed("shift_key") and Tagger.has_tag(tag_tree.get_text(0)):
+		window_switch_signaled.emit(0, {"tag": tag_tree.get_text(0)})
 		return
 	
 	if in_tag_editor != null:
@@ -184,47 +182,21 @@ func on_item_activated(item_index: int) -> void:
 	
 	Tagger.disable_shortcuts()
 	in_tag_editor = IN_TAG_EDITOR.instantiate()
-	in_tag_editor.done_editing.connect(on_tag_edited)
+	#in_tag_editor.done_editing.connect(on_tag_edited)
 	in_tag_editor.add_suggestions.connect(on_intag_suggestions)
 	in_tag_editor.go_to_fetch.connect(on_go_to_fetch_pressed)
-	in_tag_editor.alt_edited.connect(on_alt_edited)
+	#in_tag_editor.alt_edited.connect(on_alt_edited)
 	add_child(in_tag_editor)
-	in_tag_editor.set_data_and_show(
-			item_index,
-			tag_items.get_item_text(item_index),
-			tag_items.get_item_metadata(item_index))
+	in_tag_editor.set_data_and_show(tag_tree)
+
+
+func on_tag_button_wiki_activated(tag_string: String) -> void:
+	window_switch_signaled.emit(0, {"tag": tag_string})
 
 
 func on_intag_suggestions(suggs:Array[String]) -> void:
 	for sug_to_tag in suggs:
 		on_tag_submitted(sug_to_tag)
-
-
-func on_alt_edited(tag_idx: int, new_status: int) -> void:
-	tag_items.set_alt_state(tag_idx, new_status)
-
-
-func on_tag_edited(tag_index: int, tag_data: Dictionary) -> void:
-	var tag_name: String = tag_items.get_item_text(tag_index)
-	
-	tag_items.get_item_metadata(tag_index).merge(tag_data, true)
-	tag_items.load_alt_state(tag_index)
-	#tag_items.set_alt_state(tag_index, tag_data["alt_state"])
-	
-	if Tagger.has_tag(tag_name):
-		tag_items.set_item_icon(
-				tag_index,
-				load("res://textures/status/valid_custom.png"))
-	elif Tagger.has_invalid_tag(tag_name):
-		tag_items.set_item_icon(
-				tag_index,
-				load("res://textures/status/bad_custom.png"))
-	else:
-		tag_items.set_item_icon(
-				tag_index,
-				load("res://textures/status/generic_custom.png"))
-	Tagger.enable_shortcuts()
-	#in_tag_editor.queue_free()
 
 
 func open_taglist_importer() -> void:
@@ -253,7 +225,7 @@ func load_tag_array(array_to_load: Array[String]) -> void:
 
 
 func clear_main_list() -> void:
-	if tag_items.item_count == 0:
+	if tag_items.tag_count() == 0:
 		return
 	var warning_window: TaggerConfirmationDialog = Tagger.create_confirmation_dialog()
 	warning_window.set_data(
@@ -263,7 +235,7 @@ func clear_main_list() -> void:
 	warning_window.visible = true
 	var confirm: bool = await warning_window.dialog_confirmed
 	if confirm:
-		tag_items.clear()
+		tag_items.clear_tags()
 	warning_window.queue_free()
 
 
@@ -316,23 +288,7 @@ func on_load_pressed(load_data: Dictionary) -> void:
 	Tagger.search_online_suggestions = false
 	
 	for main_tag in load_data["main"]:
-		#on_tag_submitted(main_tag)	
-		var tag_index: int = tag_items.add_item(main_tag)
-		tag_items.set_tag_metadata(tag_index, load_data["main"][main_tag])
-		tag_items.load_alt_state(tag_index)
-		if not load_data["main"][main_tag]["tooltip"].is_empty():
-			tag_items.set_item_tooltip(tag_index, load_data["main"][main_tag]["tooltip"])
-		if load_data["main"][main_tag]["valid"]:
-			if Tagger.has_tag(main_tag):
-				tag_items.set_item_icon(
-						tag_index,
-						load("res://textures/status/valid_custom.png"))
-			else:
-				tag_items.set_item_icon(
-						tag_index,
-						load("res://textures/status/generic_custom.png"))
-		else:
-			tag_items.set_item_icon(tag_index, load("res://textures/status/bad_custom.png"))
+		tag_items.add_tag(main_tag, load_data["main"][main_tag], true)
 	
 	for suggestion in load_data["suggs"]:
 		var _sugg_index: int = suggestion_list.add_item(suggestion)
@@ -341,8 +297,7 @@ func on_load_pressed(load_data: Dictionary) -> void:
 			if not _tool.is_empty():
 				suggestion_list.set_item_tooltip(
 					_sugg_index,
-					_tool
-				)
+					_tool)
 		
 	for smart in load_data["smart"]:
 		var smart_index: int = smart_list.add_item(smart)
@@ -450,26 +405,17 @@ func on_tag_submitted(tag_text: String) -> void:
 
 	add_tag_line_edit.clear()
 	
-	if end_tag.is_empty() or tag_items.has_item(end_tag):
+	if end_tag.is_empty() or tag_items.has_tag(end_tag):
 		return
 
 	if suggestion_list.has_item(end_tag):
 		suggestion_list.delete_item(end_tag)
-	
-	var item_index: int = tag_items.add_item(end_tag)
-	var status_icon: String = "res://textures/status/generic.png"
+
+	var tag_metadata: Dictionary = {}
 	
 	if Tagger.has_tag(end_tag):
-		status_icon = "res://textures/status/valid.png"
 		var tag_load: Tag = Tagger.get_tag(end_tag)
-		
-		tag_items.set_item_metadata(
-				item_index,
-				Tagger.build_tag_meta(tag_load))
-		
-		tag_items.set_item_tooltip(
-				item_index,
-				tag_load.tooltip)
+		tag_metadata = Tagger.build_tag_meta(tag_load)
 		
 		for smart:Dictionary in tag_load.smart_tags:
 			if not smart_list.has_item(smart["title"]) and not session_blacklist.has_group(smart["title"]):
@@ -480,7 +426,7 @@ func on_tag_submitted(tag_text: String) -> void:
 		
 		for sugg in tag_load.suggestions:
 			if not suggestion_list.has_item(sugg) and\
-			not tag_items.has_item(sugg) and\
+			not tag_items.has_tag(sugg) and\
 			not session_blacklist.has_item(sugg) and\
 			not Tagger.suggestion_blacklist.has(sugg):
 				var suggestion_index: int = suggestion_list.add_item(sugg)
@@ -497,7 +443,7 @@ func on_tag_submitted(tag_text: String) -> void:
 		
 		for suggestion in extra_suggs["suggestions"]: # Key
 			if not suggestion_list.has_item(suggestion) and\
-			not tag_items.has_item(suggestion) and\
+			not tag_items.has_tag(suggestion) and\
 			not session_blacklist.has_item(suggestion):
 				suggestion_list.add_item(suggestion)
 		
@@ -508,24 +454,10 @@ func on_tag_submitted(tag_text: String) -> void:
 						smart_indx,
 						extra_suggs["smart"][smart_suggestion]["data"]
 				)
-		
 	else:
-		if Tagger.has_invalid_tag(end_tag):
-			status_icon = "res://textures/status/bad.png"
-			tag_items.set_item_tooltip(
-					item_index,
-					"This is an invalid tag")
-			tag_items.set_item_metadata(
-				item_index,
-				Tagger.get_empty_meta(false))
-		else:
-			tag_items.set_item_metadata(
-				item_index,
-				Tagger.get_empty_meta())
-	
-	tag_items.set_item_icon(
-			item_index,
-			load(status_icon))
+		tag_metadata = Tagger.get_empty_meta(not Tagger.has_invalid_tag(end_tag))
+
+	var tag_item: TreeItem = tag_items.add_tag(end_tag, tag_metadata)
 	
 	if Tagger.search_online_suggestions:
 		ESixRequester.queue_job(
@@ -540,7 +472,7 @@ func on_tag_submitted(tag_text: String) -> void:
 	if not scroll_called: # Scrolling only once.
 		scroll_called = true
 		await get_tree().process_frame
-		tag_items.get_v_scroll_bar().value = tag_items.get_v_scroll_bar().max_value
+		tag_items.scroll_to_item(tag_item)
 		scroll_called = false
 
 
@@ -548,16 +480,11 @@ func process_response(response: Array, response_type: ESixRequester.JOB_TYPES) -
 	if response_type != ESixRequester.JOB_TYPES.SUGGESTION or response.is_empty():
 		return
 	
-	if response[0]["category"] == 6 and tag_items.has_item(response[0]["name"]):
-		var item_index: int = tag_items.get_item_index(response[0]["name"])
-		tag_items.set_item_icon(
-				item_index,
-				load("res://textures/status/bad.png"))
-		tag_items.set_item_tooltip(
-				item_index,
-				"This is an invalid tag on e621\nConsider removing or replacing.")
-		tag_items.get_item_metadata(item_index)["valid"] = false
-		#return
+	if response[0]["category"] == 6 and tag_items.has_tag(response[0]["name"]):
+		var relevant_item: TreeItem = tag_items.get_tag_tree(response[0]["name"])
+		relevant_item.set_icon(0, load("res://textures/status/bad.png"))
+		relevant_item.set_tooltip_text(0, "This is an invalid tag on e621\nConsider removing or replacing.")
+		relevant_item.get_metadata(0)["valid"] = false
 	
 	var suggestion_array: Dictionary = ESixRequester.parse_tag_strength(
 			response[0]["related_tags"])
@@ -567,35 +494,14 @@ func process_response(response: Array, response_type: ESixRequester.JOB_TYPES) -
 			for item: String in suggestion_array[strength]:
 				var tag_string: String = item.replace("_", " ")
 				if not suggestion_list.has_item(tag_string) and\
-				not tag_items.has_item(tag_string) and\
+				not tag_items.has_tag(tag_string) and\
 				not session_blacklist.has_item(tag_string) and\
 				not Tagger.suggestion_blacklist.has(tag_string):
 					suggestion_list.add_item(tag_string)
 
 
 func on_tag_updated(tag_name: String) -> void:
-	var item_index: int = tag_items.get_item_index(tag_name)
-	
-	if item_index == -1:
-		return
-	
-	tag_items.set_item_metadata(
-			item_index,
-			Tagger.build_tag_meta(Tagger.get_tag(tag_name)))
-	
-	if Tagger.has_tag(tag_name):
-		tag_items.set_item_icon(
-				item_index,
-				load("res://textures/status/valid.png"))
-		for suggestion in Tagger.get_tag(tag_name).suggestions:
-			if not suggestion_list.has_item(suggestion) and\
-			not tag_items.has_item(suggestion) and\
-			not session_blacklist.has_item(suggestion):
-				suggestion_list.add_item(suggestion)
-	else:
-		tag_items.set_item_icon(
-				item_index,
-				load("res://textures/status/generic.png"))
+	tag_items.update_tag(tag_name)
 
 
 func on_suggestion_activated(sugg_index: int) -> void:
@@ -639,7 +545,7 @@ func display_template_loader() -> void:
 
 
 func clear_all() -> void:
-	tag_items.clear()
+	tag_items.clear_tags()
 	suggestion_list.clear()
 	smart_list.clear()
 	final_tags.clear()
@@ -656,16 +562,11 @@ func get_save_data() -> Dictionary:
 		"blacklist": [],
 	}
 	
-	for main_tag in range(tag_items.item_count):
-		var tag_text: String = tag_items.get_item_text(main_tag)
-		var metadata: Dictionary = tag_items.get_item_metadata(main_tag)
-		
-		if metadata["alt_state"] == 1:
-			tag_text = tag_text.trim_suffix(TagItemList.ALT_MAIN_SUFFIX)
-		elif metadata["alt_state"] == 2:
-			tag_text = tag_text.trim_suffix(TagItemList.ALT_SUFFIX)
-		
-		save_return["main"][tag_text] = tag_items.get_item_metadata(main_tag)
+	for main_tag:TreeItem in tag_items.get_tag_treeitems():
+		var tag_text: String = main_tag.get_text(0)
+		var metadata: Dictionary = main_tag.get_metadata(0)
+	
+		save_return["main"][tag_text] = metadata.duplicate()
 	
 	for sugg_tag in range(suggestion_list.item_count):
 		save_return["suggs"].append(suggestion_list.get_item_text(sugg_tag))
@@ -692,20 +593,14 @@ func generate_full_tags() -> void:
 	
 	var added_tags: Array[String] = tag_items.get_tag_array()
 	
-	for main_tag in range(tag_items.item_count):
-		var metadata: Dictionary = tag_items.get_item_metadata(main_tag)
-		var tag_text: String = tag_items.get_item_text(main_tag)
+	for main_tag:TreeItem in tag_items.get_tag_treeitems():
+		var metadata: Dictionary = main_tag.get_metadata(0)
+		var tag_text: String = main_tag.get_text(0)
 		
 		if metadata["alt_state"] == 2 and not use_alts: # We skip the alt exclusives
 			continue
 		elif metadata["alt_state"] == 1 and use_alts: # We skip the main exclusives
 			continue
-		
-		if metadata["alt_state"] == 1:
-			tag_text = tag_text.trim_suffix(TagItemList.ALT_MAIN_SUFFIX)
-		elif metadata["alt_state"] == 2:
-			tag_text = tag_text.trim_suffix(TagItemList.ALT_SUFFIX)
-		
 		if not metadata["valid"] and not Tagger.include_invalid:
 			continue
 		
@@ -782,8 +677,6 @@ func is_saving() -> bool:
 
 
 func reset_tag_data() -> void:
-	if tag_items.item_count == 0:
-		return
 	Tagger.disable_shortcuts()
 	var reset_warning: TaggerConfirmationDialog = Tagger.create_confirmation_dialog()
 	reset_warning.set_data(
@@ -807,24 +700,8 @@ func on_full_search_closed() -> void:
 
 
 func sort_tags_by_priority() -> void:
-	if tag_items.item_count == 0:
-		return
-	
-	var items_array: Array[Dictionary] = []
-	
-	for item in range(tag_items.item_count):
-		items_array.append(
-				{
-					"priority": tag_items.get_item_metadata(item)["priority"],
-					"name": tag_items.get_item_text(item),
-					"metadata": tag_items.get_item_metadata(item),
-					"icon": tag_items.get_item_icon(item)
-				})
-	
-	items_array.sort_custom(
-			func(a, b): return b["priority"] < a["priority"])
-	tag_items.clear()
-	for index in range(items_array.size()):
-		tag_items.add_item(items_array[index]["name"])
-		tag_items.set_item_metadata(index, items_array[index]["metadata"])
-		tag_items.set_item_icon(index, items_array[index]["icon"])
+	tag_items.sort_tags_by_priority()
+
+
+func on_main_list_changed():
+	prompt_save_on_new = true

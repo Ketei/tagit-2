@@ -2,6 +2,8 @@ class_name TagTreeList
 extends Tree
 
 signal list_changed
+signal tag_activated(tag_treeitem: TreeItem)
+signal wiki_tag_pressed(tag: String)
 
 const DELETE_ID: int = 0
 const RESET_DATA_ID: int = 1
@@ -11,16 +13,15 @@ const ALT_LIST_ID: int = 3
 var tag_root: TreeItem
 
 
-
-
 func _ready() -> void:
 	tag_root = create_item()
 	tag_root.set_text(0, "Tags")
 	button_clicked.connect(on_tree_button_clicked)
 	focus_exited.connect(_on_focus_lost)
-	add_tag("ketei (character)", Tagger.build_tag_meta(Tagger.get_tag("ketei (character)")))
-	add_tag("Second Tag", Tagger.get_empty_meta(false))
-	add_tag("cum", Tagger.build_tag_meta(Tagger.get_tag("cum")))
+	item_activated.connect(on_item_activated)
+	#add_tag("ketei (character)", Tagger.build_tag_meta(Tagger.get_tag("ketei (character)")))
+	#add_tag("Second Tag", Tagger.get_empty_meta(false))
+	#add_tag("cum", Tagger.build_tag_meta(Tagger.get_tag("cum")))
 
 
 func _gui_input(_event: InputEvent) -> void:
@@ -64,7 +65,7 @@ func set_alt_selected(alt_state: int) -> void:
 		list_changed.emit()
 
 
-func add_tag(tag_name: String, metadata: Dictionary, has_custom := false) -> void:
+func add_tag(tag_name: String, metadata: Dictionary, has_custom := false) -> TreeItem:
 	var new_tag: TreeItem = create_item(tag_root)
 	
 	new_tag.set_text(0, tag_name)
@@ -92,24 +93,7 @@ func add_tag(tag_name: String, metadata: Dictionary, has_custom := false) -> voi
 	new_tag.collapsed = true
 	
 	list_changed.emit()
-
-
-func get_list_texture(state: int) -> Texture2D:
-	if state == 0:
-		return load("res://textures/icons/crossed_star.svg")
-	elif state == 1:
-		return load("res://textures/icons/white_star.svg")
-	else:
-		return load("res://textures/icons/full_star.svg")
-
-
-func get_list_tooltip(state: int) -> String:
-	if state == 0:
-		return "All lists"
-	elif state == 1:
-		return "Main only"
-	else:
-		return "Alt only"
+	return new_tag
 
 
 func set_item_alt(item: TreeItem, alt_state: int) -> void:
@@ -242,7 +226,7 @@ func _on_focus_lost() -> void:
 
 func on_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse_button_index: int) -> void:
 	if id == WIKI_ID:
-		print("Searching for: " + item.get_text(column))
+		wiki_tag_pressed.emit(item.get_text(column))
 	elif id == ALT_LIST_ID:
 		var metadata = item.get_metadata(column)
 		var button_idx: int = item.get_button_by_id(column, id)
@@ -253,3 +237,110 @@ func on_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse_button_
 		reset_tag(item)
 	elif id == DELETE_ID:
 		item.free()
+
+
+func on_item_activated() -> void:
+	var selected_item: TreeItem = get_selected()
+	if selected_item != null:
+		if selected_item.get_parent() == tag_root:
+			tag_activated.emit(selected_item)
+
+
+func sort_tags_by_text() -> void:
+	var tree_array: Array[TreeItem] = tag_root.get_children()
+	if tree_array.size() < 2:
+		return
+	
+	tree_array.sort_custom(sort_custom_treeitem_alphabetically)
+	tree_array[0].move_before(tag_root.get_child(0))
+	for tree_idx in range(1, tree_array.size()):
+		tree_array[tree_idx].move_after(tree_array[tree_idx - 1])
+
+
+func sort_tags_by_priority() -> void:
+	var tree_array: Array[TreeItem] = tag_root.get_children()
+	if tree_array.size() < 2:
+		return
+	
+	tree_array.sort_custom(sort_custom_treeitem_priority)
+	tree_array[0].move_before(tag_root.get_child(0))
+	for tree_idx in range(1, tree_array.size()):
+		tree_array[tree_idx].move_after(tree_array[tree_idx - 1])
+
+
+func get_tag_tree(tag_name: String) -> TreeItem:
+	for tag_tree:TreeItem in tag_root.get_children():
+		if tag_tree.get_text(0) == tag_name:
+			return tag_tree
+	return null
+
+
+func update_tag(tag_name: String) -> void:
+	var relevant_tagtree: TreeItem = get_tag_tree(tag_name)
+	if relevant_tagtree == null:
+		return
+	
+	var tag_metadata: Dictionary = relevant_tagtree.get_metadata(0)
+	var new_metadata: Dictionary = {}
+	var signal_change: bool = false
+	var invalid: bool = Tagger.has_invalid_tag(tag_name)
+
+	if Tagger.has_tag(tag_name):
+		new_metadata = Tagger.build_tag_meta(Tagger.get_tag(tag_name))
+		relevant_tagtree.set_icon(0, load("res://textures/status/valid.png"))
+	else:
+		new_metadata = Tagger.get_empty_meta(not invalid)
+		if invalid:
+			relevant_tagtree.set_icon(0, load("res://textures/status/bad.png"))
+		else:
+			relevant_tagtree.set_icon(0, load("res://textures/status/generic.png"))
+	
+	for meta_key in tag_metadata:
+		if meta_key == "alt_state":
+			continue	
+		if tag_metadata[meta_key] != new_metadata[meta_key]:
+			tag_metadata[meta_key] = new_metadata[meta_key]
+			if not signal_change and meta_key != "suggestions" and meta_key != "tooltip":
+				signal_change = true
+	
+	if signal_change:
+		list_changed.emit()
+
+
+func clear_tags() -> void:
+	for child:TreeItem in tag_root.get_children():
+		child.free()
+
+
+func get_tag_treeitems() -> Array[TreeItem]:
+	return tag_root.get_children()
+
+
+func tag_count() -> int:
+	return tag_root.get_child_count()
+
+
+static func sort_custom_treeitem_alphabetically(item_a: TreeItem, item_b: TreeItem) -> bool:
+	return item_a.get_text(0).naturalnocasecmp_to(item_b.get_text(0)) < 0
+
+
+static func sort_custom_treeitem_priority(item_a: TreeItem, item_b: TreeItem) -> bool:
+	return item_b.get_metadata(0)["priority"] < item_a.get_metadata(0)["priority"]
+
+
+static func get_list_texture(state: int) -> Texture2D:
+	if state == 0:
+		return load("res://textures/icons/crossed_star.svg")
+	elif state == 1:
+		return load("res://textures/icons/white_star.svg")
+	else:
+		return load("res://textures/icons/full_star.svg")
+
+
+static func get_list_tooltip(state: int) -> String:
+	if state == 0:
+		return "All lists"
+	elif state == 1:
+		return "Main only"
+	else:
+		return "Alt only"
