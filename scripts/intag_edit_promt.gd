@@ -93,15 +93,23 @@ func on_close_pressed() -> void:
 	var new_priority: int = int(priority_spin_box.value)
 	var new_alt: int = alt_options.selected
 	var tag_data: Dictionary = tag_tree.get_metadata(0)
+	
 	tag_data["category"] = new_category
 	tag_data["priority"] = new_priority
 	tag_data["alt_state"] = new_alt
+	
 	if new_alt != original_alt:
 		var button_idx: int = tag_tree.get_button_by_id(0, TagTreeList.ALT_LIST_ID)
 		tag_tree.set_button(0, button_idx, TagTreeList.get_list_texture(tag_data["alt_state"]))
 		tag_tree.set_button_tooltip_text(0, button_idx, TagTreeList.get_list_tooltip(tag_data["alt_state"]))
+	
 	if new_category != original_cat or new_priority != original_prio or new_alt != original_alt:
+		tag_tree.set_button_disabled(
+				0,
+				tag_tree.get_button_by_id(0,TagTreeList.RESET_DATA_ID),
+				false)
 		list_changed.emit()
+	
 	Tagger.shortcuts_disabled = false
 	queue_free()
 

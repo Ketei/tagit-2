@@ -320,6 +320,12 @@ func tag_count() -> int:
 	return tag_root.get_child_count()
 
 
+func collapse_all_tags() -> void:
+	for tag:TreeItem in tag_root.get_children():
+		if not tag.collapsed:
+			tag.collapsed = true
+
+
 static func sort_custom_treeitem_alphabetically(item_a: TreeItem, item_b: TreeItem) -> bool:
 	return item_a.get_text(0).naturalnocasecmp_to(item_b.get_text(0)) < 0
 

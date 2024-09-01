@@ -288,7 +288,9 @@ func on_load_pressed(load_data: Dictionary) -> void:
 	Tagger.search_online_suggestions = false
 	
 	for main_tag in load_data["main"]:
-		tag_items.add_tag(main_tag, load_data["main"][main_tag], true)
+		var metadata: Dictionary = Tagger.get_empty_meta()
+		metadata.merge(load_data["main"][main_tag], true)
+		tag_items.add_tag(main_tag, metadata, true)
 	
 	for suggestion in load_data["suggs"]:
 		var _sugg_index: int = suggestion_list.add_item(suggestion)
@@ -701,6 +703,10 @@ func on_full_search_closed() -> void:
 
 func sort_tags_by_priority() -> void:
 	tag_items.sort_tags_by_priority()
+
+
+func collapse_tags() -> void:
+	tag_items.collapse_all_tags()
 
 
 func on_main_list_changed():

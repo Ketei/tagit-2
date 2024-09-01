@@ -159,6 +159,8 @@ func on_tagger_menu_selected(menu_index: int) -> void:
 		tagger.display_template_loader()
 	elif menu_id == 11: # Reset tag Data
 		tagger.reset_tag_data()
+	elif menu_id == 12:
+		tagger.collapse_tags()
 
 
 func on_menu_changed(menu_index: int) -> void:
