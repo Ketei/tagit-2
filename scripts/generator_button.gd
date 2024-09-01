@@ -14,10 +14,10 @@ func _on_button_pressed() -> void:
 	generate_alt = not generate_alt
 	
 	if generate_alt:
-		text = TagItemList.ALT_SUFFIX.strip_edges()
+		text = "★"
 		tooltip_text = "Switch to default list"
 	else:
-		text = TagItemList.ALT_MAIN_SUFFIX.strip_edges()
+		text = "☆"
 		tooltip_text = "Switch to alternative list"
 
 

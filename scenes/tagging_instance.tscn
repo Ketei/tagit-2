@@ -138,7 +138,6 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 9.5
 select_mode = 1
 script = ExtResource("4_kxfaf")
-allow_alting = true
 
 [node name="Interact" type="HBoxContainer" parent="MarginContainer/MainContainer/MainTags"]
 layout_mode = 2
