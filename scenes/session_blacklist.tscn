@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bnflgv04edf7b"]
+[gd_scene load_steps=5 format=3 uid="uid://bnflgv04edf7b"]
 
 [ext_resource type="Script" path="res://scripts/session_blacklist.gd" id="1_njqcq"]
+[ext_resource type="Script" path="res://scripts/tag_review_menu.gd" id="2_3h6ks"]
 [ext_resource type="Script" path="res://scripts/tag_list_script.gd" id="2_xsrjo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k81if"]
@@ -52,9 +53,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SuggestionBlackContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="SuggestionBlackContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("input_line", "submit_button", "tag_list")]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("2_3h6ks")
+input_line = NodePath("HBoxContainer/TempBlacklistLineEdit")
+submit_button = NodePath("HBoxContainer/AddTempBlacklistButton")
+tag_list = NodePath("TempItemList")
 
 [node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/SuggestionBlackContainer"]
 layout_mode = 2
