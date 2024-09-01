@@ -87,6 +87,8 @@ func on_search_submit(tag_string: String) -> void:
 		tag_name_line_edit.editable = true
 		load_button.disabled = false
 		fetch_button.disabled = false
+		parents_list.exclusion = ""
+		suggestions_list.exclusion = ""
 		return
 	
 	var tag_load: Tag = Tagger.get_tag(tag_search)
@@ -115,6 +117,9 @@ func on_search_submit(tag_string: String) -> void:
 	tag_name_line_edit.editable = true
 	load_button.disabled = false
 	fetch_button.disabled = false
+	
+	parents_list.exclusion = tag_search
+	aliases_list.exclusion = tag_search
 
 
 func on_fetch_pressed() -> void:
@@ -232,6 +237,16 @@ func on_save_pressed() -> void:
 	#tag_resource.aliases = aliases_list.get_all_items()
 	tag_resource.smart_tags = groups_list.get_entries()
 	
+	var parent_recursion = tag_resource.parents.find(tag_title)
+	var alias_recursion = tag_resource.aliases.find(tag_title)
+	
+	if parent_recursion != -1:
+		tag_resource.parents.remove_at(parent_recursion)
+	if alias_recursion != -1:
+		tag_resource.aliases.remove_at(alias_recursion)	
+	
+	
+	
 	# Validation to prevent self-referencing
 	var aliases: Array[String] = aliases_list.get_all_items()
 	DumbUtils.array_remove_all(aliases, tag_title)
@@ -280,4 +295,3 @@ func on_delete_pressed() -> void:
 	OS.move_to_trash(Tagger.get_tag_filepath(loaded_tag))
 	Tagger.remove_tag(loaded_tag)
 	clear_all()
-

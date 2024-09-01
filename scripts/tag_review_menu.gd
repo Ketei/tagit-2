@@ -5,6 +5,7 @@ extends VBoxContainer
 @export var submit_button: Button = null
 @export var tag_list: TagItemList = null
 
+var exclusion: String = ""
 var scroll_queued: bool = false
 
 
@@ -22,12 +23,8 @@ func on_text_submitted(new_tag: String) -> void:
 	new_tag = new_tag.strip_edges().to_lower()
 	input_line.clear()
 	
-	if new_tag.is_empty():
+	if new_tag.is_empty() or tag_list.has_item(new_tag) or new_tag == exclusion:
 		return
-	
-	for item_indx in range(tag_list.item_count):
-		if tag_list.get_item_text(item_indx) == new_tag:
-			return
 	
 	tag_list.add_item(new_tag)
 	
@@ -52,4 +49,3 @@ func add_items(item_array: Array) -> void:
 		var item_text: String = item.replace("_", " ")
 		if not tag_list.has_item(item_text):
 			tag_list.add_item(item_text)
-
