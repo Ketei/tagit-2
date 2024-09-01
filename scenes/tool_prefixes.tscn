@@ -72,7 +72,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 placeholder_text = "Prefix Symbol"
 alignment = 1
-max_length = 5
+max_length = 15
 
 [node name="FormatLineEdit" type="LineEdit" parent="ToolContainer/ListContainer/VBoxContainer/CreateContainer"]
 layout_mode = 2

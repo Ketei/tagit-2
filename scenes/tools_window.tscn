@@ -46,22 +46,28 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jdtdr")
 tab_alignment = 1
+current_tab = 0
 
 [node name="Prefixes" parent="MarginContainer/TabContainer" instance=ExtResource("1_iui6u")]
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="Template Editor" parent="MarginContainer/TabContainer" instance=ExtResource("2_7rhvu")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="Batch Create Tags" parent="MarginContainer/TabContainer" instance=ExtResource("4_hx0nf")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="Character Creator" parent="MarginContainer/TabContainer" instance=ExtResource("5_aw5cc")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 3
 
 [node name="Dupe Tag Cleaner" parent="MarginContainer/TabContainer" instance=ExtResource("6_bx02q")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 4

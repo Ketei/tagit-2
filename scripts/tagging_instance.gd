@@ -16,6 +16,8 @@ const UNSAVED_WINDOW = preload("res://scenes/unsaved_window.tscn")
 var scroll_called: bool = false
 var prompt_save_on_new: bool = false
 
+var prefix_recursion_protection: Array[String] = []
+
 var template_loader: TemplateLoader
 var save_window: SaveWindow
 var load_window: SaveWindow
@@ -403,9 +405,16 @@ func on_tag_submitted(tag_text: String) -> void:
 			break
 	
 	if not prefix_found.is_empty():
-		tag_text = Tagger.convert_prefix(
-			prefix_found, 
-			tag_text.trim_prefix(prefix_found))
+		if prefix_recursion_protection.has(tag_text):
+			return
+		else:
+			prefix_recursion_protection.append(tag_text)
+		var prefixed_string: String = tag_text.trim_prefix(prefix_found)
+		var conv_tags: Array[String] = Tagger.split_and_strip(Tagger.convert_prefix(prefix_found, prefixed_string), "|")
+		for tag in conv_tags:
+			on_tag_submitted(tag)
+		prefix_recursion_protection.erase(tag_text)
+		return
 	
 	var end_tag: String = Tagger.get_alias(tag_text)
 
