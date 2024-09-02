@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Tag_It_2"
 config/description="A tool that helps to create populated tag lists for your posts."
-config/version="2.5.4.0"
+config/version="2.6.0.0"
 run/main_scene="res://scenes/main_window.tscn"
 config/auto_accept_quit=false
 config/features=PackedStringArray("4.3", "GL Compatibility")
