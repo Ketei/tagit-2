@@ -31,8 +31,11 @@ func on_create_submitted(_ignored: String = "") -> void:
 	var prefix_key: String = create_prefix_line_edit.text.strip_edges()
 	var format_key: String = format_line_edit.text.strip_edges()
 	
-	if Tagger.prefixes.has(prefix_key):
+	if Tagger.prefixes.has(prefix_key) or prefix_key.is_empty():
 		return
+	
+	create_prefix_line_edit.clear()
+	format_line_edit.clear()
 	
 	Tagger.prefixes[prefix_key] = format_key
 	Tagger.sort_prefixes()
@@ -58,7 +61,8 @@ func on_test_submitted(text_to_test: String) -> void:
 	
 	if not prefix_found.is_empty():
 		prefixed_string = prefixed_string.trim_prefix(prefix_found)
-		test_out_line_edit.text = Tagger.convert_prefix(prefix_found, prefixed_string)
+		#test_out_line_edit.text = Tagger.convert_prefix(prefix_found, prefixed_string)
+		var tags := Tagger.split_and_strip(Tagger.convert_prefix(prefix_found, prefixed_string), "|")
+		test_out_line_edit.text = "|".join(tags)
 	else:
 		test_out_line_edit.text = prefixed_string
-

@@ -204,5 +204,3 @@ func on_folder_selected(folder_path: String) -> void:
 func disable_hydrus_connect_buttons(set_disabled := true) -> void:
 	hydrus_request_button.disabled = set_disabled
 	hydrus_connect_button.disabled = set_disabled
-
-

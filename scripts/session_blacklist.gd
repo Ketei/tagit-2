@@ -57,5 +57,3 @@ func show_blacklist() -> void:
 	set_process_unhandled_key_input(true)
 	Tagger.disable_shortcuts()
 	visible = true
-
-

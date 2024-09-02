@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cv04584lewxfj"]
+[gd_scene load_steps=20 format=3 uid="uid://cv04584lewxfj"]
 
 [ext_resource type="Script" path="res://scripts/tagging_instance.gd" id="1_qwxx4"]
 [ext_resource type="Texture2D" uid="uid://bspy7b4mnwwtt" path="res://textures/icons/wizard.svg" id="2_cc4m6"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bv0lodmh5bkey" path="res://textures/icons/search_icon.svg" id="6_ym3uf"]
 [ext_resource type="PackedScene" uid="uid://dvsreawj4roce" path="res://scenes/special_tag_window.tscn" id="7_f11d4"]
 [ext_resource type="PackedScene" uid="uid://dkbd01s367esl" path="res://scenes/tag_full_search.tscn" id="7_jn3ja"]
+[ext_resource type="Script" path="res://scripts/new_tag_tree_list.gd" id="8_1dblr"]
 [ext_resource type="Shortcut" uid="uid://c8vtq8aveyo58" path="res://resources/shortcuts/list_actions/search_for_tag_shortcut.tres" id="9_es8co"]
 [ext_resource type="Texture2D" uid="uid://bt5shjh0vtvkv" path="res://textures/icons/export_icon.svg" id="10_r4cct"]
 [ext_resource type="PackedScene" uid="uid://c8uqd4iwfeg78" path="res://scenes/auto_search.tscn" id="11_pjino"]
@@ -119,13 +120,24 @@ grow_horizontal = 0
 grow_vertical = 2
 text = "Tags"
 
+[node name="TagTreeList" type="Tree" parent="MarginContainer/MainContainer/MainTags"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 9.5
+theme_override_constants/draw_guides = 0
+theme_override_constants/draw_relationship_lines = 1
+hide_root = true
+select_mode = 2
+scroll_horizontal_enabled = false
+script = ExtResource("8_1dblr")
+
 [node name="TagItems" type="ItemList" parent="MarginContainer/MainContainer/MainTags"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 9.5
 select_mode = 1
 script = ExtResource("4_kxfaf")
-allow_alting = true
 
 [node name="Interact" type="HBoxContainer" parent="MarginContainer/MainContainer/MainTags"]
 layout_mode = 2

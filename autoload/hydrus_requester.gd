@@ -105,13 +105,13 @@ func get_thumbnails(ids_array: Array) -> Dictionary:
 		
 		if not response_array[0]: # If successful
 			continue
-		
-		return_dictionary[str(pic_id)] = response_array[1]
+		var sprite_fra:SpriteFrames = response_array[1]
+		return_dictionary[str(pic_id)] = sprite_fra.get_frame_texture(&"default", 0)
 	
 	return return_dictionary
 
 
-func get_file(file_id: int) -> Texture2D:
+func get_file(file_id: int) -> SpriteFrames:
 	if not connected:
 		return null
 	
@@ -233,5 +233,3 @@ func request_permissions(port: int) -> void:
 	var json: JSON = JSON.new()
 	json.parse(client_response[3].get_string_from_utf8())
 	permissions_received.emit(json.data["access_key"])
-
-

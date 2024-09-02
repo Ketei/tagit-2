@@ -51,10 +51,33 @@ script/source = "extends TextureRect
 
 @onready var button: Button = $Button
 @onready var smooth_scroll_container: SmoothScrollContainer = $\"..\"
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+
+var sprite_frames: SpriteFrames = null : set = set_new_frames
 
 
 func _ready():
 	button.pressed.connect(on_button_pressed)
+	animated_sprite_2d.frame_changed.connect(on_frame_changed)
+
+
+func set_new_frames(new_frames: SpriteFrames) -> void:
+	sprite_frames = new_frames
+	animated_sprite_2d.sprite_frames = sprite_frames
+
+
+func show_pic() -> void:
+	animated_sprite_2d.frame = 0
+	texture = sprite_frames.get_frame_texture(&\"default\", 0)
+	visible = true
+	if 1 < sprite_frames.get_frame_count(&\"default\"):
+		animated_sprite_2d.play(&\"default\")
+
+
+func hide_pic() -> void:
+	visible = false
+	if animated_sprite_2d.is_playing():
+		animated_sprite_2d.stop()
 
 
 func on_button_pressed() -> void:
@@ -63,6 +86,9 @@ func on_button_pressed() -> void:
 	else:
 		expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 
+
+func on_frame_changed() -> void:
+	texture = sprite_frames.get_frame_texture(&\"default\", animated_sprite_2d.frame)
 "
 
 [node name="WikiInstance" type="Control"]
@@ -242,3 +268,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 flat = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="PanelContainer/SmoothScrollContainer/FullScreenView"]
+visible = false

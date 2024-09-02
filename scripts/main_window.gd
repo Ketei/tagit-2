@@ -48,6 +48,7 @@ func _ready():
 	help_menu.get_popup().index_pressed.connect(on_help_menu_selected)
 	tagger_menu.sort_alphabetical_pressed.connect(sort_tags_aphabetically)
 	tagger_menu.sort_high_index_pressed.connect(sort_by_priority)
+	tagger_menu.sort_alt_list_pressed.connect(sort_tags_by_list)
 	Tagger.menus_disabled.connect(disable_menus)
 	Tagger.menus_enabled.connect(enable_menus)
 	
@@ -68,6 +69,10 @@ func sort_by_priority() -> void:
 
 func sort_tags_aphabetically() -> void:
 	tagger.sort_tags_alphabetically()
+
+
+func sort_tags_by_list() -> void:
+	tagger.sort_tags_by_alt_state()
 
 
 func show_controls_window() -> void:
@@ -159,6 +164,8 @@ func on_tagger_menu_selected(menu_index: int) -> void:
 		tagger.display_template_loader()
 	elif menu_id == 11: # Reset tag Data
 		tagger.reset_tag_data()
+	elif menu_id == 12:
+		tagger.collapse_tags()
 
 
 func on_menu_changed(menu_index: int) -> void:

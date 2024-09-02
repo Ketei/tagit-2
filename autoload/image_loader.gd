@@ -35,7 +35,7 @@ func on_http_response(result: int, response_code: int, headers: PackedStringArra
 	
 	var _heads: Dictionary = parse_headers(headers)
 	
-	var texture: Texture2D = create_texture(
+	var texture: SpriteFrames = create_texture(
 			body,
 			_heads["content-type"].split("/")[1])
 	
@@ -50,20 +50,28 @@ func parse_headers(headers_array: PackedStringArray) -> Dictionary:
 	return _headers
 
 
-func create_texture(image_data: PackedByteArray, image_format: String) -> Texture2D:
+func create_texture(image_data: PackedByteArray, image_format: String) -> SpriteFrames:
 	var image := Image.new()
-	var return_texture: Texture2D = null
+	var return_texture: SpriteFrames = null
 	
 	if image_format == "jpeg" or image_format == "jpg":
 		image.load_jpg_from_buffer(image_data)
 		image.generate_mipmaps()
-		return_texture = ImageTexture.create_from_image(image)
+		return_texture = SpriteFrames.new()
+		#return_texture.add_animation(&"default")
+		var frame_texture: Texture2D = ImageTexture.create_from_image(image)
+		return_texture.add_frame("default", frame_texture)
 	elif image_format == "png":
 		image.load_png_from_buffer(image_data)
 		image.generate_mipmaps()
-		return_texture = ImageTexture.create_from_image(image)
+		return_texture = SpriteFrames.new()
+		#return_texture.add_animation(&"default")
+		var frame_texture: Texture2D = ImageTexture.create_from_image(image)
+		return_texture.add_frame(&"default", frame_texture)
 	elif image_format == "gif":
-		return_texture =  GifManager.animated_texture_from_buffer(image_data, 256)
+		#return_texture =  GifManager.animated_texture_from_buffer(image_data, 256)
+		return_texture = GifManager.sprite_frames_from_buffer(image_data)
+		return_texture.rename_animation(&"gif", &"default")
 	return return_texture
 
 
@@ -74,10 +82,8 @@ func on_full_response(result: int, response_code: int, headers: PackedStringArra
 	
 	var _heads: Dictionary = parse_headers(headers)
 	
-	var texture: Texture2D = create_texture(
+	var texture: Resource = create_texture(
 			body,
 			_heads["content-type"].split("/")[1])
 	
 	emit_signal.call_deferred("full_image_responded", [true, texture])
-
-
