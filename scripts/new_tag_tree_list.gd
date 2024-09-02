@@ -79,7 +79,7 @@ func add_tag(tag_name: String, metadata: Dictionary, has_custom := false) -> Tre
 		new_tag.set_icon(0, load("res://textures/status/generic.png"))
 	
 	new_tag.add_button(0, get_list_texture(metadata["alt_state"]), ALT_LIST_ID, false, get_list_tooltip(metadata["alt_state"]))
-	new_tag.add_button(0, load("res://textures/icons/wiki_icon_m.svg"), WIKI_ID, not metadata["valid"], "Wiki")
+	new_tag.add_button(0, load("res://textures/icons/wiki_icon_m.svg"), WIKI_ID, not Tagger.has_tag(tag_name), "Wiki")
 	new_tag.add_button(0, load("res://textures/icons/reset_icon_m.svg"), RESET_DATA_ID, not has_custom, "Reset Tag")
 	new_tag.add_button(0, load("res://textures/icons/x_icon_m.svg"), DELETE_ID, false, "Delete")
 	
@@ -286,44 +286,69 @@ func get_tag_tree(tag_name: String) -> TreeItem:
 	return null
 
 
+# Searches on all tags' children for this tag.
+func get_tag_tree_children(tag_name: String) -> Array[TreeItem]:
+	var matching_parents: Array[TreeItem] = []
+	
+	for tag in tag_root.get_children():
+		for parent_tag in tag.get_children():
+			if parent_tag.get_text(0) == tag_name:
+				matching_parents.append(parent_tag)
+	
+	return matching_parents
+
+
 func update_tag(tag_name: String) -> void:
 	var relevant_tagtree: TreeItem = get_tag_tree(tag_name)
-	if relevant_tagtree == null:
+	var in_database: bool = Tagger.has_tag(tag_name)
+	
+	if relevant_tagtree != null:
 		return
 	
-	var tag_metadata: Dictionary = relevant_tagtree.get_metadata(0)
-	var new_metadata: Dictionary = {}
-	var signal_change: bool = false
-	var invalid: bool = Tagger.has_invalid_tag(tag_name)
+		var tag_metadata: Dictionary = relevant_tagtree.get_metadata(0)
+		var new_metadata: Dictionary = {}
+		var signal_change: bool = false
+		var invalid: bool = Tagger.has_invalid_tag(tag_name)
 
-	if Tagger.has_tag(tag_name):
-		new_metadata = Tagger.build_tag_meta(Tagger.get_tag(tag_name))
-		relevant_tagtree.set_icon(0, load("res://textures/status/valid.png"))
-	else:
-		new_metadata = Tagger.get_empty_meta(not invalid)
-		if invalid:
-			relevant_tagtree.set_icon(0, load("res://textures/status/bad.png"))
+		if in_database:
+			new_metadata = Tagger.build_tag_meta(Tagger.get_tag(tag_name))
+			relevant_tagtree.set_icon(0, load("res://textures/status/valid.png"))
 		else:
-			relevant_tagtree.set_icon(0, load("res://textures/status/generic.png"))
+			new_metadata = Tagger.get_empty_meta(not invalid)
+			if invalid:
+				relevant_tagtree.set_icon(0, load("res://textures/status/bad.png"))
+			else:
+				relevant_tagtree.set_icon(0, load("res://textures/status/generic.png"))
+		
+		for meta_key in tag_metadata:
+			if meta_key == "alt_state":
+				continue	
+			if tag_metadata[meta_key] != new_metadata[meta_key]:
+				tag_metadata[meta_key] = new_metadata[meta_key]
+				if not signal_change and meta_key != "suggestions" and meta_key != "tooltip":
+					signal_change = true
+		
+		for parent in relevant_tagtree.get_children():
+			parent.free()
+		
+		for new_parent in tag_metadata["parents"]:
+			var parent_tag: TreeItem = relevant_tagtree.create_child()
+			parent_tag.set_text(0, new_parent)
+			parent_tag.add_button(0, load("res://textures/icons/wiki_icon_m.svg"), WIKI_ID, not Tagger.has_tag(new_parent))
+		
+		relevant_tagtree.set_button_disabled(
+				0,
+				relevant_tagtree.get_button_by_id(0, WIKI_ID),
+				not in_database)
 	
-	for meta_key in tag_metadata:
-		if meta_key == "alt_state":
-			continue	
-		if tag_metadata[meta_key] != new_metadata[meta_key]:
-			tag_metadata[meta_key] = new_metadata[meta_key]
-			if not signal_change and meta_key != "suggestions" and meta_key != "tooltip":
-				signal_change = true
+		if signal_change:
+			list_changed.emit()
 	
-	for parent in relevant_tagtree.get_children():
-		parent.free()
-	
-	for new_parent in tag_metadata["parents"]:
-		var parent_tag: TreeItem = relevant_tagtree.create_child()
-		parent_tag.set_text(0, new_parent)
-		parent_tag.add_button(0, load("res://textures/icons/wiki_icon_m.svg"), WIKI_ID, not Tagger.has_tag(new_parent))
-	
-	if signal_change:
-		list_changed.emit()
+	for parent in get_tag_tree_children(tag_name):
+		parent.set_button_disabled(
+				0,
+				parent.get_button_by_id(0, WIKI_ID),
+				not in_database)
 
 
 func clear_tags() -> void:

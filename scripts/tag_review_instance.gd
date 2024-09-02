@@ -87,8 +87,6 @@ func on_search_submit(tag_string: String) -> void:
 		tag_name_line_edit.editable = true
 		load_button.disabled = false
 		fetch_button.disabled = false
-		parents_list.exclusion = ""
-		suggestions_list.exclusion = ""
 		return
 	
 	var tag_load: Tag = Tagger.get_tag(tag_search)
@@ -117,9 +115,6 @@ func on_search_submit(tag_string: String) -> void:
 	tag_name_line_edit.editable = true
 	load_button.disabled = false
 	fetch_button.disabled = false
-	
-	parents_list.exclusion = tag_search
-	aliases_list.exclusion = tag_search
 
 
 func on_fetch_pressed() -> void:
