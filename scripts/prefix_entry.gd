@@ -31,4 +31,3 @@ func on_delete_pressed() -> void:
 	Tagger.prefixes.erase(prefix_key)
 	Tagger.prefix_sorting.erase(prefix_key)
 	queue_free()
-
