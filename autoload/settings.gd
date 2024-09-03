@@ -5,7 +5,8 @@ signal image_view_toggled(is_toggled)
 signal tag_updated(tag_name)
 signal tag_registered(tag_name)
 signal aliases_reloaded
-signal tag_deleted(tag_name)
+@warning_ignore("unused_signal")
+signal tag_deleted(tag_name) # Used bu the reviewer
 signal invalid_added(tag_name)
 signal websites_updated
 signal disabled_shortcuts(is_disabled: bool)
@@ -146,7 +147,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net/tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.6.0"
+const VERSION: String = "2.6.1"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 const GENDERS: Dictionary = {
