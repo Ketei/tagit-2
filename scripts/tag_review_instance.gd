@@ -286,7 +286,8 @@ func clear_all(include_line := true) -> void:
 func on_delete_pressed() -> void:
 	if not Tagger.has_tag(loaded_tag):
 		return
-	
+
 	OS.move_to_trash(Tagger.get_tag_filepath(loaded_tag))
 	Tagger.remove_tag(loaded_tag)
+	Tagger.tag_deleted.emit(loaded_tag)
 	clear_all()

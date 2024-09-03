@@ -19,6 +19,7 @@ func _ready() -> void:
 	button_clicked.connect(on_tree_button_clicked)
 	focus_exited.connect(_on_focus_lost)
 	item_activated.connect(on_item_activated)
+	Tagger.tag_deleted.connect(on_tag_deleted)
 	#add_tag("ketei (character)", Tagger.build_tag_meta(Tagger.get_tag("ketei (character)")))
 	#add_tag("Second Tag", Tagger.get_empty_meta(false))
 	#add_tag("cum", Tagger.build_tag_meta(Tagger.get_tag("cum")))
@@ -303,8 +304,6 @@ func update_tag(tag_name: String) -> void:
 	var in_database: bool = Tagger.has_tag(tag_name)
 	
 	if relevant_tagtree != null:
-		return
-	
 		var tag_metadata: Dictionary = relevant_tagtree.get_metadata(0)
 		var new_metadata: Dictionary = {}
 		var signal_change: bool = false
@@ -368,6 +367,25 @@ func collapse_all_tags() -> void:
 	for tag:TreeItem in tag_root.get_children():
 		if not tag.collapsed:
 			tag.collapsed = true
+
+
+func on_tag_deleted(tag_name: String) -> void:
+	var relevant_tree := get_tag_tree(tag_name)
+	if relevant_tree == null:
+		return
+	
+	var invalid: bool = Tagger.has_invalid_tag(tag_name)
+	var new_metadata = Tagger.get_empty_meta(not invalid)
+	
+	relevant_tree.set_metadata(0, new_metadata)
+	
+	for child in relevant_tree.get_children():
+		child.free()
+	
+	if invalid:
+		relevant_tree.set_icon(0, load("res://textures/status/bad.png"))
+	else:
+		relevant_tree.set_icon(0, load("res://textures/status/generic.png"))
 
 
 static func sort_custom_treeitem_alphabetically(item_a: TreeItem, item_b: TreeItem) -> bool:
