@@ -25,10 +25,8 @@ metadata/_edit_use_anchors_ = true
 [node name="KeySymbolLineEdit" type="LineEdit" parent="MarginContainer/PrefixContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "WWWWW"
 placeholder_text = "Prefix"
 alignment = 1
-max_length = 5
 editable = false
 
 [node name="Label" type="Label" parent="MarginContainer/PrefixContainer"]
