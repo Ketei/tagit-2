@@ -40,6 +40,7 @@ var website_installer: WebsiteInstallWindow
 
 @onready var algoritm_button: OptionButton = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/TabContainer/General/GeneralContainer/AlgorithmType/AlgorithmButton
 
+@onready var export_json_btn: Button = $MarginContainer/HBoxContainer/MarginContainer/LeftBox/ExportJsonBtn
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -86,6 +87,7 @@ func _ready():
 	remove_after_use.toggled.connect(on_remove_after_use)
 	blacklist_after_remove.toggled.connect(on_blacklist_after_remove)
 	hydrus_request_button.pressed.connect(on_request_pressed)
+	export_json_btn.pressed.connect(on_export_new_pressed)
 
 
 func on_algoritm_selected(algorithm_id: int) -> void:
@@ -204,3 +206,198 @@ func on_folder_selected(folder_path: String) -> void:
 func disable_hydrus_connect_buttons(set_disabled := true) -> void:
 	hydrus_request_button.disabled = set_disabled
 	hydrus_connect_button.disabled = set_disabled
+
+
+func on_export_new_pressed() -> void:
+	var dialog_browser := FileDialog.new()
+	dialog_browser.access = FileDialog.ACCESS_FILESYSTEM
+	dialog_browser.use_native_dialog = true
+	dialog_browser.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog_browser.add_filter("*.json", "JSON Files")
+	dialog_browser.file_selected.connect(export_for_new.bind(dialog_browser))
+	dialog_browser.canceled.connect(dialog_browser.queue_free)
+	dialog_browser.show()
+
+
+func export_for_new(path: String, browser: FileDialog):
+	const categories: Array[Dictionary] = [
+		{
+			"color": "ffffff",
+			"description": "A category for tags that lacks specificity.",
+			"icon": 0,
+			"name": "Generic"
+		},
+		{
+			"color": "ffffff",
+			"description": "Tags that represent artists.",
+			"icon": 0,
+			"name": "Artist"
+		},
+		{
+			"color": "ffffff",
+			"description": "A tag referring to something belonging to an IP",
+			"name": "Copyright",
+			"icon": 0
+		},
+		{
+			"color": "ffffff",
+			"description": "A representation of an individual in a fictional or dramatic work.",
+			"icon": 0,
+			"name": "Character"
+		},
+		{
+			"color": "ffffff",
+			"description": "A group of closely related organisms that are very similar to each other and are capable of interbreeding and producing fertile offspring",
+			"icon": 0,
+			"name": "Species"
+		},
+		{
+			"color": "ffffff",
+			"description": "The anatomical and physiological configurations of a character.",
+			"icon": 0,
+			"name": "Body"
+		},
+		{
+			"color": "ffffff",
+			"description": " The state or process of acting or doing something",
+			"icon": 0,
+			"name": "Action"
+		},
+		{
+			"color": "ffffff",
+			"description": "An activity that can involve kissing, touching, masturbation, vaginal, oral, or anal sex/penetration in any position.",
+			"icon": 0,
+			"name": "Sex"
+		},
+		{
+			"color": "ffffff",
+			"description": "Any material thing perceptible by one or more of the senses, especially by vision or touch. ",
+			"icon": 0,
+			"name": "Object"
+		},
+		{
+			"color": "ffffff",
+			"description": "Any object that can be worn on the body as apparel or accessory",
+			"icon": 0,
+			"name": "Clothing"
+		},
+		{
+			"color": "ffffff",
+			"description": " A place that holds distinguishing features",
+			"icon": 0,
+			"name": "Location"
+		},
+		{
+			"color": "ffffff",
+			"description": "A tag describing a property of the file.",
+			"icon": 0,
+			"name": "Meta"
+		},
+		{
+			"color": "ffffff",
+			"description": "A tag for describing a character or situation even though visually can't be confirmed.",
+			"icon": 0,
+			"name": "Lore"
+		},
+		{
+			"color": "ffffff",
+			"description": "Tags describing physical, social or moral properties of something",
+			"icon": 0,
+			"name": "Properties"}]
+	
+	var tags: Array[Dictionary] = []
+	
+	for tag in Tagger.loaded_tags:
+		for tag_name in Tagger.loaded_tags[tag]:
+			var tag_load: Tag = Tagger.get_tag(tag_name)
+			var category: int = old_to_new(tag_load.category)
+			tags.append({
+				"aliases": tag_load.aliases,
+				"category": category,
+				"group": -1,
+				"group_suggestions": [],
+				"is_valid": not Tagger.has_invalid_tag(tag_name),
+				"name": tag_name,
+				"parents": tag_load.parents,
+				"priority": tag_load.tag_priority,
+				"suggestions": tag_load.suggestions,
+				"tooltip": tag_load.tooltip,
+				"wiki": tag_load.wiki_entry,
+				})
+	
+	var full_data: Dictionary = {
+		"categories": categories,
+		"groups": [],
+		"icons": [],
+		"tags": tags,
+		"type": 1}
+	
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	
+	if file == null:
+		Tagger.log_message("Couldn't open JSON file on path: " + path, Tagger.LoggingLevel.ERROR)
+		Tagger.queue_notification(
+			"Couldn't export tags",
+			"Error")
+	else:
+		file.store_string(JSON.stringify(full_data, "\t"))
+		Tagger.queue_notification(
+			"Tags Exported",
+			"Success")
+		file.close()
+	
+	browser.queue_free()
+
+
+func old_to_new(from: int) -> int:
+	match from:
+		Tagger.Categories.GENERAL:
+			return 0
+		Tagger.Categories.ARTIST:
+			return 1
+		Tagger.Categories.COPYRIGHT:
+			return 2
+		Tagger.Categories.CHARACTER:
+			return 3
+		Tagger.Categories.SPECIES:
+			return 4
+		Tagger.Categories.GENDER:
+			return 5
+		Tagger.Categories.BODY_TYPES:
+			return 5
+		Tagger.Categories.ANATOMY:
+			return 5
+		Tagger.Categories.MARKINGS:
+			return 5
+		Tagger.Categories.POSES_AND_STANCES:
+			return 6
+		Tagger.Categories.ACTIONS_AND_INTERACTIONS:
+			return 6
+		Tagger.Categories.SEX_AND_POSITIONS:
+			return 7
+		Tagger.Categories.PENETRATION:
+			return 7
+		Tagger.Categories.FLUIDS:
+			return 8
+		Tagger.Categories.EXPRESSIONS:
+			return 6
+		Tagger.Categories.COLORS:
+			return 13
+		Tagger.Categories.OBJECTS:
+			return 8
+		Tagger.Categories.CLOTHING:
+			return 9
+		Tagger.Categories.ACCESSORIES:
+			return 9
+		Tagger.Categories.PROFESSION:
+			return 13
+		Tagger.Categories.META:
+			return 11
+		Tagger.Categories.LOCATION:
+			return 10
+		Tagger.Categories.FURNITURE:
+			return 8
+		Tagger.Categories.LORE:
+			return 12
+		_:
+			return 0

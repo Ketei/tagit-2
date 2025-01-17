@@ -103,6 +103,9 @@ const CategorySorting: Array = [
 	{"name": "Lore", "index": Categories.LORE},
 ]
 
+
+
+
 const DEFAULT_SITES: Dictionary = {
 	"e_six": {
 		"name": "e621",
@@ -147,7 +150,7 @@ const WIKI: String = "https://e621.net/wiki_pages.json?limit=1&title=" # title
 const TAGS: String = "https://e621.net/tags.json?"
 const ALIASES: String = "https://e621.net/tag_aliases.json?search[name_matches]="
 const PARENTS: String = "https://e621.net/tag_implications.json?search[antecedent_name]="
-const VERSION: String = "2.6.1"
+const VERSION: String = "2.6.2"
 const HEADER_FORMAT: String = "TaglistMaker/{0} (by Ketei)"
 const AUTOFILL_TIME: float = 0.3
 const GENDERS: Dictionary = {
@@ -248,6 +251,7 @@ var blacklist_after_remove: bool = false
 var default_site: String = ""
 var suggestion_confidence: int = 45
 var search_online_suggestions: bool = false
+var next_ver_notified: bool = false
 
 # Loaded tags {"a": {"asshole": "D:/tags/asshole.tres"}}
 # Loaded tags {"a": {"asshole": {"path": "D:/tags/asshole.tres", "category": 0}}
@@ -451,6 +455,14 @@ func _ready():
 	removed_aliases = _load_settings.removed_aliases
 	
 	sort_prefixes()
+	
+	if not _load_settings.next_version_notified:
+		queue_notification(
+				"TagIt v3 has been released!\nFind the link in the Help -> About window.",
+				"Next Version Released",
+				"I understand")
+		next_ver_notified = true
+		
 
 
 func disable_shortcuts() -> void:
@@ -1412,6 +1424,7 @@ func save_settings() -> void:
 		new_settings.update_notified = update_notified
 		new_settings.autofill_enabled = autofill_enabled
 		new_settings.search_algorithm = int(search_algorithm)
+		new_settings.next_version_notified = next_ver_notified
 		new_settings.save()
 	else:
 		print("Running from source: Skipping saving settings.")

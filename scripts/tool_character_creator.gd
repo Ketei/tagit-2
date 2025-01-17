@@ -358,5 +358,3 @@ func on_finish_pressed() -> void:
 	tab_container.current_tab = 0
 	current_tab = 1
 	reset_fields()
-
-

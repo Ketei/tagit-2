@@ -65,13 +65,12 @@ func on_close_pressed() -> void:
 
 func set_new_version_available(update_available: bool, update_version: String = "") -> void:
 	if update_available:
-		update_status.text = "[center][color=ffc800][url=https://github.com/Ketei/tagit-2/releases/latest]Update {0} is available.[/url][/color][/center]".format([update_version])
+		update_status.text = "[center][color=ffc800][url=https://github.com/Ketei/tagit-2/releases/latest]Update {0} is available.[/url][/color]\n\n[url=https://github.com/Ketei/tagit-v3/releases/latest][color=ORANGE]TagIt V3 has been released! Click here to get it.[/color][/url][/center]".format([update_version])
 		if not Tagger.update_notified:
 			Tagger.queue_notification(
-				"A new update is available: " + update_version,
+				"A new update is available: " + update_version + "\nTagIt v3 has also been released!",
 				"Update Available!",
 				"Close")
 			Tagger.update_notified = true
 	else:
-		update_status.text = "[center][color=96fa00]You're using the latest version.[/color][/center]"
-
+		update_status.text = "[center][color=96fa00]You're using the latest version.[/color]\n\n[url=https://github.com/Ketei/tagit-v3/releases/latest][color=ORANGE]TagIt V3 has been released! Click here to get it.[/color][/url][/center]"

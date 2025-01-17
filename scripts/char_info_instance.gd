@@ -184,6 +184,3 @@ func set_body_id(body_id: String) -> void:
 
 func set_age_id(age_id: String) -> void:
 	age_option_button.set_age_by_id(age_id)
-
-
-

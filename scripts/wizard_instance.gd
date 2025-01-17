@@ -207,5 +207,3 @@ func on_cancel_press() -> void:
 func close_wizard() -> void:
 	Tagger.enable_shortcuts()
 	queue_free()
-
-

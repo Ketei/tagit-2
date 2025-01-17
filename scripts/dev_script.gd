@@ -1,9 +1,12 @@
 extends Control
 
+var data: Dictionary = {}
+var test :TestRes = load("res://new_resource.tres")
 
-func _ready():
-	print("- Start -")
-	print("- Done -")
+
+
+
+
 
 
 func compare_versions() -> void:

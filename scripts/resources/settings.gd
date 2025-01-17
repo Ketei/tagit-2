@@ -7,6 +7,7 @@ extends Resource
 @export var database_path: String = ""
 @export var update_notified: bool = false
 @export var version_notified: String = ""
+@export var next_version_notified: bool = false
 
 # Basic Settings
 @export var load_images: bool = false # Hydrus Only
@@ -93,5 +94,3 @@ static func get_settings() -> SettingsResource:
 
 func save() -> void:
 	ResourceSaver.save(self, "user://settings.tres")
-
-
